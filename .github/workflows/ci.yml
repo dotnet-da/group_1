@@ -16,10 +16,14 @@ jobs:
       uses: nuget/setup-nuget@v1
     
     - name: Restore NuGet
-      run: nuget restore solution.sln
+      run: nuget restore *.sln
 
     - name: Build Solution
-      run: msbuild solution.sln /t:Build
+      run: msbuild *.sln /t:Build
 
+  test:
+    runs-on: windows-latest
+    
+    steps:
     - name: Run Tests
       run:  dotnet test
