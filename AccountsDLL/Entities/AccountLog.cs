@@ -1,4 +1,4 @@
-﻿namespace AccountsDLL
+﻿namespace AccountsDLL.Entities
 {
     public enum LogLevel
     {

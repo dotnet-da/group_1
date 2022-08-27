@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace AccountsDLL
+namespace AccountsDLL.Entities
 {
     public enum AccountType
     {
@@ -20,13 +20,13 @@ namespace AccountsDLL
     {
         // Important members and credentials
         public Guid Id { get; set; } = new Guid();
-        public string UserName { get; set; } = "";
+        public string Username { get; set; } = "";
         public string Email { get; set; } = "";
         public AccountType Type { get; set; } = AccountType.User;
-        
+
         // Account management fields
-        public AccountStatus status { get; set; } = AccountStatus.ValidationRequired;
-        public int failedLogins { get; set; } = 0;
+        public AccountStatus Status { get; set; } = AccountStatus.ValidationRequired;
+        public int FailedLogins { get; set; } = 0;
 
         [JsonIgnore]
         public string Password { get; set; } = "";
@@ -39,6 +39,19 @@ namespace AccountsDLL
 
         // Logs
         public List<AccountLog> Logs { get; set; } = new List<AccountLog>();
+
+        public bool Log(AccountLog log)
+        {
+            try
+            {
+                Logs.Add(log);
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+            return true;
+        }
 
     }
 }
