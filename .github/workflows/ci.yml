@@ -1,0 +1,28 @@
+name: CI
+
+on: [push]
+
+env:
+  SOLUTION_FILE: solution.sln
+
+jobs:
+  build:
+    runs-on: windows-latest
+    
+    steps:
+    - uses: actions/checkout@v2
+    
+    - name: Setup MSBuild.exe
+      uses: microsoft/setup-msbuild@v1.0.3
+
+    - name: Setup NuGet
+      uses: nuget/setup-nuget@v1
+    
+    - name: Restore NuGet
+      run: nuget restore $env:SOLUTION_FILE
+
+    - name: Build Solution
+      run: msbuild $env:SOLUTION_FILE /t:Build
+
+    - name: Tests
+      run:  dotnet test $env:SOLUTION_FILE
