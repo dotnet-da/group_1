@@ -2,6 +2,9 @@ name: CI
 
 on: [push, pull_request]
 
+env:
+  SOLUTION_FILE: solution.sln
+
 jobs:
   build:
     runs-on: windows-latest
@@ -16,10 +19,10 @@ jobs:
       uses: nuget/setup-nuget@v1
     
     - name: Restore NuGet
-      run: nuget restore *.sln
+      run: nuget restore $env:SOLUTION_FILE
 
     - name: Build Solution
-      run: msbuild *.sln /t:Build
+      run: msbuild $env:SOLUTION_FILE /t:Build
 
     - name: Tests
-      run:  dotnet test
+      run:  dotnet test $env:SOLUTION_FILE
