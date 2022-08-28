@@ -5,6 +5,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.Win32;
 using System.IdentityModel.Tokens.Jwt;
+using System.Reflection;
 using System.Security.Claims;
 using System.Text;
 
@@ -14,6 +15,7 @@ namespace backend.Services
     {
         RegisterResponse Register(RegisterRequest model);
         AuthenticateResponse Authenticate(AuthenticateRequest model);
+        UpdateResponse UpdateAccount(UpdateRequest model);
         IEnumerable<Account> GetAll();
         Account GetById(Guid id);
     }
@@ -72,6 +74,45 @@ namespace backend.Services
             }
 
             return new RegisterResponse(user, status, message, token);
+        }
+
+        public UpdateResponse UpdateAccount(UpdateRequest model)
+        {
+            bool status = false;
+            string message = "Successfully updated following properties: ";
+
+            var user = _accounts.SingleOrDefault(x => x.Id == model.Id);
+
+            if(user == null)
+            {
+                message = $"Error: user with id '{model.Id}' does not exist.";
+            }
+            else
+            {
+                foreach(PropertyInfo prop in model.GetType().GetProperties())
+                {
+                    var property = prop.Name;
+                    var newValue = model.GetType().GetProperty(property).GetValue(model,null);
+                    var oldValue = user.GetType().GetProperty(property).GetValue(user, null);
+                    if(newValue != null)
+                    {
+                        Console.WriteLine("newValue: " + newValue + ", oldValue: " + oldValue);
+                        Console.WriteLine("newValue: " + newValue.GetType() + ", oldValue: " + oldValue.GetType());
+                        Console.WriteLine("is different: " + (newValue.ToString() != oldValue.ToString()));
+                        if (newValue.ToString() != oldValue.ToString())
+                        {
+                            user.GetType().GetProperty(property).SetValue(user, newValue);
+                            message += "" + property + "=" + newValue + ", ";
+                            status = true;
+                        }
+                    }
+                }
+                if (!status)
+                {
+                    message = "Info: did not change any properties.";
+                }
+            }
+            return new UpdateResponse(user,status,message);
         }
 
         public IEnumerable<Account> GetAll()

@@ -14,17 +14,17 @@ namespace backend.Controllers
     [ApiController]
     public class AccountsController : ControllerBase
     {
-        private IAccountsManagementService _accountsService;
+        private IAccountsManagementService _accountsManagementService;
 
-        public AccountsController(IAccountsManagementService accountsService)
+        public AccountsController(IAccountsManagementService accountsManagementService)
         {
-            _accountsService = accountsService;
+            _accountsManagementService = accountsManagementService;
         }
 
         [HttpPost("register")]
         public IActionResult Register(RegisterRequest model)
         {
-            var response = _accountsService.Register(model);
+            var response = _accountsManagementService.Register(model);
 
             return Ok(response);
         }
@@ -32,7 +32,7 @@ namespace backend.Controllers
         [HttpPost("authenticate")]
         public IActionResult Authenticate(AuthenticateRequest model)
         {
-            var response = _accountsService.Authenticate(model);
+            var response = _accountsManagementService.Authenticate(model);
 
             if (response == null)
                 return BadRequest(new { message = "Username or password is incorrect" });
@@ -40,12 +40,27 @@ namespace backend.Controllers
             return Ok(response);
         }
 
+        /// <summary>
+        /// Admin endpoint: Returns a collection of all managed accounts
+        /// </summary>
         [AmsAuthorize(AccountType.Admin)]
         [HttpGet]
         public IActionResult GetAll()
         {
-            var users = _accountsService.GetAll();
+            var users = _accountsManagementService.GetAll();
             return Ok(users);
+        }
+
+        /// <summary>
+        /// Admin endpoint: Updates specific account via id
+        /// </summary>
+        [AmsAuthorize(AccountType.Admin)]
+        [HttpPut("{id}")]
+        public IActionResult UpdateAccount([FromRoute] Guid id, UpdateRequest model)
+        {
+            model.Id = id;
+            var response = _accountsManagementService.UpdateAccount(model);
+            return Ok(response);
         }
 
         [AmsAuthorize]
