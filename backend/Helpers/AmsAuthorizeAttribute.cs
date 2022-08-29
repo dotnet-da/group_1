@@ -31,7 +31,7 @@ namespace backend.Helpers
             if (user.Type < AuthorizationLevel)
             {
                 // not high enough access rights
-                context.Result = new JsonResult(new { message = "Unauthorized, access rights too low" }) { StatusCode = StatusCodes.Status401Unauthorized };
+                context.Result = new JsonResult(new { message = "Forbidden" }) { StatusCode = StatusCodes.Status403Forbidden };
                 return;
             }
         }

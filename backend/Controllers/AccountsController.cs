@@ -1,12 +1,8 @@
-﻿using AccountsDLL.Models;
-using backend.Services;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-
+﻿using AccountsDLL.Entities;
+using AccountsDLL.Models;
 using backend.Helpers;
-using System.Linq;
-using AccountsDLL.Entities;
+using backend.Services;
+using Microsoft.AspNetCore.Mvc;
 
 namespace backend.Controllers
 {
@@ -21,7 +17,7 @@ namespace backend.Controllers
             _accountsManagementService = accountsManagementService;
         }
 
-        [HttpPost("register")]
+        [HttpPost]
         public IActionResult Register(RegisterRequest model)
         {
             var response = _accountsManagementService.Register(model);
@@ -40,9 +36,7 @@ namespace backend.Controllers
             return Ok(response);
         }
 
-        /// <summary>
-        /// Admin endpoint: Returns a collection of all managed accounts
-        /// </summary>
+        // Admin endpoint: Returns a collection of all managed accounts
         [AmsAuthorize(AccountType.Admin)]
         [HttpGet]
         public IActionResult GetAll()
@@ -51,9 +45,16 @@ namespace backend.Controllers
             return Ok(users);
         }
 
-        /// <summary>
-        /// Admin endpoint: Updates specific account via id
-        /// </summary>
+        // Admin endpoint: Get specific account via id
+        [AmsAuthorize(AccountType.Admin)]
+        [HttpGet("{id}")]
+        public IActionResult GetAccount([FromRoute] Guid id)
+        {
+            var user = _accountsManagementService.GetById(id);
+            return Ok(user);
+        }
+
+        // Admin endpoint: Updates specific account via id
         [AmsAuthorize(AccountType.Admin)]
         [HttpPut("{id}")]
         public IActionResult UpdateAccount([FromRoute] Guid id, UpdateRequest model)
@@ -63,18 +64,58 @@ namespace backend.Controllers
             return Ok(response);
         }
 
+        // Admin endpoint: deletes specific account via id
+        [AmsAuthorize(AccountType.Admin)]
+        [HttpDelete("{id}")]
+        public IActionResult DeleteAccount([FromRoute] Guid id)
+        {
+            var response = _accountsManagementService.DeleteAccount(id);
+            return Ok(response);
+        }
+
         [AmsAuthorize]
-        [HttpGet("debug")]
-        public IActionResult GetDebug()
+        [HttpGet("session")]
+        public IActionResult GetSessionUser()
         {
             var sessionUser = (Account)Request.HttpContext.Items["User"];
 
-            if(sessionUser == null)
+            if (sessionUser == null)
             {
                 return NoContent();
             }
 
             return Ok(sessionUser);
+        }
+
+        [AmsAuthorize]
+        [HttpPut("session")]
+        public IActionResult UpdateSessionUser(UpdateRequest model)
+        {
+            var sessionUser = (Account)Request.HttpContext.Items["User"];
+
+            if (sessionUser == null)
+            {
+                return NoContent();
+            }
+
+            model.Id = sessionUser.Id;
+            var response = _accountsManagementService.UpdateAccount(model);
+            return Ok(response);
+        }
+
+        [AmsAuthorize]
+        [HttpDelete("session")]
+        public IActionResult DeleteSessionUser()
+        {
+            var sessionUser = (Account)Request.HttpContext.Items["User"];
+
+            if (sessionUser == null)
+            {
+                return NoContent();
+            }
+
+            var response = _accountsManagementService.DeleteAccount(sessionUser.Id);
+            return Ok(response);
         }
     }
 }

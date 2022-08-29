@@ -3,7 +3,6 @@ using AccountsDLL.Models;
 using backend.Helpers;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.Win32;
 using System.IdentityModel.Tokens.Jwt;
 using System.Reflection;
 using System.Security.Claims;
@@ -16,6 +15,7 @@ namespace backend.Services
         RegisterResponse Register(RegisterRequest model);
         AuthenticateResponse Authenticate(AuthenticateRequest model);
         UpdateResponse UpdateAccount(UpdateRequest model);
+        DeleteResponse DeleteAccount(Guid id);
         IEnumerable<Account> GetAll();
         Account GetById(Guid id);
     }
@@ -57,7 +57,7 @@ namespace backend.Services
             string token = "";
 
             var user = _accounts.SingleOrDefault(x => x.Username == model.Username);
-            
+
             // return null if username already exists
             if (user != null)
             {
@@ -83,18 +83,18 @@ namespace backend.Services
 
             var user = _accounts.SingleOrDefault(x => x.Id == model.Id);
 
-            if(user == null)
+            if (user == null)
             {
                 message = $"Error: user with id '{model.Id}' does not exist.";
             }
             else
             {
-                foreach(PropertyInfo prop in model.GetType().GetProperties())
+                foreach (PropertyInfo prop in model.GetType().GetProperties())
                 {
                     var property = prop.Name;
-                    var newValue = model.GetType().GetProperty(property).GetValue(model,null);
+                    var newValue = model.GetType().GetProperty(property).GetValue(model, null);
                     var oldValue = user.GetType().GetProperty(property).GetValue(user, null);
-                    if(newValue != null)
+                    if (newValue != null)
                     {
                         Console.WriteLine("newValue: " + newValue + ", oldValue: " + oldValue);
                         Console.WriteLine("newValue: " + newValue.GetType() + ", oldValue: " + oldValue.GetType());
@@ -112,7 +112,27 @@ namespace backend.Services
                     message = "Info: did not change any properties.";
                 }
             }
-            return new UpdateResponse(user,status,message);
+            return new UpdateResponse(user, status, message);
+        }
+
+        public DeleteResponse DeleteAccount(Guid id)
+        {
+            bool status = false;
+            string message = "";
+
+            var user = _accounts.SingleOrDefault(x => x.Id == id);
+            if (user == null)
+            {
+                message = $"Error: user with id '{id}' does not exist.";
+            }
+            else
+            {
+                _accounts.Remove(user);
+                status = true;
+                message = $"Removed user with id '{id}'";
+            }
+
+            return new DeleteResponse(status, message);
         }
 
         public IEnumerable<Account> GetAll()
@@ -124,11 +144,11 @@ namespace backend.Services
         {
             Console.WriteLine("id: " + id);
             Console.WriteLine("_accounts:");
-            foreach(Account a in _accounts)
+            foreach (Account a in _accounts)
             {
                 Console.WriteLine(a.Id);
             }
-            
+
             Account user = _accounts.FirstOrDefault(x => x.Id == id);
             Console.WriteLine("Found user: " + user);
             return user;
@@ -143,7 +163,7 @@ namespace backend.Services
             var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
             var tokenDescriptor = new SecurityTokenDescriptor
             {
-                Subject = new ClaimsIdentity(new[] { new Claim("id", user.Id.ToString()) }),
+                Subject = new ClaimsIdentity(new[] { new Claim("id", user.Id.ToString()), new Claim("auth", Enum.GetName(typeof(AccountType), user.Type)) }),
                 Expires = DateTime.UtcNow.AddDays(7),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
