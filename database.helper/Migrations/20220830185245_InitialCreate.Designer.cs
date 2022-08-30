@@ -12,7 +12,7 @@ using database.helper;
 namespace database.helper.Migrations
 {
     [DbContext(typeof(MediaServiceContext))]
-    [Migration("20220830172205_InitialCreate")]
+    [Migration("20220830185245_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -23,6 +23,84 @@ namespace database.helper.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
+
+            modelBuilder.Entity("AccountsDLL.Entities.Account", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("Birthday")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("FailedLogins")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Accounts");
+                });
+
+            modelBuilder.Entity("AccountsDLL.Entities.AccountLog", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<Guid?>("AccountId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("Level")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Message")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Source")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("Timestamp")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AccountId");
+
+                    b.ToTable("AccountLog");
+                });
 
             modelBuilder.Entity("database.helper.Entitites.Episode", b =>
                 {
@@ -195,6 +273,13 @@ namespace database.helper.Migrations
                     b.HasDiscriminator().HasValue("series");
                 });
 
+            modelBuilder.Entity("AccountsDLL.Entities.AccountLog", b =>
+                {
+                    b.HasOne("AccountsDLL.Entities.Account", null)
+                        .WithMany("Logs")
+                        .HasForeignKey("AccountId");
+                });
+
             modelBuilder.Entity("database.helper.Entitites.Episode", b =>
                 {
                     b.HasOne("database.helper.Entitites.Season", null)
@@ -221,6 +306,11 @@ namespace database.helper.Migrations
                     b.HasOne("database.helper.Entitites.Media", null)
                         .WithMany("StreamingInfos")
                         .HasForeignKey("MediaTmdbId");
+                });
+
+            modelBuilder.Entity("AccountsDLL.Entities.Account", b =>
+                {
+                    b.Navigation("Logs");
                 });
 
             modelBuilder.Entity("database.helper.Entitites.Media", b =>

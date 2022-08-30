@@ -12,14 +12,19 @@ namespace database.helper // Note: actual namespace depends on the project name.
         static MediaServiceContext _dbContext;
         public static HttpClient _client;
 
-        public static int _updateNumberMovies = 40;
-        public static int _updateNumberSeries = 20;
+        public static int _updateNumberMovies = 0;
+        public static int _updateNumberSeries = 0;
 
         public static DateTime _start;
         static async Task Main(string[] args)
         {
             string username, password, apiKey;
             DateTime start;
+
+            Console.Write("Update Number of Movies: ");
+            _updateNumberMovies = int.Parse(Console.ReadLine());
+            Console.Write("Update Number of Series: ");
+            _updateNumberSeries = int.Parse(Console.ReadLine());
 
             _start = DateTime.Now;
 
@@ -29,7 +34,7 @@ namespace database.helper // Note: actual namespace depends on the project name.
                 password = args[1];
                 apiKey = args[2];
 
-                Console.WriteLine("Arguments: username=" + username + ", password=" + password + ", apiKey=" + apiKey);
+                //Console.WriteLine("Arguments: username=" + username + ", password=" + password + ", apiKey=" + apiKey);
             }
             catch (Exception)
             {
@@ -61,8 +66,6 @@ namespace database.helper // Note: actual namespace depends on the project name.
             Console.WriteLine("Amount of series: " + series.Count);
 
             StartDatabase(username, password);
-
-            //EnsureDatabaseStructure();
 
             FillMediaTableWithMovies(movies);
             FillMediaTableWithSeries(series);
@@ -108,14 +111,16 @@ namespace database.helper // Note: actual namespace depends on the project name.
                     _dbContext.Movies.Add(movie);
                 }
 
-                Console.WriteLine("Movie #" + (++counter) + ": " + movie.TmdbId + ": " + movie.Title);
+                Console.Write("\r" + new string(' ', Console.WindowWidth - 1) + "\r" + "Movie #"+(++counter) + " of " + movies.Count + " -> TmdbId: "+ movie.TmdbId + ", Title: " + movie.Title);
 
                 if (counter % batchSize == 0)
                 {
+                    Console.WriteLine();
                     Console.WriteLine("Saving a batch of " + batchSize + " entities...");
                     _dbContext.SaveChanges();
                 }
             }
+            Console.WriteLine();
             Console.WriteLine("Saving the rest...");
             _dbContext.SaveChanges();
         }
@@ -136,14 +141,17 @@ namespace database.helper // Note: actual namespace depends on the project name.
                     _dbContext.Series.Add(series);
                 }
 
-                Console.WriteLine("Series #" + (++counter) + ": " + series.TmdbId + ": " + series.Title);
+                Console.Write("\r" + new string(' ', Console.WindowWidth - 1) + "\r" + "Series #" + (++counter) + " of " + seriesList.Count + " -> TmdbId: " + series.TmdbId + ", Title: " + series.Title);
+
 
                 if (counter % batchSize == 0)
                 {
+                    Console.WriteLine();
                     Console.WriteLine("Saving a batch of " + batchSize + " entities...");
                     _dbContext.SaveChanges();
                 }
             }
+            Console.WriteLine();
             Console.WriteLine("Saving the rest...");
             _dbContext.SaveChanges();
         }
@@ -152,19 +160,17 @@ namespace database.helper // Note: actual namespace depends on the project name.
         {
             const int pageSize = 20;
 
-            DateTime start;
-
             List<int> allMovieIds = new List<int>();
 
             string path;
             for (int i = 0; i < amountOfMovies / pageSize; i++)
             {
                 path = $"https://api.themoviedb.org/3/movie/popular?page={pageStart + i}";
-                start = DateTime.Now;
+                
 
                 HttpResponseMessage response = await _client.GetAsync(path);
 
-                Console.WriteLine("Elapsed API call time: " + (DateTime.Now - start).TotalSeconds + "s");
+                
                 if (!response.IsSuccessStatusCode)
                 {
                     Console.WriteLine("Error in GetAllMovieIds: '" + path + "':" + response.StatusCode);
@@ -174,8 +180,6 @@ namespace database.helper // Note: actual namespace depends on the project name.
                 var content = await response.Content.ReadAsStringAsync();
                 JObject joResponse = JObject.Parse(content);
 
-                Console.WriteLine("Page: " + joResponse["page"]);
-                Console.WriteLine("Data amount:" + (joResponse["results"] as JArray).Count);
                 if ((joResponse["results"] as JArray).Count > 0)
                 {
                     foreach (var obj in (joResponse["results"] as JArray))
@@ -183,8 +187,10 @@ namespace database.helper // Note: actual namespace depends on the project name.
                         allMovieIds.Add(int.Parse(obj["id"].ToString()));
                     }
                 }
+                Console.Write("\r" + new string(' ', Console.WindowWidth - 1) + "\r"
+                + "Page: " + joResponse["page"] + " of " + ((amountOfMovies / pageSize) + pageStart-1) + ", Data amount:" + allMovieIds.Count);
             }
-            Console.WriteLine("allMovieIds.Count: " + allMovieIds.Count);
+            Console.WriteLine();
 
             return allMovieIds;
         }
@@ -193,19 +199,15 @@ namespace database.helper // Note: actual namespace depends on the project name.
         {
             const int pageSize = 20;
 
-            DateTime start;
-
             List<int> allSeriesIds = new List<int>();
 
             string path;
             for (int i = 0; i < amountOfSeries / pageSize; i++)
             {
                 path = $"https://api.themoviedb.org/3/tv/popular?page={pageStart + i}";
-                start = DateTime.Now;
 
                 HttpResponseMessage response = await _client.GetAsync(path);
 
-                Console.WriteLine("Elapsed API call time: " + (DateTime.Now - start).TotalSeconds + "s");
                 if (!response.IsSuccessStatusCode)
                 {
                     Console.WriteLine("Error in GetAllSeriesIds: '" + path + "':" + response.StatusCode);
@@ -215,8 +217,7 @@ namespace database.helper // Note: actual namespace depends on the project name.
                 var content = await response.Content.ReadAsStringAsync();
                 JObject joResponse = JObject.Parse(content);
 
-                Console.WriteLine("Page: " + joResponse["page"]);
-                Console.WriteLine("Data amount:" + (joResponse["results"] as JArray).Count);
+
                 if ((joResponse["results"] as JArray).Count > 0)
                 {
                     foreach (var obj in (joResponse["results"] as JArray))
@@ -225,8 +226,10 @@ namespace database.helper // Note: actual namespace depends on the project name.
                     }
 
                 }
+                Console.Write("\r" + new string(' ', Console.WindowWidth - 1) + "\r"
+                    + "Page: " + joResponse["page"] + " of " + ((amountOfSeries / pageSize) + pageStart - 1) + ", Data amount:" + allSeriesIds.Count);
             }
-            Console.WriteLine("allSeriesIds.Count: " + allSeriesIds.Count);
+            Console.WriteLine();
 
             return allSeriesIds;
         }
@@ -258,12 +261,14 @@ namespace database.helper // Note: actual namespace depends on the project name.
                 var content = await response.Content.ReadAsStringAsync();
                 JObject joResponse = JObject.Parse(content);
                 var obj = await ParseJObjectToMovie(joResponse);
+                ++counter;
                 if (obj != null)
                 {
                     allMovies.Add(obj);
                 }
-                Console.WriteLine(++counter);
+                Console.Write("\r" + new string(' ', Console.WindowWidth - 1) + "\r" + counter + " of " + movieIds.Count + " -> Title: " + obj.Title);
             }
+            Console.WriteLine();
 
             Console.WriteLine("  API Call details: ");
             var elapsedTime = (DateTime.Now - start).TotalSeconds;
@@ -304,12 +309,14 @@ namespace database.helper // Note: actual namespace depends on the project name.
                 var content = await response.Content.ReadAsStringAsync();
                 JObject joResponse = JObject.Parse(content);
                 var obj = await ParseJObjectToSeries(joResponse);
+                ++counter;
                 if (obj != null)
                 {
                     allSeries.Add(obj);
+                    Console.Write("\r" + new string(' ', Console.WindowWidth - 1) + "\r" + counter + " of " + seriesIds.Count + " -> Title: " + obj.Title + ", Seasons: " + obj.Seasons.Count);
                 }
-                Console.WriteLine(++counter);
             }
+            Console.WriteLine();
 
             Console.WriteLine("  API Call details: ");
             var elapsedTime = (DateTime.Now - start).TotalSeconds;
@@ -425,21 +432,38 @@ namespace database.helper // Note: actual namespace depends on the project name.
         {
             try
             {
+                DateTime? release, lastAirDate;
+                try
+                {
+                    release = (string)obj["first_air_date"] != "" && obj["first_air_date"] != null ? ((DateTime)obj["first_air_date"]).ToUniversalTime() : null;
+                }
+                catch (Exception)
+                {
+                    release = null;
+                }
+
+                try
+                {
+                    lastAirDate = (string)obj["last_air_date"] != "" && obj["last_air_date"] != null ? ((DateTime)obj["last_air_date"]).ToUniversalTime() : null;
+                }
+                catch (Exception)
+                {
+                    lastAirDate = null;
+                }
+
                 Series series = new Series
                 {
-                    TmdbId = (int)obj["id"],
+                    TmdbId = 10000000 + (int)obj["id"],
                     Title = (string)obj["name"],
                     Tagline = (string)obj["tagline"],
                     Description = (string)obj["overview"],
-                    Release = (string)obj["first_air_date"] != "" ? ((DateTime)obj["first_air_date"]).ToUniversalTime() : null,
+                    Release = release,
                     BackdropURL = (string)obj["backdrop_path"],
                     StreamingInfos = await GetAllStreamingInfos("tv", (int)obj["id"]),
-                    LastAirDate = (string)obj["last_air_date"] != "" ? ((DateTime)obj["last_air_date"]).ToUniversalTime() : null,
+                    LastAirDate = lastAirDate,
                     Seasons = await GetAllSeasons((int)obj["id"], (JArray)obj["seasons"]),
                     Genres = GetGenres((JArray)obj["genres"]),
                 };
-
-                Console.WriteLine("Title: " + series.Title + ", Seasons: " + series.Seasons.Count);
 
                 return series;
             }
@@ -488,7 +512,7 @@ namespace database.helper // Note: actual namespace depends on the project name.
         {
             var result = new Season();
 
-            result.Id = 10000000 + (int)obj["id"];
+            result.Id = (int)obj["id"];
             result.Description = (string)obj["overview"];
             result.Number = (int)obj["season_number"];
 
