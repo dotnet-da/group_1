@@ -8,11 +8,12 @@ namespace database.helper // Note: actual namespace depends on the project name.
     internal class Program
     {
         static string _apiKey = "";
+        static MediaServiceContextFactory _dbContextFactory = new MediaServiceContextFactory();
         static MediaServiceContext _dbContext;
         public static HttpClient _client;
 
-        public static int _updateNumberMovies = 2000;
-        public static int _updateNumberSeries = 500;
+        public static int _updateNumberMovies = 40;
+        public static int _updateNumberSeries = 20;
 
         public static DateTime _start;
         static async Task Main(string[] args)
@@ -59,7 +60,6 @@ namespace database.helper // Note: actual namespace depends on the project name.
             Console.WriteLine("Amount of movies: " + movies.Count);
             Console.WriteLine("Amount of series: " + series.Count);
 
-
             StartDatabase(username, password);
 
             //EnsureDatabaseStructure();
@@ -80,10 +80,7 @@ namespace database.helper // Note: actual namespace depends on the project name.
         public static void StartDatabase(string username, string password)
         {
             // Connect to database
-            var connString = $"Host=postgres.fbi.h-da.de;Username={username};Password={password};Database=sttoabel;Include Error Detail=true;";
-
-            Console.WriteLine("Connecting to database...");
-            _dbContext = new MediaServiceContext(connString);
+            _dbContext = _dbContextFactory.CreateDbContext(new string[] { username, password });
 
             Console.WriteLine("Connected.");
         }
@@ -409,7 +406,7 @@ namespace database.helper // Note: actual namespace depends on the project name.
                     Title = (string)obj["title"],
                     Tagline = (string)obj["tagline"],
                     Description = (string)obj["overview"],
-                    Release = ((DateTime)obj["release_date"]).ToUniversalTime(),
+                    Release = (string)obj["release_date"] != "" ? ((DateTime)obj["release_date"]).ToUniversalTime() : null,
                     BackdropURL = (string)obj["backdrop_path"],
                     StreamingInfos = await GetAllStreamingInfos("movie", (int)obj["id"]),
                     Runtime = (int)obj["runtime"],
@@ -434,10 +431,10 @@ namespace database.helper // Note: actual namespace depends on the project name.
                     Title = (string)obj["name"],
                     Tagline = (string)obj["tagline"],
                     Description = (string)obj["overview"],
-                    Release = ((DateTime)obj["first_air_date"]).ToUniversalTime(),
+                    Release = (string)obj["first_air_date"] != "" ? ((DateTime)obj["first_air_date"]).ToUniversalTime() : null,
                     BackdropURL = (string)obj["backdrop_path"],
                     StreamingInfos = await GetAllStreamingInfos("tv", (int)obj["id"]),
-                    LastAirYear = ((DateTime)obj["last_air_date"]).ToUniversalTime(),
+                    LastAirDate = (string)obj["last_air_date"] != "" ? ((DateTime)obj["last_air_date"]).ToUniversalTime() : null,
                     Seasons = await GetAllSeasons((int)obj["id"], (JArray)obj["seasons"]),
                     Genres = GetGenres((JArray)obj["genres"]),
                 };
@@ -491,7 +488,7 @@ namespace database.helper // Note: actual namespace depends on the project name.
         {
             var result = new Season();
 
-            result.Id = (int)obj["id"];
+            result.Id = 10000000 + (int)obj["id"];
             result.Description = (string)obj["overview"];
             result.Number = (int)obj["season_number"];
 
@@ -503,7 +500,7 @@ namespace database.helper // Note: actual namespace depends on the project name.
                     Id = (int)episode["id"],
                     Number = (int)episode["episode_number"],
                     Title = (string)episode["name"],
-                    AirDate = ((DateTime)obj["air_date"]).ToUniversalTime(),
+                    AirDate = (string)obj["air_date"] != "" ? ((DateTime)obj["air_date"]).ToUniversalTime() : null,
                     Rating = (float)episode["vote_average"],
                     VoteCount = (int)episode["vote_count"],
                     StillPath = (string)episode["still_path"],
@@ -515,3 +512,4 @@ namespace database.helper // Note: actual namespace depends on the project name.
         }
     }
 }
+

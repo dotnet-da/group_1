@@ -6,14 +6,9 @@ namespace database.helper
     public class MediaServiceContext : DbContext
     {
 
-        private readonly string ConnectionString;
-        public MediaServiceContext(string connectionString)
+        public MediaServiceContext(DbContextOptions<MediaServiceContext> options)
+        : base(options)
         {
-            ConnectionString = connectionString;
-        }
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            optionsBuilder.UseNpgsql(ConnectionString);
         }
 
         public DbSet<Media> Media { get; set; }

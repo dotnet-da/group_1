@@ -4,6 +4,6 @@
     {
         public List<Season> Seasons { get; set; }
 
-        public DateTime? LastAirYear { get; set; }
+        public DateTime? LastAirDate { get; set; }
     }
 }
