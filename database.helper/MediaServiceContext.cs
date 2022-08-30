@@ -1,4 +1,5 @@
-﻿using database.helper.Entitites;
+﻿using AccountsDLL.Entities;
+using database.helper.Entitites;
 using Microsoft.EntityFrameworkCore;
 
 namespace database.helper
@@ -14,6 +15,7 @@ namespace database.helper
         public DbSet<Media> Media { get; set; }
         public DbSet<Movie> Movies { get; set; }
         public DbSet<Series> Series { get; set; }
+        public DbSet<Account> Accounts { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
