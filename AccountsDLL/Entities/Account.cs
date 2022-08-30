@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace AccountsDLL.Entities
 {
@@ -19,6 +20,7 @@ namespace AccountsDLL.Entities
     public class Account
     {
         // Important members and credentials
+        [Key]
         public Guid Id { get; set; } = new Guid();
         public string Username { get; set; } = "";
         public string Email { get; set; } = "";

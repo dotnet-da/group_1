@@ -9,7 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "frontend", "frontend\fronte
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "backend.tests", "tests\backend.tests\backend.tests.csproj", "{70FFA1F1-BDD3-4BB3-8B2D-100DE1625BEE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AccountsDLL", "AccountsDLL\AccountsDLL.csproj", "{45D0A803-A764-495F-AA82-7DC965FECF04}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AccountsDLL", "AccountsDLL\AccountsDLL.csproj", "{45D0A803-A764-495F-AA82-7DC965FECF04}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "database.helper", "database.helper\database.helper.csproj", "{711CA020-A461-430D-95B2-163D0DE27A19}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{45D0A803-A764-495F-AA82-7DC965FECF04}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{45D0A803-A764-495F-AA82-7DC965FECF04}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{45D0A803-A764-495F-AA82-7DC965FECF04}.Release|Any CPU.Build.0 = Release|Any CPU
+		{711CA020-A461-430D-95B2-163D0DE27A19}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{711CA020-A461-430D-95B2-163D0DE27A19}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{711CA020-A461-430D-95B2-163D0DE27A19}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{711CA020-A461-430D-95B2-163D0DE27A19}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
