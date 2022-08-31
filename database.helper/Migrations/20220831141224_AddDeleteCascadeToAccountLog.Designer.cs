@@ -12,8 +12,8 @@ using database.helper.Models;
 namespace database.helper.Migrations
 {
     [DbContext(typeof(MediaServiceContext))]
-    [Migration("20220830185245_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20220831141224_AddDeleteCascadeToAccountLog")]
+    partial class AddDeleteCascadeToAccountLog
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -277,7 +277,8 @@ namespace database.helper.Migrations
                 {
                     b.HasOne("AccountsDLL.Entities.Account", null)
                         .WithMany("Logs")
-                        .HasForeignKey("AccountId");
+                        .HasForeignKey("AccountId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("database.helper.Entitites.Episode", b =>

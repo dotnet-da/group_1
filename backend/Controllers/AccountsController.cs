@@ -99,6 +99,17 @@ namespace backend.Controllers
             }
 
             model.Id = sessionUser.Id;
+
+            // Nullify properties that cannot be changed by a user
+            model.FailedLogins = null;
+            model.Type = null;
+            model.Created = null;
+
+            if (sessionUser.Status == AccountStatus.Locked || sessionUser.Status == AccountStatus.ValidationRequired)
+            {
+                model.Status = null;
+            }
+
             var response = _accountsManagementService.UpdateAccount(model);
             return Ok(response);
         }

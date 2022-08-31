@@ -1,7 +1,7 @@
 ﻿using AccountsDLL.Entities;
 using AccountsDLL.Models;
 using backend.Helpers;
-using database.helper;
+using database.helper.Models;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
@@ -24,19 +24,23 @@ namespace backend.Services
 
     public class AccountsManagementService : IAccountsManagementService
     {
-        private static MediaServiceContextFactory _mediaServiceContextFactory;
-        private static MediaServiceContext _mediaServiceContext;
+        private static MediaServiceContextFactory _mediaServiceContextFactory = new MediaServiceContextFactory();
+        private static IMediaServiceContext _mediaServiceContext;
 
         private readonly AppSettings _appSettings;
 
         public AccountsManagementService(IOptions<AppSettings> appSettings)
         {
-            Console.WriteLine("AccountsManagementService constructor");
             _appSettings = appSettings.Value;
-            _mediaServiceContextFactory = new MediaServiceContextFactory();
             _mediaServiceContext = _mediaServiceContextFactory.CreateDbContext(new string[] {
                 _appSettings.LoginUsername,_appSettings.LoginPassword
             });
+        }
+
+        public AccountsManagementService(IOptions<AppSettings> appSettings, IMediaServiceContext context)
+        {
+            _appSettings = appSettings.Value;
+            _mediaServiceContext = context;
         }
 
         public AuthenticateResponse Authenticate(AuthenticateRequest model)
@@ -129,7 +133,7 @@ namespace backend.Services
                     iterationCount: 100000,
                     numBytesRequested: 256 / 8));
 
-                user = new Account { Id = Guid.NewGuid(), Username = model.Username, Password = model.Password };
+                user = new Account { Username = model.Username, Password = model.Password };
 
                 _mediaServiceContext.Accounts.Add(user);
                 user.Log(new AccountLog

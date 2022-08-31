@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
-using database.helper;
+using database.helper.Models;
 
 #nullable disable
 
@@ -275,7 +275,8 @@ namespace database.helper.Migrations
                 {
                     b.HasOne("AccountsDLL.Entities.Account", null)
                         .WithMany("Logs")
-                        .HasForeignKey("AccountId");
+                        .HasForeignKey("AccountId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("database.helper.Entitites.Episode", b =>

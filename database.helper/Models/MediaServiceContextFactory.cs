@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore.Design;
 
 
-namespace database.helper
+namespace database.helper.Models
 {
     public class MediaServiceContextFactory : IDesignTimeDbContextFactory<MediaServiceContext>
     {

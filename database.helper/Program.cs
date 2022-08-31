@@ -1,5 +1,6 @@
 ﻿// See https://aka.ms/new-console-template for more information
 using database.helper.Entitites;
+using database.helper.Models;
 using Newtonsoft.Json.Linq;
 using System.Net.Http.Headers;
 
