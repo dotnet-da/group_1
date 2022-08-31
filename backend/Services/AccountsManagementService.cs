@@ -174,6 +174,10 @@ namespace backend.Services
                     {
                         if (newValue.ToString() != oldValue.ToString())
                         {
+                            if(newValue.GetType() == typeof(DateTime))
+                            {
+                                newValue = ((DateTime)newValue).ToUniversalTime();
+                            }
                             user.GetType().GetProperty(property).SetValue(user, newValue);
                             message += "" + property + "=" + newValue + ", ";
                             status = true;
