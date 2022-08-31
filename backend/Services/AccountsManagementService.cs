@@ -1,6 +1,8 @@
 ﻿using AccountsDLL.Entities;
 using AccountsDLL.Models;
 using backend.Helpers;
+using database.helper;
+using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -22,30 +24,66 @@ namespace backend.Services
 
     public class AccountsManagementService : IAccountsManagementService
     {
-        // users hardcoded for simplicity, store in a db with hashed passwords in production applications
-        private static List<Account> _accounts = new List<Account>
-        {
-            new Account { Id = new Guid("a54d3db4-8520-4058-b433-cf9b608164d5"), FirstName = "Ad", LastName = "Min", Username = "admin", Password = "admin", Type = AccountType.Admin },
-            new Account { Id = new Guid("2184489d-1e7b-40e4-a42e-cc2ddcb2c162"), FirstName = "Test", LastName = "User", Username = "test", Password = "test" }
-
-        };
+        private static MediaServiceContextFactory _mediaServiceContextFactory;
+        private static MediaServiceContext _mediaServiceContext;
 
         private readonly AppSettings _appSettings;
 
         public AccountsManagementService(IOptions<AppSettings> appSettings)
         {
+            Console.WriteLine("AccountsManagementService constructor");
             _appSettings = appSettings.Value;
+            _mediaServiceContextFactory = new MediaServiceContextFactory();
+            _mediaServiceContext = _mediaServiceContextFactory.CreateDbContext(new string[] {
+                _appSettings.LoginUsername,_appSettings.LoginPassword
+            });
         }
 
         public AuthenticateResponse Authenticate(AuthenticateRequest model)
         {
-            var user = _accounts.SingleOrDefault(x => x.Username == model.Username && x.Password == model.Password);
+            byte[] salt = Encoding.ASCII.GetBytes(model.Username);
 
+            // derive a 256-bit subkey (use HMACSHA256 with 100,000 iterations)
+            model.Password = Convert.ToBase64String(KeyDerivation.Pbkdf2(
+                password: model.Password!,
+                salt: salt,
+                prf: KeyDerivationPrf.HMACSHA256,
+                iterationCount: 100000,
+                numBytesRequested: 256 / 8));
+
+            var user = _mediaServiceContext.Accounts.SingleOrDefault(x => x.Username == model.Username);
+
+            if (user == null)
+            {
+                return null;
+            }
             // return null if user not found
-            if (user == null) return null;
+            if (user.Password != model.Password)
+            {
+                user.Log(new AccountLog
+                {
+                    Timestamp = DateTime.Now.ToUniversalTime(),
+                    Level = AccountsDLL.Entities.LogLevel.Warning,
+                    Source = "AccountsManagementService.Authenticate",
+                    Message = "WARNING: failed login."
+                });
+                user.FailedLogins++;
+                _mediaServiceContext.SaveChanges();
+                return null;
+            }
 
             // authentication successful so generate jwt token
             var token = generateJwtToken(user);
+
+            user.Log(new AccountLog
+            {
+                Timestamp = DateTime.Now.ToUniversalTime(),
+                Level = AccountsDLL.Entities.LogLevel.Info,
+                Source = "AccountsManagementService.Authenticate",
+                Message = "Successfull user login."
+            });
+            user.FailedLogins = 0;
+            _mediaServiceContext.SaveChanges();
 
             return new AuthenticateResponse(user, token);
         }
@@ -56,7 +94,7 @@ namespace backend.Services
             string message = "Successfully registered new user.";
             string token = "";
 
-            var user = _accounts.SingleOrDefault(x => x.Username == model.Username);
+            var user = _mediaServiceContext.Accounts.SingleOrDefault(x => x.Username == model.Username);
 
             // return null if username already exists
             if (user != null)
@@ -67,8 +105,42 @@ namespace backend.Services
             }
             else
             {
+                // check if password fulfills the requirements
+                if (model.Password.Length < 8)
+                {
+                    status = false;
+                    message = "Password must have at least 8 characters.";
+                    return new RegisterResponse(user, status, message, "");
+                }
+                else if (model.Password.Length > 40)
+                {
+                    status = false;
+                    message = "Password cannot have more than 40 characters.";
+                    return new RegisterResponse(user, status, message, "");
+                }
+
+                byte[] salt = Encoding.ASCII.GetBytes(model.Username);
+
+                // derive a 256-bit subkey (use HMACSHA256 with 100,000 iterations)
+                model.Password = Convert.ToBase64String(KeyDerivation.Pbkdf2(
+                    password: model.Password!,
+                    salt: salt,
+                    prf: KeyDerivationPrf.HMACSHA256,
+                    iterationCount: 100000,
+                    numBytesRequested: 256 / 8));
+
                 user = new Account { Id = Guid.NewGuid(), Username = model.Username, Password = model.Password };
-                _accounts.Add(user);
+
+                _mediaServiceContext.Accounts.Add(user);
+                user.Log(new AccountLog
+                {
+                    Timestamp = DateTime.Now.ToUniversalTime(),
+                    Level = AccountsDLL.Entities.LogLevel.Info,
+                    Source = "AccountsManagementService.Register",
+                    Message = "Created user."
+                });
+
+                _mediaServiceContext.SaveChanges();
 
                 token = generateJwtToken(user);
             }
@@ -81,7 +153,7 @@ namespace backend.Services
             bool status = false;
             string message = "Successfully updated following properties: ";
 
-            var user = _accounts.SingleOrDefault(x => x.Id == model.Id);
+            var user = _mediaServiceContext.Accounts.SingleOrDefault(x => x.Id == model.Id);
 
             if (user == null)
             {
@@ -96,9 +168,6 @@ namespace backend.Services
                     var oldValue = user.GetType().GetProperty(property).GetValue(user, null);
                     if (newValue != null)
                     {
-                        Console.WriteLine("newValue: " + newValue + ", oldValue: " + oldValue);
-                        Console.WriteLine("newValue: " + newValue.GetType() + ", oldValue: " + oldValue.GetType());
-                        Console.WriteLine("is different: " + (newValue.ToString() != oldValue.ToString()));
                         if (newValue.ToString() != oldValue.ToString())
                         {
                             user.GetType().GetProperty(property).SetValue(user, newValue);
@@ -107,10 +176,19 @@ namespace backend.Services
                         }
                     }
                 }
+                message = message.Substring(0, message.Length - 2);
                 if (!status)
                 {
                     message = "Info: did not change any properties.";
                 }
+                user.Log(new AccountLog
+                {
+                    Timestamp = DateTime.Now.ToUniversalTime(),
+                    Level = AccountsDLL.Entities.LogLevel.Info,
+                    Source = "AccountsManagementService.UpdateAccount",
+                    Message = message,
+                });
+                _mediaServiceContext.SaveChanges();
             }
             return new UpdateResponse(user, status, message);
         }
@@ -120,14 +198,16 @@ namespace backend.Services
             bool status = false;
             string message = "";
 
-            var user = _accounts.SingleOrDefault(x => x.Id == id);
+            var user = _mediaServiceContext.Accounts.SingleOrDefault(x => x.Id == id);
             if (user == null)
             {
                 message = $"Error: user with id '{id}' does not exist.";
             }
             else
             {
-                _accounts.Remove(user);
+                _mediaServiceContext.Accounts.Remove(user);
+                _mediaServiceContext.SaveChanges();
+
                 status = true;
                 message = $"Removed user with id '{id}'";
             }
@@ -137,20 +217,21 @@ namespace backend.Services
 
         public IEnumerable<Account> GetAll()
         {
-            return _accounts;
+            return _mediaServiceContext.Accounts;
         }
 
         public Account GetById(Guid id)
         {
             Console.WriteLine("id: " + id);
-            Console.WriteLine("_accounts:");
-            foreach (Account a in _accounts)
+            Account user = _mediaServiceContext.Accounts.FirstOrDefault(x => x.Id == id);
+            user.Log(new AccountLog
             {
-                Console.WriteLine(a.Id);
-            }
-
-            Account user = _accounts.FirstOrDefault(x => x.Id == id);
-            Console.WriteLine("Found user: " + user);
+                Timestamp = DateTime.Now.ToUniversalTime(),
+                Level = AccountsDLL.Entities.LogLevel.Info,
+                Source = "AccountsManagementService.GetById",
+                Message = "Retrieval of account details.",
+            });
+            _mediaServiceContext.SaveChanges();
             return user;
         }
 

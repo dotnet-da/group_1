@@ -111,7 +111,7 @@ namespace database.helper // Note: actual namespace depends on the project name.
                     _dbContext.Movies.Add(movie);
                 }
 
-                Console.Write("\r" + new string(' ', Console.WindowWidth - 1) + "\r" + "Movie #"+(++counter) + " of " + movies.Count + " -> TmdbId: "+ movie.TmdbId + ", Title: " + movie.Title);
+                Console.Write("\r" + new string(' ', Console.WindowWidth - 1) + "\r" + "Movie #" + (++counter) + " of " + movies.Count + " -> TmdbId: " + movie.TmdbId + ", Title: " + movie.Title);
 
                 if (counter % batchSize == 0)
                 {
@@ -166,11 +166,11 @@ namespace database.helper // Note: actual namespace depends on the project name.
             for (int i = 0; i < amountOfMovies / pageSize; i++)
             {
                 path = $"https://api.themoviedb.org/3/movie/popular?page={pageStart + i}";
-                
+
 
                 HttpResponseMessage response = await _client.GetAsync(path);
 
-                
+
                 if (!response.IsSuccessStatusCode)
                 {
                     Console.WriteLine("Error in GetAllMovieIds: '" + path + "':" + response.StatusCode);
@@ -188,7 +188,7 @@ namespace database.helper // Note: actual namespace depends on the project name.
                     }
                 }
                 Console.Write("\r" + new string(' ', Console.WindowWidth - 1) + "\r"
-                + "Page: " + joResponse["page"] + " of " + ((amountOfMovies / pageSize) + pageStart-1) + ", Data amount:" + allMovieIds.Count);
+                + "Page: " + joResponse["page"] + " of " + ((amountOfMovies / pageSize) + pageStart - 1) + ", Data amount:" + allMovieIds.Count);
             }
             Console.WriteLine();
 
