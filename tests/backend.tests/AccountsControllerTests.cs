@@ -3,9 +3,13 @@ using AccountsDLL.Models;
 using backend.Controllers;
 using backend.Helpers;
 using backend.Services;
+using database.helper.Models;
+using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using Moq;
+using Moq.EntityFrameworkCore;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
 
@@ -15,8 +19,27 @@ namespace backend.tests
     public class AccountsControllerTests
     {
         public static AppSettings _appSettings { get; private set; }
+        public static Moq.Mock<IMediaServiceContext> _testMediaServiceContext { get; private set; }
         public static AccountsManagementService _accountsManagementService { get; private set; }
         public static AccountsController _accountsController { get; private set; }
+
+
+        public static string _testAdminPassword = "admintest";
+        public static Account _testAdmin = new Account
+        {
+            Id = new Guid("0d0ed5c8-11ff-4125-b091-353c07eea569"),
+            Username = _testAdminPassword,
+            Password = GetHashedPassword(_testAdminPassword, _testAdminPassword),
+            Type = AccountType.Admin
+        };
+
+        public static string _testUserPassword = "testuser";
+        public static Account _testUser = new Account
+        {
+            Id = new Guid("50f8afbb-eec2-4eb8-b73c-2c914858b0ee"),
+            Username = _testUserPassword,
+            Password = GetHashedPassword(_testUserPassword, _testUserPassword),
+        };
 
         private string GetToken(AuthenticateRequest request)
         {
@@ -54,39 +77,40 @@ namespace backend.tests
             return claimValue == value;
         }
 
+        private static string GetHashedPassword(string username, string password)
+        {
+            byte[] salt = Encoding.ASCII.GetBytes(username);
+
+            // derive a 256-bit subkey (use HMACSHA256 with 100,000 iterations)
+            password = Convert.ToBase64String(KeyDerivation.Pbkdf2(
+                password: password!,
+                salt: salt,
+                prf: KeyDerivationPrf.HMACSHA256,
+                iterationCount: 100000,
+                numBytesRequested: 256 / 8));
+
+            return password;
+        }
+
         [TestInitialize]
         public void Initialize()
         {
             _appSettings = new AppSettings { Secret = "Test secret-----" };
             IOptions<AppSettings> appSettings = Options.Create(_appSettings);
-            _accountsManagementService = new AccountsManagementService(appSettings);
+
+            _testMediaServiceContext = new Moq.Mock<IMediaServiceContext>();
+
+            IList<Account> accounts = new List<Account>() { _testAdmin, _testUser };
+            _testMediaServiceContext.Setup(x => x.Accounts).ReturnsDbSet(accounts);
+
+            _testMediaServiceContext.Setup(i => i.Accounts.Add(It.IsAny<Account>()))
+                .Callback((Account item) => { item.Id = Guid.NewGuid(); accounts.Add(item); });
+
+            _testMediaServiceContext.Setup(i => i.Accounts.Remove(It.IsAny<Account>()))
+                .Callback((Account item) => accounts.Remove(item));
+
+            _accountsManagementService = new AccountsManagementService(appSettings, _testMediaServiceContext.Object);
             _accountsController = new AccountsController(_accountsManagementService);
-        }
-
-        [TestMethod]
-        public void RegisterUser()
-        {
-            var request = new RegisterRequest
-            {
-                Username = "register",
-                Password = "Register"
-            };
-
-            // Act
-            var response = _accountsController.Register(request);
-
-            // Parse to response object
-            Assert.IsInstanceOfType(response, typeof(OkObjectResult));
-
-            var okObjectResult = response as OkObjectResult;
-            Assert.IsNotNull(okObjectResult);
-
-            var model = okObjectResult.Value as RegisterResponse;
-            Assert.IsNotNull(model);
-
-            //Assert
-            Assert.AreEqual(true, model.Status);
-            Assert.AreEqual(request.Username, model.User.Username);
         }
 
         [TestMethod]
@@ -95,14 +119,14 @@ namespace backend.tests
             // Requests for different scenarios
             var adminRequest = new AuthenticateRequest
             {
-                Username = "admin",
-                Password = "admin"
+                Username = _testAdminPassword,
+                Password = _testAdminPassword
             };
 
             var userRequest = new AuthenticateRequest
             {
-                Username = "test",
-                Password = "test"
+                Username = _testUserPassword,
+                Password = _testUserPassword
             };
 
             var wrongRequest = new AuthenticateRequest
@@ -128,14 +152,14 @@ namespace backend.tests
             // Requests for different scenarios
             var adminRequest = new AuthenticateRequest
             {
-                Username = "admin",
-                Password = "admin"
+                Username = _testAdminPassword,
+                Password = _testAdminPassword
             };
 
             var userRequest = new AuthenticateRequest
             {
-                Username = "test",
-                Password = "test"
+                Username = _testUserPassword,
+                Password = _testUserPassword
             };
 
             // Act
@@ -153,32 +177,28 @@ namespace backend.tests
         [TestMethod]
         public void GetAccounts()
         {
-            // UserId for specific user api
-            Guid userId = new Guid("2184489d-1e7b-40e4-a42e-cc2ddcb2c162");
-
             // Act & Parse
             var responseAll = _accountsController.GetAll();
             var okObjectResultAll = responseAll as OkObjectResult;
             var modelAll = okObjectResultAll.Value as IEnumerable<Account>;
 
-            var responseUser = _accountsController.GetAccount(userId);
+            var responseUser = _accountsController.GetAccount(_testUser.Id);
             var okObjectResultUser = responseUser as OkObjectResult;
             var modelUser = okObjectResultUser.Value as Account;
 
             // Assert
             Assert.IsTrue(modelAll.Count() > 1);
-            Assert.IsTrue(modelUser.Username == "test");
+            Assert.IsTrue(modelUser.Username == _testUser.Username);
         }
 
         [TestMethod]
         public void UpdateAccount()
         {
             // UserId for specific user api
-            Guid userId = new Guid("2184489d-1e7b-40e4-a42e-cc2ddcb2c162");
             var updateRequest = new UpdateRequest { Email = "test@test.com" };
 
             // Act & Parse
-            var response = _accountsController.UpdateAccount(userId, updateRequest);
+            var response = _accountsController.UpdateAccount(_testUser.Id, updateRequest);
             var okObjectResult = response as OkObjectResult;
             var model = okObjectResult.Value as UpdateResponse;
 
@@ -187,7 +207,7 @@ namespace backend.tests
         }
 
         [TestMethod]
-        public void DeleteAccount()
+        public void RegisterAndDeleteAccount()
         {
             // Prepare test user to be deleted
             var testUserRegisterRequest = new RegisterRequest
@@ -196,16 +216,23 @@ namespace backend.tests
                 Password = "todelete"
             };
 
-            var userToBeDeleted = (_accountsController.Register(testUserRegisterRequest) as OkObjectResult).Value as RegisterResponse;
-            Guid userId = userToBeDeleted.Id;
+            var userToBeDeletedModel = (_accountsController.Register(testUserRegisterRequest) as OkObjectResult).Value as RegisterResponse;
+            var user = userToBeDeletedModel.User;
 
             // Act & Parse
-            var response = _accountsController.DeleteAccount(userId);
+            var responseAll = _accountsController.GetAll();
+            var okObjectResultAll = responseAll as OkObjectResult;
+            var modelAll = okObjectResultAll.Value as IEnumerable<Account>;
+
+            Assert.IsTrue(userToBeDeletedModel.Status);
+
+            // Act & Parse
+            var response = _accountsController.DeleteAccount(user.Id);
             var okObjectResult = response as OkObjectResult;
             var model = okObjectResult.Value as DeleteResponse;
 
             var allAccounts = (_accountsController.GetAll() as OkObjectResult).Value as IEnumerable<Account>;
-            var findUser = allAccounts.SingleOrDefault(x => x.Id == userId);
+            var findUser = allAccounts.SingleOrDefault(x => x.Id == user.Id);
 
             // Assert
             Assert.IsTrue(model.Status);

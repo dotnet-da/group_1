@@ -20,16 +20,16 @@ namespace backend.Helpers
         // Check for token in header and attach the account to the context
         public async Task Invoke(HttpContext context, IAccountsManagementService accountsService)
         {
-            Console.WriteLine("Invoke started");
+            Console.WriteLine("Authorization started");
             var token = context.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
 
             if (token != null)
             {
-                Console.WriteLine("Found Token, trying to attach");
+                Console.WriteLine("Found Token, trying to authorize...");
                 attachUserToContext(context, accountsService, token);
             }
 
-            Console.WriteLine("Invoke finished");
+            Console.WriteLine("Authorization finished");
             await _next(context);
         }
 
@@ -52,12 +52,8 @@ namespace backend.Helpers
                 var jwtToken = (JwtSecurityToken)validatedToken;
                 var userId = Guid.Parse(jwtToken.Claims.First(x => x.Type == "id").Value);
 
-                Console.WriteLine("jwtToken: " + jwtToken);
-                Console.WriteLine("userId: " + userId);
-
                 // attach user to context on successful jwt validation
                 context.Items["User"] = accountsService.GetById(userId);
-                Console.WriteLine("context.Items[\"User\"]: " + context.Items["User"]);
             }
             catch (Exception ex)
             {

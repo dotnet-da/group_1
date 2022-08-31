@@ -36,8 +36,8 @@ namespace AccountsDLL.Entities
         // User data
         public string FirstName { get; set; } = "";
         public string LastName { get; set; } = "";
-        public DateTime Birthday { get; set; } = DateTime.Now;
-        public DateTime Created { get; set; } = DateTime.Now;
+        public DateTime Birthday { get; set; } = DateTime.Now.ToUniversalTime();
+        public DateTime Created { get; set; } = DateTime.Now.ToUniversalTime();
 
         // Logs
         public List<AccountLog> Logs { get; set; } = new List<AccountLog>();
