@@ -13,21 +13,27 @@ namespace frontend.Login
             InitializeComponent();
         }
 
+        public static bool isLoggingIn = false;
+
         private async void LoginButton_Click(object sender, RoutedEventArgs e)
         {
-            if (PasswordInput.Password.Length > 0)
+            if (PasswordInput.Password.Length > 0 && !isLoggingIn)
             {
                 Mouse.OverrideCursor = Cursors.Wait;
-                LoginButton.IsEnabled = false;
+                isLoggingIn = true;
 
-                var status = await App.Login(UsernameInput.Text, PasswordInput.Password);
+                var username = UsernameInput.Text;
+                var password = PasswordInput.Password;
+
+                UsernameInput.Clear();
+                PasswordInput.Clear();
+
+                var status = await App.Login(username, password);
 
                 Mouse.OverrideCursor = null;
-                LoginButton.IsEnabled = true;
 
-                UsernameInput.Text = "";
-                PasswordInput.Password = "";
                 MessageBox.Show("Login status: " + status);
+                isLoggingIn = false;
             }
             else
             {

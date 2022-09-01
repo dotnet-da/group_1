@@ -36,7 +36,7 @@
                 <TextBlock Text="Password"></TextBlock>
                 <PasswordBox x:Name="PasswordInput" TabIndex="2" Style="{StaticResource InputControlBox}"></PasswordBox>
             </ItemsControl>
-            <ItemsControl IsTabStop="False" Margin="8" >
+            <ItemsControl IsTabStop="False" Margin="8" FocusVisualStyle="{x:Null}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
                         <DockPanel></DockPanel>

@@ -44,14 +44,19 @@
         <Setter Property="Background" Value="{StaticResource SecondaryColor}"/>
         <Setter Property="BorderBrush" Value="{StaticResource SecondaryColor}"/>
         <Setter Property="Padding" Value="48,5"/>
-        <Setter Property="FontWeight" Value="SemiBold"/>
+        <Setter Property="FontWeight" Value="Medium"/>
         <Setter Property="Border.CornerRadius" Value="4"/>
 
-        <!--<Style.Triggers>
-            <Trigger Property="IsFocused" Value="true">
-                <Setter Property="Background" Value="{StaticResource SecondaryFocusColor}"/>
+        <Style.Triggers>
+            <Trigger Property="IsEnabled" Value="false">
+                <Setter Property="Background" Value="{StaticResource SecondaryDisabledColor}"/>
+                <Setter Property="BorderBrush" Value="{StaticResource SecondaryDisabledColor}"/>
             </Trigger>
-        </Style.Triggers>-->
+            <Trigger Property="IsEnabled" Value="true">
+                <Setter Property="Background" Value="{StaticResource SecondaryColor}"/>
+                <Setter Property="BorderBrush" Value="{StaticResource SecondaryColor}"/>
+            </Trigger>
+        </Style.Triggers>
     </Style>
     
     <!-- Secondary Button -->
@@ -95,6 +100,7 @@
         <Setter Property="Background" Value="{StaticResource PrimaryColor}"/>
         <Setter Property="Padding" Value="48,5"/>
         <Setter Property="TextBlock.TextDecorations" Value="Underline"/>
+        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
         <Setter Property="Cursor" Value="Hand"/>
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="true">
