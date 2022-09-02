@@ -47,27 +47,76 @@ namespace frontend
 
             var authenticateRequestContent = JsonConvert.SerializeObject(authenticateRequest);
             var httpContent = new StringContent(authenticateRequestContent, Encoding.UTF8, "application/json");
-
-            HttpResponseMessage response = await _accountsApi.PostAsync(path, httpContent);
-
-            if (!response.IsSuccessStatusCode && response.StatusCode != System.Net.HttpStatusCode.BadRequest)
+            try
             {
-                message = "ERROR in login: " + response.StatusCode;
-                return message;
+                HttpResponseMessage response = await _accountsApi.PostAsync(path, httpContent);
+                if (!response.IsSuccessStatusCode && response.StatusCode != System.Net.HttpStatusCode.BadRequest)
+                {
+                    message = "ERROR in login: " + response.StatusCode;
+                    return message;
+                }
+
+                var content = await response.Content.ReadAsStringAsync();
+                JObject joResponse = JObject.Parse(content);
+
+                if (joResponse["token"] != null && joResponse["id"] != null)
+                {
+                    message = "Success";
+                    _userId = (Guid)joResponse["id"];
+                    _apiToken = (string)joResponse["token"];
+                }
+                else
+                {
+                    message = (string)joResponse["message"];
+                }
+            }
+            catch (Exception ex)
+            {
+                message = "ERROR:\n" + ex.Message;
             }
 
-            var content = await response.Content.ReadAsStringAsync();
-            JObject joResponse = JObject.Parse(content);
+            return message;
+        }
 
-            if (joResponse["token"] != null && joResponse["id"] != null)
+        public static async Task<string> Register(string username, string password)
+        {
+            string message;
+            string path = "";
+
+            RegisterRequest registerRequest = new RegisterRequest
             {
-                message = "Success";
-                _userId = (Guid)joResponse["id"];
-                _apiToken = (string)joResponse["token"];
+                Username = username,
+                Password = password
+            };
+
+            var authenticateRequestContent = JsonConvert.SerializeObject(registerRequest);
+            var httpContent = new StringContent(authenticateRequestContent, Encoding.UTF8, "application/json");
+            try
+            {
+                HttpResponseMessage response = await _accountsApi.PostAsync(path, httpContent);
+                if (!response.IsSuccessStatusCode && response.StatusCode != System.Net.HttpStatusCode.BadRequest)
+                {
+                    message = "ERROR in sign up: " + response.StatusCode;
+                    return message;
+                }
+
+                var content = await response.Content.ReadAsStringAsync();
+                JObject joResponse = JObject.Parse(content);
+
+                if ((bool)joResponse["status"] && joResponse["token"] != null && joResponse["id"] != null)
+                {
+                    message = "Success";
+                    _userId = (Guid)joResponse["id"];
+                    _apiToken = (string)joResponse["token"];
+                }
+                else
+                {
+                    message = (string)joResponse["message"];
+                }
             }
-            else
+            catch (Exception ex)
             {
-                message = (string)joResponse["message"];
+                message = "ERROR:\n" + ex.Message;
             }
 
             return message;

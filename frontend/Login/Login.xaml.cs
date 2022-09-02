@@ -1,5 +1,5 @@
-﻿using System.Windows;
-using System.Windows.Input;
+﻿using frontend.Login.ViewModels;
+using System.Windows;
 
 namespace frontend.Login
 {
@@ -11,34 +11,19 @@ namespace frontend.Login
         public Login()
         {
             InitializeComponent();
+            DataContext = new LoginViewModel();
         }
 
-        public static bool isLoggingIn = false;
-
-        private async void LoginButton_Click(object sender, RoutedEventArgs e)
+        public void SetRegisterView()
         {
-            if (PasswordInput.Password.Length > 0 && !isLoggingIn)
-            {
-                Mouse.OverrideCursor = Cursors.Wait;
-                isLoggingIn = true;
+            Height = 640;
+            DataContext = new RegisterViewModel();
+        }
 
-                var username = UsernameInput.Text;
-                var password = PasswordInput.Password;
-
-                UsernameInput.Clear();
-                PasswordInput.Clear();
-
-                var status = await App.Login(username, password);
-
-                Mouse.OverrideCursor = null;
-
-                MessageBox.Show("Login status: " + status);
-                isLoggingIn = false;
-            }
-            else
-            {
-                MessageBox.Show("Password is empty!");
-            }
+        public void SetLoginView()
+        {
+            Height = 480;
+            DataContext = new LoginViewModel();
         }
     }
 }
