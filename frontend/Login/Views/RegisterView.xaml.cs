@@ -1,17 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace frontend.Login.Views
 {
@@ -21,6 +11,7 @@ namespace frontend.Login.Views
     public partial class RegisterView : UserControl
     {
 
+        public static int _usernameMinLength = 4;
         public static int _passwordMinLength = 8;
         public static int _passwordMaxLength = 40;
 
@@ -54,13 +45,13 @@ namespace frontend.Login.Views
 
         public void checkValidInputs()
         {
-            
+
             if (RepeatPasswordInput.Password == PasswordInput.Password
     && RepeatPasswordInput.Password.Length >= _passwordMinLength
     && RepeatPasswordInput.Password.Length <= _passwordMaxLength
     && PasswordInput.Password.Length >= _passwordMinLength
     && PasswordInput.Password.Length <= _passwordMaxLength
-    && UsernameInput.Text.Length > 0)
+    && UsernameInput.Text.Length > _usernameMinLength)
             {
                 SignUpInfo.Visibility = Visibility.Collapsed;
 
@@ -80,14 +71,14 @@ namespace frontend.Login.Views
                 UsernameInputLabel.Foreground = (SolidColorBrush)new BrushConverter().ConvertFrom("#ffffff");
                 RepeatPasswordInputLabel.Foreground = (SolidColorBrush)new BrushConverter().ConvertFrom("#ffffff");
 
-                if (UsernameInput.Text.Length == 0)
+                if (UsernameInput.Text.Length < _usernameMinLength)
                 {
-                    signUpInfo = "Please choose a username.";
+                    signUpInfo = "Please choose a username with at least " + _usernameMinLength + " characters.";
                     UsernameInputLabel.Foreground = (SolidColorBrush)new BrushConverter().ConvertFrom("#ff0000");
                 }
-                else if(PasswordInput.Password.Length < _passwordMinLength)
+                else if (PasswordInput.Password.Length < _passwordMinLength)
                 {
-                    signUpInfo = "Password needs to be at least " + _passwordMinLength+ " characters long.";
+                    signUpInfo = "Password needs to be at least " + _passwordMinLength + " characters long.";
                     PasswordInputLabel.Foreground = (SolidColorBrush)new BrushConverter().ConvertFrom("#ff0000");
                 }
                 else if (PasswordInput.Password.Length > _passwordMaxLength)

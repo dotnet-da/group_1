@@ -80,8 +80,8 @@ namespace frontend
 
         public static async Task<string> Register(string username, string password)
         {
-            string message = "";
-            string path = "register";
+            string message;
+            string path = "";
 
             RegisterRequest registerRequest = new RegisterRequest
             {

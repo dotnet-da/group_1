@@ -44,7 +44,7 @@ namespace frontend.Login.Views
 
         private void RegisterButton_Click(object sender, RoutedEventArgs e)
         {
-            Login loginWindow = (Login) Window.GetWindow(this);
+            Login loginWindow = (Login)Window.GetWindow(this);
             loginWindow.SetRegisterView();
         }
     }
