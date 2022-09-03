@@ -1,0 +1,45 @@
+﻿<UserControl x:Class="StreamKing.Login.Views.LoginView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:StreamKing.Login.Views"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    
+    <Grid>
+        <ItemsControl IsTabStop="False" Grid.Row="1" Grid.Column="1" FontSize="16" VerticalAlignment="Center" Foreground="{StaticResource SecondaryColor}">
+            <TextBlock Text="Stream King" Style="{StaticResource Title}" VerticalAlignment="Bottom"></TextBlock>
+
+            <ItemsControl IsTabStop="False" Margin="8">
+                <TextBlock Text="Username"></TextBlock>
+                <TextBox x:Name="UsernameInput" TabIndex="1" Style="{StaticResource InputControlBox}"></TextBox>
+            </ItemsControl>
+
+            <ItemsControl IsTabStop="False" Margin="8">
+                <TextBlock Text="Password"></TextBlock>
+                <PasswordBox x:Name="PasswordInput" TabIndex="2" Style="{StaticResource InputControlBox}"></PasswordBox>
+            </ItemsControl>
+            <ItemsControl IsTabStop="False" Margin="8" FocusVisualStyle="{x:Null}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <DockPanel></DockPanel>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <Button Content="Create an Account" x:Name="RegisterButton" TabIndex="4"  Style="{StaticResource TertiaryButton}" Click="RegisterButton_Click">
+                </Button>
+                <Button Content="Login" x:Name="LoginButton" HorizontalAlignment="Right" TabIndex="3" Click="LoginButton_Click">
+                    <Button.Style>
+                        <Style TargetType="{x:Type Button}" BasedOn="{StaticResource PrimaryButton}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Text.Length, ElementName=UsernameInput, UpdateSourceTrigger=PropertyChanged}" Value="0">
+                                    <Setter Property="IsEnabled" Value="False"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                </Button>
+            </ItemsControl>
+        </ItemsControl>
+    </Grid>
+</UserControl>
