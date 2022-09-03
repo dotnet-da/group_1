@@ -1,4 +1,4 @@
-﻿namespace frontend.Login.ViewModels
+﻿namespace StreamKing.Login.ViewModels
 {
     public class LoginViewModel
     {

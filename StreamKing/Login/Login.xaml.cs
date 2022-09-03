@@ -1,7 +1,7 @@
-﻿using frontend.Login.ViewModels;
+﻿using StreamKing.Login.ViewModels;
 using System.Windows;
 
-namespace frontend.Login
+namespace StreamKing.Login
 {
     /// <summary>
     /// Interaction logic for Login.xaml

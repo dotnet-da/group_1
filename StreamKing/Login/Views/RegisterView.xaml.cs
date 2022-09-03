@@ -3,7 +3,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 
-namespace frontend.Login.Views
+namespace StreamKing.Login.Views
 {
     /// <summary>
     /// Interaction logic for RegisterView.xaml

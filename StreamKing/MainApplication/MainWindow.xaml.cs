@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace frontend
+namespace StreamKing
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml

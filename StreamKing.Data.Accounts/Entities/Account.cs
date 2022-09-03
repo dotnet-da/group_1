@@ -25,6 +25,7 @@ namespace StreamKing.Data.Accounts
         public Guid Id { get; set; } = new Guid();
         public string Username { get; set; } = "";
         public string Email { get; set; } = "";
+        public string Region { get; set; } = "US";
         public AccountType Type { get; set; } = AccountType.User;
 
         // Account management fields

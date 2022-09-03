@@ -2,7 +2,7 @@
 using System.Windows.Controls;
 using System.Windows.Input;
 
-namespace frontend.Login.Views
+namespace StreamKing.Login.Views
 {
     /// <summary>
     /// Interaction logic for LoginView.xaml
