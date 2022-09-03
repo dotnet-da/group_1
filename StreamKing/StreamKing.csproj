@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\StreamKing.Data.Accounts\StreamKing.Data.Accounts.csproj" />
+    <ProjectReference Include="..\StreamKing.Data.Media\StreamKing.Data.Media.csproj" />
+    <ProjectReference Include="..\StreamKing.Web\StreamKing.Web.csproj" />
+  </ItemGroup>
+
+</Project>

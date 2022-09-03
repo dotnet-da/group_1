@@ -3,15 +3,17 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.3.32804.467
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "backend", "backend\backend.csproj", "{FCCB2C17-FE73-4DA9-A184-21326E618ADA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StreamKing.Web", "StreamKing.Web\StreamKing.Web.csproj", "{FCCB2C17-FE73-4DA9-A184-21326E618ADA}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "frontend", "frontend\frontend.csproj", "{1633C6C0-3FA2-4F9F-9789-BD39D150DA1C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StreamKing", "StreamKing\StreamKing.csproj", "{1633C6C0-3FA2-4F9F-9789-BD39D150DA1C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "backend.tests", "tests\backend.tests\backend.tests.csproj", "{70FFA1F1-BDD3-4BB3-8B2D-100DE1625BEE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StreamKing.Web.Tests", "tests\StreamKing.Web.Tests\StreamKing.Web.Tests.csproj", "{70FFA1F1-BDD3-4BB3-8B2D-100DE1625BEE}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AccountsDLL", "AccountsDLL\AccountsDLL.csproj", "{45D0A803-A764-495F-AA82-7DC965FECF04}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StreamKing.Data.Accounts", "StreamKing.Data.Accounts\StreamKing.Data.Accounts.csproj", "{45D0A803-A764-495F-AA82-7DC965FECF04}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "database.helper", "database.helper\database.helper.csproj", "{711CA020-A461-430D-95B2-163D0DE27A19}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StreamKing.Database.Helper", "StreamKing.Database.Helper\StreamKing.Database.Helper.csproj", "{711CA020-A461-430D-95B2-163D0DE27A19}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StreamKing.Data.Media", "StreamKing.Data.Media\StreamKing.Data.Media.csproj", "{E9B3A952-6686-48C4-BDA6-725CC2C7AA1E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{711CA020-A461-430D-95B2-163D0DE27A19}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{711CA020-A461-430D-95B2-163D0DE27A19}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{711CA020-A461-430D-95B2-163D0DE27A19}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E9B3A952-6686-48C4-BDA6-725CC2C7AA1E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E9B3A952-6686-48C4-BDA6-725CC2C7AA1E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E9B3A952-6686-48C4-BDA6-725CC2C7AA1E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E9B3A952-6686-48C4-BDA6-725CC2C7AA1E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
