@@ -17,8 +17,5 @@ namespace StreamKing.Data.Media
         public DateTime? Created { get; set; } = DateTime.Now.ToUniversalTime();
         public UserRating? UserRating { get; set; }
 
-        // foreign key definition
-        public int WatchlistId { get; set; }
-        public virtual Watchlist Watchlist { get; set; }
     }
 }

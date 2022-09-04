@@ -5,6 +5,7 @@ using StreamKing.Data.Accounts;
 using StreamKing.Data.Media;
 using StreamKing.Database.Helper.Models;
 using StreamKing.Web.Helpers;
+using StreamKing.Web.Models;
 using StreamKing.Web.Services;
 using System.Linq;
 using System.Text;
@@ -199,8 +200,10 @@ namespace StreamKing.Web.Controllers
                 .Where(acc => acc.Id == userId)
                 .Include(acc => acc.Watchlists.Where(wl => wl.Id == watchlistId))
                 .ThenInclude(wl => wl.MovieList)
+                .ThenInclude(sl => sl.Movie)
                 .Include(acc => acc.Watchlists.Where(wl => wl.Id == watchlistId))
                 .ThenInclude(wl => wl.SeriesList)
+                .ThenInclude(sl => sl.Series)
                 .FirstOrDefault();
 
             if (user != null && user.Watchlists.FirstOrDefault() != null)
@@ -265,6 +268,40 @@ namespace StreamKing.Web.Controllers
         }
 
         [AmsAuthorize]
+        [HttpGet("session/watchlists")]
+        public IActionResult GetWatchlistsOfCurrentUser()
+        {
+            var sessionUser = (Account)Request.HttpContext.Items["User"];
+
+            if (sessionUser == null)
+            {
+                return NoContent();
+            }
+
+            JArray result = new JArray();
+
+            var user = _mediaServiceContext.Accounts
+                .Where(acc => acc.Id == sessionUser.Id)
+                .Include(acc => acc.Watchlists)
+                .ThenInclude(wl => wl.MovieList)
+                .ThenInclude(sl => sl.Movie)
+                .Include(acc => acc.Watchlists)
+                .ThenInclude(wl => wl.SeriesList)
+                .ThenInclude(sl => sl.Series)
+                .FirstOrDefault();
+
+            if (user != null && user.Watchlists != null)
+            {
+                result = JArray.FromObject(user.Watchlists);
+            }
+            else
+            {
+                return NotFound();
+            }
+            return Content(result.ToString(), "application/json", Encoding.UTF8);
+        }
+
+        [AmsAuthorize]
         [HttpPost("session/watchlists")]
         public IActionResult AddWatchlistToCurrentUser(Watchlist watchlist)
         {
@@ -300,7 +337,7 @@ namespace StreamKing.Web.Controllers
 
         [AmsAuthorize]
         [HttpPost("session/watchlists/{watchlistId}/movies")]
-        public IActionResult AddMovieEntryToSessionUserWatchlist([FromRoute]int watchlistId, MovieEntry movieEntry)
+        public IActionResult AddMovieEntryToSessionUserWatchlist([FromRoute]int watchlistId, MovieEntryRequest movieEntryRequest)
         {
             var sessionUser = (Account)Request.HttpContext.Items["User"];
 
@@ -308,6 +345,21 @@ namespace StreamKing.Web.Controllers
             {
                 return NoContent();
             }
+
+            var movie = _mediaServiceContext.Media
+                .OfType<Movie>()
+                .Where(media => media.TmdbId == movieEntryRequest.MovieId)
+                .FirstOrDefault();
+
+            if (movie == null)
+            {
+                return NotFound("Movie with TmdbId " + movieEntryRequest.MovieId + " not found");
+            }
+
+            MovieEntry movieEntry = new MovieEntry {
+                Tag = movieEntryRequest.Tag,
+                Movie = movie
+            };
 
             JObject result = new JObject();
 
@@ -318,7 +370,7 @@ namespace StreamKing.Web.Controllers
 
             if (user != null && user.Watchlists.FirstOrDefault() != null)
             {
-                user.Watchlists.First().MovieList.Add(movieEntry);
+                user.Watchlists[0].MovieList.Add(movieEntry);
                 _mediaServiceContext.SaveChanges();
                 result = JObject.FromObject(movieEntry);
             }
