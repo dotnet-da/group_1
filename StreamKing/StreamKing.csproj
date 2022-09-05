@@ -5,7 +5,30 @@
     <TargetFramework>net6.0-windows</TargetFramework>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
+    <ApplicationIcon>Assets\Images\LogoNB_small.ico</ApplicationIcon>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Assets\Images\icon_search.png" />
+    <None Remove="Assets\Images\LogoNB.png" />
+    <None Remove="Assets\Images\LogoNB_small.png" />
+    <None Remove="Assets\Images\profile_image.jpg" />
+    <None Remove="Assets\Images\region_DE.jpg" />
+    <None Remove="Assets\Images\region_FI.jpg" />
+    <None Remove="Assets\Images\region_US.jpg" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Assets\Images\LogoNB_small.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Assets\Images\icon_search.png" />
+    <Resource Include="Assets\Images\LogoNB_small.png" />
+    <Resource Include="Assets\Images\region_DE.jpg" />
+    <Resource Include="Assets\Images\region_FI.jpg" />
+    <Resource Include="Assets\Images\region_US.jpg" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
@@ -15,6 +38,10 @@
     <ProjectReference Include="..\StreamKing.Data.Accounts\StreamKing.Data.Accounts.csproj" />
     <ProjectReference Include="..\StreamKing.Data.Media\StreamKing.Data.Media.csproj" />
     <ProjectReference Include="..\StreamKing.Web\StreamKing.Web.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Assets\Images\profile_image.jpg" />
   </ItemGroup>
 
 </Project>

@@ -24,7 +24,7 @@ namespace StreamKing.Login.Views
 
         private void BackToLoginButton_Click(object sender, RoutedEventArgs e)
         {
-            Login loginWindow = (Login)Window.GetWindow(this);
+            LoginWindow loginWindow = (LoginWindow)Window.GetWindow(this);
             loginWindow.SetLoginView();
         }
 

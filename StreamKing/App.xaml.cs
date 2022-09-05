@@ -1,5 +1,8 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using StreamKing.Data.Accounts;
+using StreamKing.Login;
+using StreamKing.MainApplication;
 using StreamKing.Web.Models;
 using System;
 using System.Net.Http;
@@ -7,6 +10,7 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Input;
 
 namespace StreamKing
 {
@@ -17,12 +21,18 @@ namespace StreamKing
     {
         public static HttpClient _accountsApi { get; set; }
 
-        public static Guid _userId { get; set; }
-        public static string _apiToken { get; set; }
-
+        public static Guid? _userId { get; set; }
+        public static string? _apiToken { get; set; }
+        public static Account? _currentUser { get; set; }
+        public static MainWindow? _mainWindow { get; set; }
+        public static LoginWindow? _loginWindow { get; set; }
         public App()
         {
-            // Get data from accounts API
+            InitAccountsApi();
+        }
+
+        public static void InitAccountsApi()
+        {
             _accountsApi = new HttpClient(new HttpClientHandler
             {
                 UseProxy = false
@@ -31,7 +41,6 @@ namespace StreamKing
             _accountsApi.DefaultRequestHeaders.Accept.Add(
                                  new MediaTypeWithQualityHeaderValue("application/json"));
             _accountsApi.BaseAddress = new Uri("https://localhost:9595/api/accounts/");
-            //_accountsApi.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _apiKey);
         }
 
         public static async Task<string> Login(string username, string password)
@@ -64,6 +73,12 @@ namespace StreamKing
                     message = "Success";
                     _userId = (Guid)joResponse["id"];
                     _apiToken = (string)joResponse["token"];
+
+                    Mouse.OverrideCursor = null;
+                    _mainWindow = new MainWindow();
+                    _mainWindow.Show();
+
+                    SetCurrentUser();
                 }
                 else
                 {
@@ -120,6 +135,49 @@ namespace StreamKing
             }
 
             return message;
+        }
+
+        public static async void SetCurrentUser()
+        {
+            _accountsApi.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _apiToken);
+
+            HttpResponseMessage response = await _accountsApi.GetAsync("session");
+
+
+            if (!response.IsSuccessStatusCode)
+            {
+                MessageBox.Show("Error in SetCurrentUser:" + response.StatusCode);
+                return;
+            }
+
+            var content = await response.Content.ReadAsStringAsync();
+
+            try
+            {
+                _currentUser = JObject.Parse(content).ToObject<Account>();
+                _mainWindow.UpdateHeader();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error in SetCurrentUser: " + ex.Message);
+            }
+        }
+
+        public static async void Logout()
+        {
+            InitAccountsApi();
+            _currentUser = null;
+            _apiToken = null;
+            _userId = null;
+
+            _loginWindow = new LoginWindow();
+            _loginWindow.Show();
+
+            if (_mainWindow != null)
+            {
+                _mainWindow.Close();
+            }
+            _mainWindow = null;
         }
     }
 }
