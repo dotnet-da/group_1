@@ -1,10 +1,10 @@
-﻿using StreamKing.Data.Accounts;
-using StreamKing.Web.Models;
-using StreamKing.Web.Helpers;
-using StreamKing.Web.Services;
-using Microsoft.AspNetCore.Mvc;
-using StreamKing.Database.Helper.Models;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using StreamKing.Data.Accounts;
+using StreamKing.Database.Helper.Models;
+using StreamKing.Web.Helpers;
+using StreamKing.Web.Models;
+using StreamKing.Web.Services;
 
 namespace StreamKing.Web.Controllers
 {
@@ -69,7 +69,7 @@ namespace StreamKing.Web.Controllers
                 .Include(acc => acc.Logs)
                 .FirstOrDefault();
 
-            if (user!= null)
+            if (user != null)
             {
                 return Ok(user.Logs);
             }

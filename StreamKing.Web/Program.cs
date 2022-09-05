@@ -1,6 +1,6 @@
+using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using StreamKing.Web.Helpers;
 using StreamKing.Web.Services;
-using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -41,7 +41,7 @@ var builder = WebApplication.CreateBuilder(args);
     while (!apiLogin)
     {
         Console.WriteLine("Login to API: ");
-        if(apiUsername == null)
+        if (apiUsername == null)
         {
             Console.Write("Username: ");
             username = Console.ReadLine();
@@ -51,7 +51,7 @@ var builder = WebApplication.CreateBuilder(args);
             username = apiUsername;
         }
 
-        if(apiPassword == null)
+        if (apiPassword == null)
         {
             Console.Write("Password: ");
             {
@@ -138,7 +138,7 @@ var builder = WebApplication.CreateBuilder(args);
     while (!dbLogin)
     {
         Console.WriteLine("Login to database: ");
-        if(dbUsername == null)
+        if (dbUsername == null)
         {
             Console.Write("Username: ");
             username = Console.ReadLine();

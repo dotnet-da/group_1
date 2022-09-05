@@ -1,14 +1,14 @@
-﻿using StreamKing.Web.Models;
-using StreamKing.Web.Helpers;
-using StreamKing.Data.Accounts;
-using Microsoft.AspNetCore.Cryptography.KeyDerivation;
+﻿using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using StreamKing.Data.Accounts;
+using StreamKing.Database.Helper.Models;
+using StreamKing.Web.Helpers;
+using StreamKing.Web.Models;
 using System.IdentityModel.Tokens.Jwt;
 using System.Reflection;
 using System.Security.Claims;
 using System.Text;
-using StreamKing.Database.Helper.Models;
 
 namespace StreamKing.Web.Services
 {
@@ -176,7 +176,7 @@ namespace StreamKing.Web.Services
                     {
                         if (newValue.ToString() != oldValue.ToString())
                         {
-                            if(newValue.GetType() == typeof(DateTime))
+                            if (newValue.GetType() == typeof(DateTime))
                             {
                                 newValue = ((DateTime)newValue).ToUniversalTime();
                             }

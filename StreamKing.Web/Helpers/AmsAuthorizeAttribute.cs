@@ -1,6 +1,6 @@
-﻿using StreamKing.Data.Accounts;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using StreamKing.Data.Accounts;
 
 namespace StreamKing.Web.Helpers
 {

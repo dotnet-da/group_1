@@ -1,19 +1,9 @@
-﻿using StreamKing.Web.Models;
-using StreamKing.Web.Helpers;
-using StreamKing.Data.Accounts;
-using Microsoft.AspNetCore.Cryptography.KeyDerivation;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
-using System.Reflection;
-using System.Security.Claims;
-using System.Text;
-using StreamKing.Database.Helper.Models;
-using StreamKing.Data.Media;
-using System.Reflection.Metadata;
-using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json.Linq;
-using System.Linq;
+using StreamKing.Data.Media;
+using StreamKing.Database.Helper.Models;
+using StreamKing.Web.Helpers;
 
 namespace StreamKing.Web.Services
 {
@@ -52,9 +42,9 @@ namespace StreamKing.Web.Services
         public JArray GetAll(string? type, int? take)
         {
             JArray allMedia = new JArray();
-            if(type == null)
+            if (type == null)
             {
-                if(take == null)
+                if (take == null)
                 {
                     allMedia = JArray.FromObject(MediaServiceContext.Media
                         .Include(media => media.Genres)
@@ -95,7 +85,8 @@ namespace StreamKing.Web.Services
                             .Take((int)take)
                             .ToList());
                     }
-                } else if (type == "movie")
+                }
+                else if (type == "movie")
                 {
                     if (take == null)
                     {
@@ -137,7 +128,7 @@ namespace StreamKing.Web.Services
                 .Include(media => (media as Series).Seasons)
                 .FirstOrDefault();
 
-            if( media != null)
+            if (media != null)
             {
                 result = JObject.FromObject(media);
             }
@@ -163,12 +154,12 @@ namespace StreamKing.Web.Services
 
         public bool UpdateById(int tmdbId, Media media)
         {
-            if(media.TmdbId != tmdbId) return false;
+            if (media.TmdbId != tmdbId) return false;
 
             var contextMedia = MediaServiceContext.Media.FirstOrDefault(x => x.TmdbId == tmdbId);
-            
+
             if (contextMedia == null) return false;
-                
+
             contextMedia = media;
             MediaServiceContext.SaveChanges();
 
