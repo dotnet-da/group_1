@@ -51,4 +51,11 @@
         </Style.Triggers>
     </Style>
 
+    <!-- ImageBox for Captcha Style -->
+    <Style x:Key="ImageBox" TargetType="Image">
+        <Setter Property="Height" Value="30"></Setter>
+        <Setter Property="Width" Value="300"></Setter>
+        <Setter Property="Margin" Value="8"></Setter>
+    </Style>
+
 </ResourceDictionary>

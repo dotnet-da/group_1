@@ -1,0 +1,54 @@
+﻿<UserControl x:Class="frontend.Login.Views.CaptchaView"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:frontend.Login.Views"
+      mc:Ignorable="d" 
+      d:DesignHeight="400" d:DesignWidth="400">
+
+    <Grid>
+        <ItemsControl IsTabStop="False" Grid.Row="1" Grid.Column="1" FontSize="16" VerticalAlignment="Center" Foreground="{StaticResource SecondaryColor}">
+            <TextBlock Text="Captcha" Style="{StaticResource Title}" VerticalAlignment="Bottom"></TextBlock>
+
+            <ItemsControl HorizontalAlignment="Center" Margin="0,8,0,0" IsTabStop="False" >
+                <ItemsControl IsTabStop="False" Margin="8">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <DockPanel></DockPanel>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <Image x:Name="CatchaImage" HorizontalAlignment="Left" Style="{StaticResource ImageBox}" />
+                    <Button x:Name="GenerateCaptcha"
+                            Width="40" Height="40"
+                            Padding="0"
+                            Style="{StaticResource SecondaryButton}" Cursor="Hand"
+                            />
+
+
+                </ItemsControl>
+
+                <TextBox x:Name="UsernameInput" TabIndex="1" Style="{StaticResource InputControlBox}"></TextBox>
+                
+
+            </ItemsControl>
+
+            <ItemsControl IsTabStop="False"  Margin="8" FocusVisualStyle="{x:Null}">
+
+                <Button Content="Verify" x:Name="LoginButton" VerticalAlignment="Center" HorizontalAlignment="Center" TabIndex="3" >
+                    <Button.Style>
+                        <Style TargetType="{x:Type Button}" BasedOn="{StaticResource PrimaryButton}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Text.Length, ElementName=UsernameInput, UpdateSourceTrigger=PropertyChanged}" Value="0">
+                                    <Setter Property="IsEnabled" Value="False"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                </Button>
+                <Button Content="Create an Account" x:Name="RegisterButton" HorizontalAlignment="Center" TabIndex="4" Margin="0,8,0,0" Style="{StaticResource TertiaryButton}" Cursor="Hand" >
+                </Button>
+            </ItemsControl>
+        </ItemsControl>
+    </Grid>
+</UserControl>

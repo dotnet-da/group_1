@@ -8,11 +8,30 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Assets\Images\Logo.png" />
+    <None Remove="Assets\Images\LogoNB.png" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Include="System.Drawing.Common" Version="6.0.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\AccountsDLL\AccountsDLL.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Assets\Icons\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Assets\Images\Logo.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Images\LogoNB.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
   </ItemGroup>
 
 </Project>

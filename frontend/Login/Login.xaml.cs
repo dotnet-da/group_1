@@ -16,14 +16,21 @@ namespace frontend.Login
 
         public void SetRegisterView()
         {
-            Height = 640;
-            DataContext = new RegisterViewModel();
+            //Height = 640;
+            DataContext = new RegisterViewModel1();
+        }
+
+        public void SetRegisterView2()
+        {
+            DataContext = new RegisterViewModel2();
         }
 
         public void SetLoginView()
         {
-            Height = 480;
+            //Height = 480;
             DataContext = new LoginViewModel();
         }
+
+        
     }
 }

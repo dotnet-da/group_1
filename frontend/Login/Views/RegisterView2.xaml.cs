@@ -1,25 +1,33 @@
-﻿using System.Windows;
+﻿using System;
+using System.Globalization;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Drawing;
+using System.IO;
 
 namespace frontend.Login.Views
 {
     /// <summary>
-    /// Interaction logic for RegisterView.xaml
+    /// Interaction logic for RegisterView2.xaml
     /// </summary>
-    public partial class RegisterView : UserControl
+    public partial class RegisterView2 : UserControl
     {
 
         public static int _usernameMinLength = 4;
         public static int _passwordMinLength = 8;
-        public static int _passwordMaxLength = 40;
+        public static int _inputMaxLength = 40;
+        int num = 0;
+        string verifyString;
 
         public static bool _isSigningUp = false;
 
-        public RegisterView()
+        public RegisterView2()
         {
             InitializeComponent();
+            LoadCaptcha();
         }
 
         private void BackToLoginButton_Click(object sender, RoutedEventArgs e)
@@ -43,21 +51,39 @@ namespace frontend.Login.Views
             checkValidInputs();
         }
 
+        private void InputCaptcha_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            checkValidInputs();
+        }
+
+        private void GenerateCaptcha_Click(object sender, RoutedEventArgs e)
+        {
+            LoadCaptcha();
+            checkValidInputs();
+        }
+
+        private void BackButton_Click(object sender, RoutedEventArgs e)
+        {
+            Login registerView1 = (Login)Window.GetWindow(this);
+            registerView1.SetRegisterView();
+        }
         public void checkValidInputs()
         {
+            verifyString = num.ToString();
 
             if (RepeatPasswordInput.Password == PasswordInput.Password
-    && RepeatPasswordInput.Password.Length >= _passwordMinLength
-    && RepeatPasswordInput.Password.Length <= _passwordMaxLength
-    && PasswordInput.Password.Length >= _passwordMinLength
-    && PasswordInput.Password.Length <= _passwordMaxLength
-    && UsernameInput.Text.Length > _usernameMinLength)
+                && PasswordInput.Password.Length >= _passwordMinLength
+                && PasswordInput.Password.Length <= _inputMaxLength
+                && UsernameInput.Text.Length > _usernameMinLength
+                && UsernameInput.Text.Length <= _inputMaxLength
+                && verifyString.Equals(InputCaptcha.Text.ToString()))
             {
                 SignUpInfo.Visibility = Visibility.Collapsed;
 
                 PasswordInputLabel.Foreground = (SolidColorBrush)new BrushConverter().ConvertFrom("#ffffff");
                 UsernameInputLabel.Foreground = (SolidColorBrush)new BrushConverter().ConvertFrom("#ffffff");
                 RepeatPasswordInputLabel.Foreground = (SolidColorBrush)new BrushConverter().ConvertFrom("#ffffff");
+                VerifyCaptchaTextBlock.Foreground = (SolidColorBrush)new BrushConverter().ConvertFrom("#ffffff");
 
                 SignUpButton.IsEnabled = true;
             }
@@ -76,20 +102,30 @@ namespace frontend.Login.Views
                     signUpInfo = "Please choose a username with at least " + _usernameMinLength + " characters.";
                     UsernameInputLabel.Foreground = (SolidColorBrush)new BrushConverter().ConvertFrom("#ff0000");
                 }
+                else if (UsernameInput.Text.Length > _inputMaxLength)
+                {
+                    signUpInfo = "Please choose a username with at most " + _inputMaxLength + " characters.";
+                    UsernameInputLabel.Foreground = (SolidColorBrush)new BrushConverter().ConvertFrom("#ff0000");
+                }
                 else if (PasswordInput.Password.Length < _passwordMinLength)
                 {
                     signUpInfo = "Password needs to be at least " + _passwordMinLength + " characters long.";
                     PasswordInputLabel.Foreground = (SolidColorBrush)new BrushConverter().ConvertFrom("#ff0000");
                 }
-                else if (PasswordInput.Password.Length > _passwordMaxLength)
+                else if (PasswordInput.Password.Length > _inputMaxLength)
                 {
-                    signUpInfo = "Password cannot contain more than " + _passwordMaxLength + " characters.";
+                    signUpInfo = "Password cannot contain more than " + _inputMaxLength + " characters.";
                     PasswordInputLabel.Foreground = (SolidColorBrush)new BrushConverter().ConvertFrom("#ff0000");
                 }
                 else if (RepeatPasswordInput.Password != PasswordInput.Password)
                 {
                     signUpInfo = "Password and Repeat Password are not the same.";
                     RepeatPasswordInputLabel.Foreground = (SolidColorBrush)new BrushConverter().ConvertFrom("#ff0000");
+                }
+                else if (!verifyString.Equals(InputCaptcha.Text.ToString()))
+                {
+                    signUpInfo = "Captcha and Verify Captcha are not the same.";
+                    VerifyCaptchaTextBlock.Foreground = (SolidColorBrush)new BrushConverter().ConvertFrom("#ff0000");
                 }
 
                 SignUpInfo.Text = signUpInfo;
@@ -130,6 +166,33 @@ namespace frontend.Login.Views
             {
                 MessageBox.Show("Already signing up. Don't be so impatient!");
             }
+        }
+
+        private void LoadCaptcha()
+        {
+            Random random = new Random();
+            num = random.Next(1000000, 10000000);
+            var image = new Bitmap((int)this.CaptchaImage.Width, (int)this.CaptchaImage.Height);
+            var font = new Font("Comic", 25, System.Drawing.FontStyle.Bold, GraphicsUnit.Pixel);
+            var graphics = Graphics.FromImage(image);
+            graphics.DrawString(num.ToString(), font, System.Drawing.Brushes.Red, new System.Drawing.Point(90, 2));
+
+            drawImage(image);
+
+
+        }
+
+        // Convert bitmap to System.Windows.Controls.Image
+        private void drawImage(System.Drawing.Bitmap bitmap)
+        {
+            System.IO.MemoryStream ms = new System.IO.MemoryStream();
+            bitmap.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
+            ms.Position = 0;
+            BitmapImage bi = new BitmapImage();
+            bi.BeginInit();
+            bi.StreamSource = ms;
+            bi.EndInit();
+            CaptchaImage.Source = bi;
         }
     }
 }
