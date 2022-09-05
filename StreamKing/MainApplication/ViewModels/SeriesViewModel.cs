@@ -3,19 +3,17 @@ using StreamKing.MainApplication;
 
 namespace StreamKing.MainApplication.ViewModels
 {
-    public class DataTemplateViewModel
+    public class SeriesViewModel
     {
-        public DataTemplateViewModel()
+        public SeriesViewModel()
         { 
-
         }
         public Media Media { get; set; }
 
-        public DataTemplateViewModel(Media media)
+        public SeriesViewModel(Media media)
         {
             Media = media;
             
-        
         }
 
     }
