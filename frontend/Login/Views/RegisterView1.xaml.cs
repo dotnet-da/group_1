@@ -1,4 +1,5 @@
-﻿using frontend.Login.ViewModels;
+﻿using frontend.Login.Models;
+using frontend.Login.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,6 +20,8 @@ namespace frontend.Login.Views
 
     public partial class RegisterView1 : UserControl
     {
+        //public RegisterViewModel1 _viewModel;
+        string? region = "US";
 
         public static int _inputMaxLength = 40;
         public static int _inputMinLength = 0;
@@ -27,11 +30,37 @@ namespace frontend.Login.Views
         public RegisterView1()
         {
             InitializeComponent();
+            UsernameInput.Text = Login.Udata.firstName;
+            UserLastnameInput.Text = Login.Udata.lastName;
+            if (Login.Udata.region == null)
+            {
+                region = "US";
+                rb_us.IsChecked = true;
+            }
+            else if (Login.Udata.region == "FI")
+            {
+                region = "FI";
+                rb_fi.IsChecked = true;
+            }
+            else if (Login.Udata.region == "DE")
+            {
+                region = "DE";
+                rb_de.IsChecked = true;
+            }
+            else
+            {
+                region = "US";
+                rb_us.IsChecked = true;
+            }
+
         }
 
         private void BackToLoginButton_Click(object sender, RoutedEventArgs e)
         {
             Login loginWindow = (Login)Window.GetWindow(this);
+            
+            // Clear the model
+            Login.ClearUserModel();
             loginWindow.SetLoginView();
         }
 
@@ -47,8 +76,28 @@ namespace frontend.Login.Views
 
         private void NextButton_Clicked(object sender, RoutedEventArgs e)
         {
-            Login register2Window = (Login)Window.GetWindow(this);
-            register2Window.SetRegisterView2();
+            Login login = (Login)Window.GetWindow(this);
+            Login.Udata.firstName = UsernameInput.Text;
+            Login.Udata.lastName = UserLastnameInput.Text;
+            Login.Udata.region = region;
+            login.SetRegisterView2();
+        }
+
+        private void radioUS_Click(object sender, RoutedEventArgs e)
+        {
+            region = "US";
+            Login.Udata.region = region;
+        }
+
+        private void radioDE_Click(object sender, RoutedEventArgs e)
+        {
+            region = "DE";
+            Login.Udata.region = region;
+        }
+        private void radioFI_Click(object sender, RoutedEventArgs e)
+        {
+            region = "FI";
+            Login.Udata.region = region;
         }
 
         public void checkValidInputs()
@@ -63,7 +112,11 @@ namespace frontend.Login.Views
 
                 UserLastnameInputLabel.Foreground = (SolidColorBrush)new BrushConverter().ConvertFrom("#ffffff");
                 UsernameInputLabel.Foreground = (SolidColorBrush)new BrushConverter().ConvertFrom("#ffffff");
+
+                Login.Udata.firstName = UsernameInput.Text;
+                Login.Udata.lastName = UserLastnameInput.Text;
                 
+
                 NextButton.IsEnabled = true;
             }
             else

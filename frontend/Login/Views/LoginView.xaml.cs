@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using frontend.Login.Models;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 
@@ -9,6 +10,7 @@ namespace frontend.Login.Views
     /// </summary>
     public partial class LoginView : UserControl
     {
+
         public LoginView()
         {
             InitializeComponent();

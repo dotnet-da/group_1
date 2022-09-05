@@ -3,22 +3,28 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:viewmodels="clr-namespace:frontend.Login.ViewModels"
+             xmlns:local="clr-namespace:frontend.Login.ViewModels"
              mc:Ignorable="d" 
              d:DesignHeight="600" d:DesignWidth="400"
              IsTabStop="False">
+    <UserControl.DataContext>
+        <local:RegisterViewModel2/>
+    </UserControl.DataContext>
     <Grid>
         <ItemsControl IsTabStop="False" Grid.Row="1" Grid.Column="1" FontSize="16" VerticalAlignment="Center" Foreground="{StaticResource SecondaryColor}">
             <TextBlock Text="Create Account" Style="{StaticResource Title}" VerticalAlignment="Bottom"></TextBlock>
 
             <ItemsControl IsTabStop="False" Margin="8">
                 <TextBlock x:Name="UsernameInputLabel" Text="Username"></TextBlock>
-                <TextBox x:Name="UsernameInput" TabIndex="1" Style="{StaticResource InputControlBox}" TextChanged="UsernameInput_TextChanged"></TextBox>
+                <TextBox x:Name="UsernameInput" Text="{Binding _userData.firstName}" TabIndex="1" Style="{StaticResource InputControlBox}" TextChanged="UsernameInput_TextChanged"></TextBox>
             </ItemsControl>
 
             <ItemsControl IsTabStop="False" Margin="8">
                 <TextBlock x:Name="PasswordInputLabel" Text="Password"></TextBlock>
-                <PasswordBox x:Name="PasswordInput" TabIndex="2" Style="{StaticResource InputControlBox}" PasswordChanged="PasswordInput_PasswordChanged"></PasswordBox>
+                <PasswordBox x:Name="PasswordInput" TabIndex="2"
+                             Style="{StaticResource InputControlBox}"
+                             PasswordChanged="PasswordInput_PasswordChanged">
+                </PasswordBox>
             </ItemsControl>
 
             <ItemsControl IsTabStop="False" Margin="8">

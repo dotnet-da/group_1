@@ -1,4 +1,5 @@
-﻿using frontend.Login.ViewModels;
+﻿using frontend.Login.Models;
+using frontend.Login.ViewModels;
 using System.Windows;
 
 namespace frontend.Login
@@ -8,15 +9,16 @@ namespace frontend.Login
     /// </summary>
     public partial class Login : Window
     {
+        public static UserData Udata { get; set; }
         public Login()
         {
             InitializeComponent();
             DataContext = new LoginViewModel();
+            Udata = new UserData();
         }
 
         public void SetRegisterView()
         {
-            //Height = 640;
             DataContext = new RegisterViewModel1();
         }
 
@@ -29,6 +31,16 @@ namespace frontend.Login
         {
             //Height = 480;
             DataContext = new LoginViewModel();
+        }
+
+        // clear the UserData Model
+        public static void ClearUserModel()
+        {
+            Udata.region = "";
+            Udata.firstName = "";
+            Udata.lastName = "";
+            Udata.userName = "";
+            Udata.password = "";
         }
 
         

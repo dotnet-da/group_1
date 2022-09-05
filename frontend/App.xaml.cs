@@ -108,6 +108,9 @@ namespace frontend
                     message = "Success";
                     _userId = (Guid)joResponse["id"];
                     _apiToken = (string)joResponse["token"];
+
+                    // Clear the model after succesfully signed up
+                    frontend.Login.Login.ClearUserModel();
                 }
                 else
                 {

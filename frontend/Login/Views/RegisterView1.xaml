@@ -3,22 +3,33 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:frontend.Login.Views"
+             xmlns:local="clr-namespace:frontend.Login.ViewModels"
              mc:Ignorable="d" 
              d:DesignHeight="400" d:DesignWidth="400"
              IsTabStop="False">
+    <UserControl.DataContext>
+        <local:RegisterViewModel1/>
+    </UserControl.DataContext>
     <Grid>
         <ItemsControl IsTabStop="False" Grid.Row="1" Grid.Column="1" FontSize="16" VerticalAlignment="Top" Foreground="{StaticResource SecondaryColor}">
             <TextBlock Text="Create Account" Style="{StaticResource Title}" VerticalAlignment="Bottom"></TextBlock>
 
             <ItemsControl IsTabStop="False" Margin="8">
                 <TextBlock x:Name="UsernameInputLabel" Text="First Name"></TextBlock>
-                <TextBox x:Name="UsernameInput" TabIndex="1" Style="{StaticResource InputControlBox}" TextChanged="UsernameInput_TextChanged"></TextBox>
+                <TextBox x:Name="UsernameInput" TabIndex="1" Style="{StaticResource InputControlBox}"
+                         TextChanged="UsernameInput_TextChanged"
+                         Text="{Binding _userData.firstName}">                    
+                </TextBox >
+                         
             </ItemsControl>
 
             <ItemsControl IsTabStop="False" Margin="8">
                 <TextBlock x:Name="UserLastnameInputLabel" Text="Last Name"></TextBlock>
-                <TextBox x:Name="UserLastnameInput" TabIndex="2" Style="{StaticResource InputControlBox}" TextChanged="UserLastnameInput_TextChanged"></TextBox>
+                <TextBox x:Name="UserLastnameInput" TabIndex="2"
+                         Style="{StaticResource InputControlBox}"
+                         TextChanged="UserLastnameInput_TextChanged"
+                         Text="{Binding _userData.lastName}">                    
+                </TextBox>
             </ItemsControl>
 
             <ItemsControl Margin="8">
@@ -35,10 +46,10 @@
                     <RadioButton Content="US"
                                  x:Name="rb_us"
                                  GroupName="Region"
-                                 IsChecked="True"
                                  Margin="0,0,50,0"
                                  HorizontalAlignment = "Left"
                                  VerticalAlignment = "Center"
+                                 Click="radioUS_Click"
                                  TextBlock.Foreground="{StaticResource SecondaryColor}"/>
                     <RadioButton Content="DE"
                                  x:Name="rb_de"
@@ -46,6 +57,7 @@
                                  Margin="0,0,50,0"
                                  HorizontalAlignment = "Left"
                                  VerticalAlignment = "Center"
+                                 Click="radioDE_Click"
                                  TextBlock.Foreground="{StaticResource SecondaryColor}"/>
                     <RadioButton Content="FI"
                                  x:Name="rb_fi"
@@ -53,6 +65,7 @@
                                  GroupName="Region"
                                  HorizontalAlignment = "Left"
                                  VerticalAlignment = "Center"
+                                 Click="radioFI_Click"
                                  TextBlock.Foreground="{StaticResource SecondaryColor}"/>
                 </ItemsControl>
 

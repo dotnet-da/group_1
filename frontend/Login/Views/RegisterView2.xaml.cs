@@ -7,6 +7,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Drawing;
 using System.IO;
+using frontend.Login.Models;
 
 namespace frontend.Login.Views
 {
@@ -15,12 +16,12 @@ namespace frontend.Login.Views
     /// </summary>
     public partial class RegisterView2 : UserControl
     {
-
+        //public UserData userData;
         public static int _usernameMinLength = 4;
         public static int _passwordMinLength = 8;
         public static int _inputMaxLength = 40;
         int num = 0;
-        string verifyString;
+        string verifyString = "";
 
         public static bool _isSigningUp = false;
 
@@ -28,11 +29,16 @@ namespace frontend.Login.Views
         {
             InitializeComponent();
             LoadCaptcha();
+            UsernameInput.Text = Login.Udata.userName;
+            //userData = Login.userData;
         }
 
         private void BackToLoginButton_Click(object sender, RoutedEventArgs e)
         {
             Login loginWindow = (Login)Window.GetWindow(this);
+
+            // Clear the model
+            Login.ClearUserModel();
             loginWindow.SetLoginView();
         }
 
@@ -85,6 +91,8 @@ namespace frontend.Login.Views
                 RepeatPasswordInputLabel.Foreground = (SolidColorBrush)new BrushConverter().ConvertFrom("#ffffff");
                 VerifyCaptchaTextBlock.Foreground = (SolidColorBrush)new BrushConverter().ConvertFrom("#ffffff");
 
+                setModelParams(UsernameInput.Text);
+
                 SignUpButton.IsEnabled = true;
             }
             else
@@ -131,6 +139,11 @@ namespace frontend.Login.Views
                 SignUpInfo.Text = signUpInfo;
                 SignUpButton.IsEnabled = false;
             }
+        }
+
+        private void setModelParams(string userName)
+        {
+            Login.Udata.userName = userName;
         }
 
         private async void SignUpButton_Click(object sender, RoutedEventArgs e)
