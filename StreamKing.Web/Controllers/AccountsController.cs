@@ -1,8 +1,10 @@
-﻿using StreamKing.Data.Accounts;
-using StreamKing.Web.Models;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using StreamKing.Data.Accounts;
+using StreamKing.Database.Helper.Models;
 using StreamKing.Web.Helpers;
+using StreamKing.Web.Models;
 using StreamKing.Web.Services;
-using Microsoft.AspNetCore.Mvc;
 
 namespace StreamKing.Web.Controllers
 {
@@ -11,10 +13,12 @@ namespace StreamKing.Web.Controllers
     public class AccountsController : ControllerBase
     {
         private IAccountsManagementService _accountsManagementService;
+        private static IMediaServiceContext _mediaServiceContext;
 
         public AccountsController(IAccountsManagementService accountsManagementService)
         {
             _accountsManagementService = accountsManagementService;
+            _mediaServiceContext = accountsManagementService.MediaServiceContext;
         }
 
         [HttpPost]
@@ -52,6 +56,27 @@ namespace StreamKing.Web.Controllers
         {
             var user = _accountsManagementService.GetById(id);
             return Ok(user);
+        }
+
+        // Admin endpoint: Get all logs of an account via id
+        [AmsAuthorize(AccountType.Admin)]
+        [HttpGet("{id}/logs")]
+        public IActionResult GetAccountLogs([FromRoute] Guid id)
+        {
+            var user = _mediaServiceContext
+                .Accounts
+                .Where(x => x.Id == id)
+                .Include(acc => acc.Logs)
+                .FirstOrDefault();
+
+            if (user != null)
+            {
+                return Ok(user.Logs);
+            }
+            else
+            {
+                return NotFound();
+            }
         }
 
         // Admin endpoint: Updates specific account via id

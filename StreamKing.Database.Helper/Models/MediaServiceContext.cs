@@ -26,6 +26,16 @@ namespace StreamKing.Database.Helper.Models
                 .WithOne()
                 .OnDelete(DeleteBehavior.Cascade);
 
+            modelBuilder.Entity<SeasonEntry>()
+                .HasMany(b => b.Episodes)
+                .WithOne()
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<SeriesEntry>()
+                .HasMany(b => b.Seasons)
+                .WithOne()
+                .OnDelete(DeleteBehavior.Cascade);
+
             // inheritance settings
             modelBuilder.Entity<Media>()
                 .HasDiscriminator<string>("type")

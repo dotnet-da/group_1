@@ -1,14 +1,14 @@
-﻿using StreamKing.Web.Models;
-using StreamKing.Web.Helpers;
-using StreamKing.Data.Accounts;
-using Microsoft.AspNetCore.Cryptography.KeyDerivation;
+﻿using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using StreamKing.Data.Accounts;
+using StreamKing.Database.Helper.Models;
+using StreamKing.Web.Helpers;
+using StreamKing.Web.Models;
 using System.IdentityModel.Tokens.Jwt;
 using System.Reflection;
 using System.Security.Claims;
 using System.Text;
-using StreamKing.Database.Helper.Models;
 
 namespace StreamKing.Web.Services
 {
@@ -20,19 +20,21 @@ namespace StreamKing.Web.Services
         DeleteResponse DeleteAccount(Guid id);
         IEnumerable<Account> GetAll();
         Account GetById(Guid id);
+
+        public IMediaServiceContext MediaServiceContext { get; set; }
     }
 
     public class AccountsManagementService : IAccountsManagementService
     {
         private static MediaServiceContextFactory _mediaServiceContextFactory = new MediaServiceContextFactory();
-        private static IMediaServiceContext _mediaServiceContext;
+        public IMediaServiceContext MediaServiceContext { get; set; }
 
         private readonly AppSettings _appSettings;
 
         public AccountsManagementService(IOptions<AppSettings> appSettings)
         {
             _appSettings = appSettings.Value;
-            _mediaServiceContext = _mediaServiceContextFactory.CreateDbContext(new string[] {
+            MediaServiceContext = _mediaServiceContextFactory.CreateDbContext(new string[] {
                 _appSettings.LoginUsername,_appSettings.LoginPassword
             });
         }
@@ -40,7 +42,7 @@ namespace StreamKing.Web.Services
         public AccountsManagementService(IOptions<AppSettings> appSettings, IMediaServiceContext context)
         {
             _appSettings = appSettings.Value;
-            _mediaServiceContext = context;
+            MediaServiceContext = context;
         }
 
         public AuthenticateResponse Authenticate(AuthenticateRequest model)
@@ -55,7 +57,7 @@ namespace StreamKing.Web.Services
                 iterationCount: 100000,
                 numBytesRequested: 256 / 8));
 
-            var user = _mediaServiceContext.Accounts.SingleOrDefault(x => x.Username == model.Username);
+            var user = MediaServiceContext.Accounts.SingleOrDefault(x => x.Username == model.Username);
 
             if (user == null)
             {
@@ -72,7 +74,7 @@ namespace StreamKing.Web.Services
                     Message = "WARNING: failed login."
                 });
                 user.FailedLogins++;
-                _mediaServiceContext.SaveChanges();
+                MediaServiceContext.SaveChanges();
                 return null;
             }
 
@@ -87,7 +89,7 @@ namespace StreamKing.Web.Services
                 Message = "Successfull user login."
             });
             user.FailedLogins = 0;
-            _mediaServiceContext.SaveChanges();
+            MediaServiceContext.SaveChanges();
 
             return new AuthenticateResponse(user, token);
         }
@@ -98,7 +100,7 @@ namespace StreamKing.Web.Services
             string message = "Successfully registered new user.";
             string token = "";
 
-            var user = _mediaServiceContext.Accounts.SingleOrDefault(x => x.Username == model.Username);
+            var user = MediaServiceContext.Accounts.SingleOrDefault(x => x.Username == model.Username);
 
             // return null if username already exists
             if (user != null)
@@ -135,7 +137,7 @@ namespace StreamKing.Web.Services
 
                 user = new Account { Username = model.Username, Password = model.Password };
 
-                _mediaServiceContext.Accounts.Add(user);
+                MediaServiceContext.Accounts.Add(user);
                 user.Log(new AccountLog
                 {
                     Timestamp = DateTime.Now.ToUniversalTime(),
@@ -144,7 +146,7 @@ namespace StreamKing.Web.Services
                     Message = "Created user."
                 });
 
-                _mediaServiceContext.SaveChanges();
+                MediaServiceContext.SaveChanges();
 
                 token = generateJwtToken(user);
             }
@@ -157,7 +159,7 @@ namespace StreamKing.Web.Services
             bool status = false;
             string message = "Successfully updated following properties: ";
 
-            var user = _mediaServiceContext.Accounts.SingleOrDefault(x => x.Id == model.Id);
+            var user = MediaServiceContext.Accounts.SingleOrDefault(x => x.Id == model.Id);
 
             if (user == null)
             {
@@ -174,7 +176,7 @@ namespace StreamKing.Web.Services
                     {
                         if (newValue.ToString() != oldValue.ToString())
                         {
-                            if(newValue.GetType() == typeof(DateTime))
+                            if (newValue.GetType() == typeof(DateTime))
                             {
                                 newValue = ((DateTime)newValue).ToUniversalTime();
                             }
@@ -196,7 +198,7 @@ namespace StreamKing.Web.Services
                     Source = "AccountsManagementService.UpdateAccount",
                     Message = message,
                 });
-                _mediaServiceContext.SaveChanges();
+                MediaServiceContext.SaveChanges();
             }
             return new UpdateResponse(user, status, message);
         }
@@ -206,15 +208,15 @@ namespace StreamKing.Web.Services
             bool status = false;
             string message = "";
 
-            var user = _mediaServiceContext.Accounts.SingleOrDefault(x => x.Id == id);
+            var user = MediaServiceContext.Accounts.SingleOrDefault(x => x.Id == id);
             if (user == null)
             {
                 message = $"Error: user with id '{id}' does not exist.";
             }
             else
             {
-                _mediaServiceContext.Accounts.Remove(user);
-                _mediaServiceContext.SaveChanges();
+                MediaServiceContext.Accounts.Remove(user);
+                MediaServiceContext.SaveChanges();
 
                 status = true;
                 message = $"Removed user with id '{id}'";
@@ -225,13 +227,13 @@ namespace StreamKing.Web.Services
 
         public IEnumerable<Account> GetAll()
         {
-            return _mediaServiceContext.Accounts;
+            return MediaServiceContext.Accounts;
         }
 
         public Account GetById(Guid id)
         {
             Console.WriteLine("id: " + id);
-            Account user = _mediaServiceContext.Accounts.FirstOrDefault(x => x.Id == id);
+            Account user = MediaServiceContext.Accounts.FirstOrDefault(x => x.Id == id);
             user.Log(new AccountLog
             {
                 Timestamp = DateTime.Now.ToUniversalTime(),
@@ -239,7 +241,7 @@ namespace StreamKing.Web.Services
                 Source = "AccountsManagementService.GetById",
                 Message = "Retrieval of account details.",
             });
-            _mediaServiceContext.SaveChanges();
+            MediaServiceContext.SaveChanges();
             return user;
         }
 

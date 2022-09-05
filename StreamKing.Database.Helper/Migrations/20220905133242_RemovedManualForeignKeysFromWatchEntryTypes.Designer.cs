@@ -2,18 +2,20 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using StreamKing.Database.Helper.Models;
 
 #nullable disable
 
-namespace database.helper.Migrations
+namespace StreamKing.Database.Helper.Migrations
 {
     [DbContext(typeof(MediaServiceContext))]
-    partial class MediaServiceContextModelSnapshot : ModelSnapshot
+    [Migration("20220905133242_RemovedManualForeignKeysFromWatchEntryTypes")]
+    partial class RemovedManualForeignKeysFromWatchEntryTypes
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -489,8 +491,7 @@ namespace database.helper.Migrations
 
                     b.HasOne("StreamKing.Data.Media.SeasonEntry", null)
                         .WithMany("Episodes")
-                        .HasForeignKey("SeasonEntryId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("SeasonEntryId");
 
                     b.Navigation("Episode");
                 });
@@ -520,8 +521,7 @@ namespace database.helper.Migrations
 
                     b.HasOne("StreamKing.Data.Media.SeriesEntry", null)
                         .WithMany("Seasons")
-                        .HasForeignKey("SeriesEntryId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("SeriesEntryId");
 
                     b.Navigation("Season");
                 });
