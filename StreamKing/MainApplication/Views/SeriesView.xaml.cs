@@ -17,7 +17,7 @@ namespace StreamKing.MainApplication.Views
     /// <summary>
     /// Interaktionslogik für SeriesView.xaml
     /// </summary>
-    public partial class SeriesView : Window
+    public partial class SeriesView : UserControl
     {
         public SeriesView()
         {

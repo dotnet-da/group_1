@@ -4,39 +4,63 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:StreamKing.MainApplication.ViewModels"
-             mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             mc:Ignorable="d"
+             Background="{StaticResource PrimaryColor}"
+             d:DesignHeight="350" d:DesignWidth="250">
 
- <UserControl.DataContext>
+    <UserControl.DataContext>
         <local:DataTemplateViewModel/>
- </UserControl.DataContext>
+    </UserControl.DataContext>
 
-
-
-
-            <ItemsControl IsTabStop="False" FontSize="16" Foreground="{StaticResource SecondaryColor}">
-        <Button Height="450" Click="MediaButton_Click" Width="400">
-            <StackPanel Width="400" HorizontalAlignment="Left" Height="446">
-                    <Grid Height="450">
-                        <Grid.RowDefinitions>
+    <ItemsControl IsTabStop="False" FontSize="16" Foreground="{StaticResource SecondaryColor}">
+        <Button Background="{StaticResource PrimaryFocusColor}" Height="350" Click="MediaButton_Click" Width="250">
+            <StackPanel Width="250" HorizontalAlignment="Center" Height="350">
+                <Grid Height="350" Width="250">
+                    <Grid.RowDefinitions>
                         <RowDefinition Height="50*"/>
                         <RowDefinition Height="10*"/>
                         <RowDefinition Height="10*"/>
                         <RowDefinition Height="10*"/>
                         <RowDefinition Height="20*"/>
                     </Grid.RowDefinitions>
-                        <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="53*"/>
-                        <ColumnDefinition Width="79*"/>
-                        </Grid.ColumnDefinitions>
-                        <Image Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"></Image>
-                        <TextBlock x:Name="MediaTitle" Text="Title" Grid.Column="0" Grid.Row="1"></TextBlock>
-                        <TextBlock x:Name="Provider" Text="Provider" Grid.Column="0" Grid.Row="2"></TextBlock>
-                        <TextBlock x:Name="Rating" Text="Rating" Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="2" Grid.RowSpan="3"></TextBlock>
-                        <TextBlock x:Name="additionalDetails" Visibility="Visible" Text="Season 1 Episode 1" Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="2" Margin="41,0,0,0" Background="Red"></TextBlock>
-                    </Grid>
-                </StackPanel>
-            </Button>
-        </ItemsControl>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="7*"/>
+                        <ColumnDefinition Width="3*"/>
+                    </Grid.ColumnDefinitions>
+                    <Border Style="{StaticResource InputBorder}"
+                        Margin="8,8,8,8"
+                        Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">
+                        <Image ></Image>
+                    </Border>
+
+                    <TextBlock x:Name="MediaTitle" Margin="8,8,8,8" FontSize="12" Grid.Column="0" Grid.Row="1" Text="{Binding Title}"/>
+                    <TextBlock x:Name="Provider" Margin="8,8,8,8" FontSize="12" Text="{Binding Provider}" Grid.Column="0" Grid.Row="2"></TextBlock>
+                    <ItemsControl IsTabStop="False" Margin="8" FocusVisualStyle="{x:Null}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <DockPanel></DockPanel>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <TextBlock x:Name="Sesons_TextBox" Text="{Binding SeasonString}"
+                                   FontSize="12" Margin="8,8,8,8" Grid.Column="0" Grid.Row="3">
+                            
+                        </TextBlock>
+                                   
+                        <TextBlock x:Name="AmountSeasnons_TextBox" Text="{Binding Rating}" FontSize="12" Margin="8,8,8,8" Grid.Column="0" Grid.Row="3" ></TextBlock>
+                    </ItemsControl>
+                    <TextBlock x:Name="Rating" Text="{Binding Rating}" FontSize="12" Margin="8,8,8,8" Grid.Column="0" Grid.Row="3" ></TextBlock>
+                    <Border Style="{StaticResource InputBorder}"
+                            Margin="8,8,8,8"
+                            Grid.Row="1" Grid.Column="1">
+                        <TextBlock x:Name="TagTextBox"
+                                   TextAlignment="Center"
+                                   FontSize="12"
+                                   Visibility="Visible" Text="{Binding Tag}"
+                                   Grid.Column="1" Grid.Row="1" Margin="0,0,0,0" Background="{Binding TagColor}"/>
+                    </Border>
+                </Grid>
+            </StackPanel>
+        </Button>
+    </ItemsControl>
 
 </UserControl>
