@@ -13,7 +13,7 @@
     </UserControl.DataContext>
 
     <ItemsControl IsTabStop="False" FontSize="16" Foreground="{StaticResource SecondaryColor}">
-        <Button Background="{StaticResource PrimaryFocusColor}" Height="350" Click="MediaButton_Click" Width="250">
+        <Button Background="{StaticResource PrimaryFocusColor}" Height="350" Width="250">
             <StackPanel Width="250" HorizontalAlignment="Center" Height="350">
                 <Grid Height="350" Width="250">
                     <Grid.RowDefinitions>

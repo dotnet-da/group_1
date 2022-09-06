@@ -32,7 +32,7 @@ namespace StreamKing.MainApplication.ViewModels
             Media = media;
             Rating = 5;
             //Title = media.Title;
-            //Rating = media.TmdbId;
+
             SeasonOrRuntimeInformation = "1h 30min";
             TagColor = "Red";
 

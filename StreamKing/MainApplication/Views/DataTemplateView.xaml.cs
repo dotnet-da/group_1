@@ -24,10 +24,5 @@ namespace StreamKing.MainApplication.Views
             InitializeComponent();
         }
 
-        private void MediaButton_Click(object sender, RoutedEventArgs e)
-        {
-            //Weiterleitung zur Film- oder Serienansicht
-
-        }
     }
 }

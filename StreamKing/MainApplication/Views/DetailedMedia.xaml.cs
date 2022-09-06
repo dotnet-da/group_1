@@ -15,14 +15,13 @@ using System.Windows.Shapes;
 namespace StreamKing.MainApplication.Views
 {
     /// <summary>
-    /// Interaktionslogik für SeriesView.xaml
+    /// Interaktionslogik für DetailedMedia.xaml
     /// </summary>
-    public partial class SeriesView : UserControl
+    public partial class DetailedMedia : UserControl
     {
-        public SeriesView()
+        public DetailedMedia()
         {
             InitializeComponent();
         }
-
     }
 }
