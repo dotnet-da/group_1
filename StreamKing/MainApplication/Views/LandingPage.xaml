@@ -7,6 +7,20 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
-            
+        <Grid.RowDefinitions>
+            <RowDefinition></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <ItemsControl Grid.Column="0" 
+                      Grid.Row="0"
+                      VerticalAlignment="Center"
+                      HorizontalAlignment="Center">
+            <TextBlock FontSize="48" 
+                       VerticalAlignment="Center"
+                       HorizontalAlignment="Center"
+                       Foreground="{StaticResource SecondaryColor}">Welcome to StreamKing!</TextBlock>
+        </ItemsControl>
     </Grid>
 </UserControl>

@@ -6,7 +6,8 @@
         mc:Ignorable="d"
         xmlns:viewmodels="clr-namespace:StreamKing.Login.ViewModels"
         xmlns:views="clr-namespace:StreamKing.Login.Views"
-        Title="Login" Height="480" Width="800">
+        Title="Login" Height="480" Width="800"
+        WindowStartupLocation="CenterScreen">
     <Window.Resources>
         <DataTemplate x:Name="RegisterViewTemplate" DataType="{x:Type viewmodels:RegisterViewModel}">
             <views:RegisterView DataContext="{Binding}"/>

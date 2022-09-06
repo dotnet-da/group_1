@@ -1,4 +1,5 @@
-﻿using StreamKing.MainApplication.ViewModels;
+﻿using StreamKing.Login.ViewModels;
+using StreamKing.MainApplication.ViewModels;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -9,11 +10,29 @@ namespace StreamKing.MainApplication
     /// </summary>
     public partial class MainWindow : Window
     {
+        public static MainWindowViewModel _viewModel { get; set; } = new MainWindowViewModel();
         public MainWindow()
         {
+            DataContext = null;
+            DataContext = _viewModel;
+
             InitializeComponent();
             UpdateHeader();
             App._mainWindow = this;
+        }
+
+        public void SetSettingsView()
+        {
+            _viewModel.MainPage = new SettingsPageViewModel();
+            DataContext = null;
+            DataContext = _viewModel;
+        }
+
+        public void SetLandingPageView()
+        {
+            _viewModel.MainPage = new LandingPageViewModel();
+            DataContext = null;
+            DataContext = _viewModel;
         }
 
         public void UpdateHeader()
@@ -28,22 +47,20 @@ namespace StreamKing.MainApplication
                 Region = null;
             }
 
-            MainWindowViewModel viewModel = new MainWindowViewModel();
-
             if (Region == "DE")
             {
-                viewModel.ActiveRegionImage = "../Assets/Images/region_DE.jpg";
+                _viewModel.ActiveRegionImage = "../Assets/Images/region_DE.jpg";
             }
             else if (Region == "FI")
             {
-                viewModel.ActiveRegionImage = "../Assets/Images/region_FI.jpg";
+                _viewModel.ActiveRegionImage = "../Assets/Images/region_FI.jpg";
             }
             else
             {
-                viewModel.ActiveRegionImage = "../Assets/Images/region_US.jpg";
+                _viewModel.ActiveRegionImage = "../Assets/Images/region_US.jpg";
             }
-
-            DataContext = viewModel;
+            DataContext = null;
+            DataContext = _viewModel;
         }
 
         private void ProfileButton_Click(object sender, RoutedEventArgs e)
@@ -90,33 +107,33 @@ namespace StreamKing.MainApplication
         private void RegionSwitch_Clicked(object sender, RoutedEventArgs e)
         {
             Button button = (Button)sender;
-            MainWindowViewModel viewModel = new MainWindowViewModel();
             if (button.Name.Contains("DE"))
             {
                 App.SwitchRegion("DE");
-                viewModel.ActiveRegionImage = "../Assets/Images/region_DE.jpg";
+                _viewModel.ActiveRegionImage = "../Assets/Images/region_DE.jpg";
             }
             else if (button.Name.Contains("FI"))
             {
                 App.SwitchRegion("FI");
-                viewModel.ActiveRegionImage = "../Assets/Images/region_FI.jpg";
+                _viewModel.ActiveRegionImage = "../Assets/Images/region_FI.jpg";
             }
             else if (button.Name.Contains("US"))
             {
                 App.SwitchRegion("US");
-                viewModel.ActiveRegionImage = "../Assets/Images/region_US.jpg";
+                _viewModel.ActiveRegionImage = "../Assets/Images/region_US.jpg";
             }
 
             if (RegionSwitch.Visibility == Visibility.Visible)
             {
                 RegionSwitch.Visibility = Visibility.Collapsed;
             }
-
-            DataContext = viewModel;
+            DataContext = null;
+            DataContext = _viewModel;
         }
 
         private void Logout_Clicked(object sender, RoutedEventArgs e)
         {
+            _viewModel = new MainWindowViewModel();
             App.Logout();
         }
 
@@ -126,7 +143,7 @@ namespace StreamKing.MainApplication
             {
                 Menu.Visibility = Visibility.Collapsed;
             }
-            MessageBox.Show("SettingsButton_Clicked");
+            SetSettingsView();
         }
     }
 }

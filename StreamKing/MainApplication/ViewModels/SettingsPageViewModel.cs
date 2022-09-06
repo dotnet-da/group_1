@@ -1,7 +1,6 @@
 ﻿namespace StreamKing.MainApplication.ViewModels
 {
-    public class LandingPageViewModel : MainPage
+    public class SettingsPageViewModel : MainPage
     {
-
     }
 }

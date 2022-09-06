@@ -6,7 +6,20 @@
         mc:Ignorable="d"
         Title="StreamKing" Height="800" Width="1280"
         Background="{StaticResource PrimaryColor}"
-        xmlns:viewmodels="clr-namespace:StreamKing.MainApplication.ViewModels">
+        WindowStartupLocation="CenterScreen"
+        xmlns:viewmodels="clr-namespace:StreamKing.MainApplication.ViewModels"
+        xmlns:views="clr-namespace:StreamKing.MainApplication.Views">
+    <Window.Resources>
+        <DataTemplate x:Name="LandingPageViewTemplate" DataType="{x:Type viewmodels:LandingPageViewModel}">
+            <views:LandingPage DataContext="{Binding}"/>
+        </DataTemplate>
+        <DataTemplate x:Name="SettingsPageViewTemplate" DataType="{x:Type viewmodels:SettingsPageViewModel}">
+            <views:SettingsPage DataContext="{Binding}"/>
+        </DataTemplate>
+    </Window.Resources>
+    <Window.DataContext>
+        <viewmodels:MainWindowViewModel/>
+    </Window.DataContext>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="48"/>
@@ -137,7 +150,7 @@
                     </StackPanel>
                 </ItemsControl>
 
-                <ItemsControl x:Name="Menu" Width="256" Grid.Column="0" 
+                <ItemsControl x:Name="Menu" Width="128" Grid.Column="0" 
                               Visibility="Collapsed"
                               VerticalAlignment="Top"
                               HorizontalAlignment="Right"
@@ -160,6 +173,8 @@
                 </ItemsControl>
             </Grid>
         </ItemsControl>
-    </Grid>
 
+        <ContentControl x:Name="ContentControl" Grid.Row="1" Grid.Column="0" Content="{Binding MainPage}" IsTabStop="False" Panel.ZIndex="1" >
+        </ContentControl>
+    </Grid>
 </Window>
