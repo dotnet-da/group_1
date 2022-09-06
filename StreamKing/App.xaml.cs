@@ -1,10 +1,12 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using StreamKing.Data.Accounts;
+using StreamKing.Data.Media;
 using StreamKing.Login;
 using StreamKing.MainApplication;
 using StreamKing.Web.Models;
 using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
@@ -20,15 +22,21 @@ namespace StreamKing
     public partial class App : Application
     {
         public static HttpClient _accountsApi { get; set; }
+        public static HttpClient _mediaApi { get; set; }
+
+        public static string WebApiUrl { get; set; } = "https://localhost:9595/api/";
 
         public static Guid? _userId { get; set; }
         public static string? _apiToken { get; set; }
         public static Account? _currentUser { get; set; }
         public static MainWindow? _mainWindow { get; set; }
         public static LoginWindow? _loginWindow { get; set; }
+        public static List<Media> _mediaList { get; set; } = new List<Media>();
         public App()
         {
             InitAccountsApi();
+            LoadMedia();
+            InitMediaApi();
         }
 
         public static void InitAccountsApi()
@@ -40,7 +48,63 @@ namespace StreamKing
             _accountsApi.DefaultRequestHeaders.Accept.Clear();
             _accountsApi.DefaultRequestHeaders.Accept.Add(
                                  new MediaTypeWithQualityHeaderValue("application/json"));
-            _accountsApi.BaseAddress = new Uri("https://localhost:9595/api/accounts/");
+            _accountsApi.BaseAddress = new Uri(WebApiUrl+"accounts/");
+
+        }
+
+        public static async void LoadMedia()
+        {
+            HttpClient tempApi = new HttpClient(new HttpClientHandler
+            {
+                UseProxy = false
+            });
+            tempApi.DefaultRequestHeaders.Accept.Clear();
+            tempApi.DefaultRequestHeaders.Accept.Add(
+                                 new MediaTypeWithQualityHeaderValue("application/json"));
+            tempApi.BaseAddress = new Uri(WebApiUrl + "media/");
+
+            HttpResponseMessage response = await tempApi.GetAsync("?type=movie&take=20");
+
+            if (!response.IsSuccessStatusCode)
+            {
+                MessageBox.Show("Error in LoadMedia:" + response.StatusCode);
+                return;
+            }
+
+            var content = await response.Content.ReadAsStringAsync();
+
+            try
+            {
+                var movieList = JArray.Parse(content).ToObject<List<Movie>>();
+                _mediaList.AddRange(movieList);
+                
+                //string message = "";
+                //message += "Now Elements:" + _mediaList.Count + "\n";
+
+                //foreach(var media in _mediaList)
+                //{
+                //    message += media.GetType()+": " + media.Title+"\n"; 
+                //}
+
+                //MessageBox.Show(message);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error in LoadMedia Parsing: " + ex.Message);
+            }
+
+        }
+
+        public static void InitMediaApi()
+        {
+            _mediaApi = new HttpClient(new HttpClientHandler
+            {
+                UseProxy = false
+            });
+            _mediaApi.DefaultRequestHeaders.Accept.Clear();
+            _mediaApi.DefaultRequestHeaders.Accept.Add(
+                                 new MediaTypeWithQualityHeaderValue("application/json"));
+            _mediaApi.BaseAddress = new Uri(WebApiUrl + "media/");
         }
 
         public static async Task<string> Login(string username, string password)
