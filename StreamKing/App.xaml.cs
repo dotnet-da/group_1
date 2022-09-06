@@ -35,7 +35,7 @@ namespace StreamKing
         public App()
         {
             InitAccountsApi();
-            LoadMedia();
+            //LoadMedia();
             InitMediaApi();
         }
 
@@ -157,16 +157,10 @@ namespace StreamKing
             return message;
         }
 
-        public static async Task<string> Register(string username, string password)
+        public static async Task<string> Register(RegisterRequest registerRequest)
         {
             string message;
             string path = "";
-
-            RegisterRequest registerRequest = new RegisterRequest
-            {
-                Username = username,
-                Password = password
-            };
 
             var authenticateRequestContent = JsonConvert.SerializeObject(registerRequest);
             var httpContent = new StringContent(authenticateRequestContent, Encoding.UTF8, "application/json");
@@ -187,6 +181,9 @@ namespace StreamKing
                     message = "Success";
                     _userId = (Guid)joResponse["id"];
                     _apiToken = (string)joResponse["token"];
+
+                    // Clear the model after succesfully signed up
+                    LoginWindow.ClearUserModel();
                 }
                 else
                 {
