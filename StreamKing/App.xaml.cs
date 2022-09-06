@@ -163,7 +163,7 @@ namespace StreamKing
             }
         }
 
-        public static async void Logout()
+        public static void Logout()
         {
             InitAccountsApi();
             _currentUser = null;
@@ -178,6 +178,25 @@ namespace StreamKing
                 _mainWindow.Close();
             }
             _mainWindow = null;
+        }
+
+        public static async void SwitchRegion(string region)
+        {
+            UpdateRequest updateRequest = new UpdateRequest
+            {
+                Region = region,
+            };
+
+            var authenticateRequestContent = JsonConvert.SerializeObject(updateRequest);
+            var httpContent = new StringContent(authenticateRequestContent, Encoding.UTF8, "application/json");
+
+            HttpResponseMessage response = await _accountsApi.PutAsync("session", httpContent);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                MessageBox.Show("Error in SwitchRegion:" + response.StatusCode);
+                return;
+            }
         }
     }
 }

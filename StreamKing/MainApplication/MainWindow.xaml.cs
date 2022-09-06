@@ -93,14 +93,17 @@ namespace StreamKing.MainApplication
             MainWindowViewModel viewModel = new MainWindowViewModel();
             if (button.Name.Contains("DE"))
             {
+                App.SwitchRegion("DE");
                 viewModel.ActiveRegionImage = "../Assets/Images/region_DE.jpg";
             }
             else if (button.Name.Contains("FI"))
             {
+                App.SwitchRegion("FI");
                 viewModel.ActiveRegionImage = "../Assets/Images/region_FI.jpg";
             }
             else if (button.Name.Contains("US"))
             {
+                App.SwitchRegion("US");
                 viewModel.ActiveRegionImage = "../Assets/Images/region_US.jpg";
             }
 
