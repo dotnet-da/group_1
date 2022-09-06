@@ -6,11 +6,15 @@
         mc:Ignorable="d"
         xmlns:viewmodels="clr-namespace:StreamKing.Login.ViewModels"
         xmlns:views="clr-namespace:StreamKing.Login.Views"
-        Title="Login" Height="480" Width="800"
-        WindowStartupLocation="CenterScreen">
+        WindowStartupLocation="CenterScreen"
+        Title="Login - Stream King"
+        Height="1000" Width="800">
     <Window.Resources>
-        <DataTemplate x:Name="RegisterViewTemplate" DataType="{x:Type viewmodels:RegisterViewModel}">
-            <views:RegisterView DataContext="{Binding}"/>
+        <DataTemplate x:Name="RegisterView1Template" DataType="{x:Type viewmodels:RegisterViewModel1}">
+            <views:RegisterView1 DataContext="{Binding}"/>
+        </DataTemplate>
+        <DataTemplate x:Name="RegisterView2Template" DataType="{x:Type viewmodels:RegisterViewModel2}">
+            <views:RegisterView2 DataContext="{Binding}"/>
         </DataTemplate>
         <DataTemplate x:Name="LoginViewTemplate" DataType="{x:Type viewmodels:LoginViewModel}">
             <views:LoginView DataContext="{Binding}"/>
@@ -33,5 +37,8 @@
 
         <ContentControl Grid.Row="1" Grid.Column="1" Content="{Binding}" IsTabStop="False" >
         </ContentControl>
+        <Image x:Name="Logo" Grid.Row="0" Grid.Column="1" HorizontalAlignment="center"
+               Height="175" VerticalAlignment="center" Width="175"
+               Source="../Assets/Images/LogoNB.png"/>
     </Grid>
 </Window>

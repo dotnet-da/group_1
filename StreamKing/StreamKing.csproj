@@ -10,6 +10,7 @@
 
   <ItemGroup>
     <None Remove="Assets\Images\icon_search.png" />
+    <None Remove="Assets\Images\Logo.png" />
     <None Remove="Assets\Images\LogoNB.png" />
     <None Remove="Assets\Images\LogoNB_small.png" />
     <None Remove="Assets\Images\profile_image.jpg" />
@@ -28,6 +29,7 @@
     <Resource Include="Assets\Images\region_DE.jpg" />
     <Resource Include="Assets\Images\region_FI.jpg" />
     <Resource Include="Assets\Images\region_US.jpg" />
+    <PackageReference Include="System.Drawing.Common" Version="6.0.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -42,6 +44,12 @@
 
   <ItemGroup>
     <Resource Include="Assets\Images\profile_image.jpg" />
+    <Resource Include="Assets\Images\Logo.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Images\LogoNB.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
   </ItemGroup>
 
 </Project>
