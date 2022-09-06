@@ -6,46 +6,83 @@
              xmlns:local="clr-namespace:StreamKing.MainApplication.ViewModels"
              mc:Ignorable="d"
              Background="{StaticResource PrimaryColor}"
-             d:DesignHeight="350" d:DesignWidth="250">
+             d:DesignHeight="250" d:DesignWidth="150">
 
     <UserControl.DataContext>
         <local:DataTemplateViewModel/>
     </UserControl.DataContext>
 
     <ItemsControl IsTabStop="False" FontSize="16" Foreground="{StaticResource SecondaryColor}">
-        <Button Background="{StaticResource PrimaryFocusColor}" Height="350" Width="250">
-            <StackPanel Width="250" HorizontalAlignment="Center" Height="350">
-                <Grid Height="350" Width="250">
+        <Button Background="{StaticResource PrimaryFocusColor}" Height="250" Width="150">
+            <StackPanel Width="150" HorizontalAlignment="Center" Height="250">
+                <Grid Height="250" Width="150">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="50*"/>
+                        <RowDefinition Height="15*"/>
                         <RowDefinition Height="10*"/>
                         <RowDefinition Height="10*"/>
                         <RowDefinition Height="10*"/>
-                        <RowDefinition Height="20*"/>
-                        <RowDefinition Height="20*"/>
+    
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="7*"/>
                         <ColumnDefinition Width="3*"/>
                     </Grid.ColumnDefinitions>
-                    <Border CornerRadius="12,12,0,0" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Margin="8,8,8,8">
+                    <Border CornerRadius="12,12,0,0" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Margin="8,8,8,0">
                         <Border.Background>
                             <ImageBrush Stretch="Fill" ImageSource="https://image.tmdb.org/t/p/w500/eSVvx8xys2NuFhl8fevXt41wX7v.jpg"/>
                         </Border.Background>
+                        
                     </Border>
-
-                    <TextBlock x:Name="MediaTitle" Margin="8,8,8,8" FontSize="12" Grid.Column="0" Grid.Row="1" Text="{Binding Media.Title}"/>
-                    <TextBlock x:Name="Provider" Margin="8,8,8,8" FontSize="12" Text="{Binding Media.StreamingInfos}" Grid.Column="0" Grid.Row="2"></TextBlock>
-                    <TextBlock x:Name="SeriesOrMovieDetails" Text="{Binding SeasonOrRuntimeInformation}" FontSize="12" Margin="8,8,8,8" Grid.Column="0" Grid.Row="3"></TextBlock>
-
-                    <TextBlock x:Name="Rating" Text="{Binding Rating}" FontSize="12" Margin="8,8,8,8" Grid.Column="0" Grid.Row="4" ></TextBlock>
-                    <Border CornerRadius="12,12,12,12" Margin="8,8,8,8" Grid.Row="1" Grid.Column="1">
+                    <Border CornerRadius="12,12,12,12" VerticalAlignment="Bottom" Margin="0,0,8,0" Grid.Row="0" Grid.Column="1">
                         <TextBlock x:Name="TagTextBox"
                                    TextAlignment="Center"
-                                   FontSize="12"
+                                   FontSize="6"
+                                   VerticalAlignment="Center"
                                    Visibility="Visible" Text="{Binding Tag}"
-                                   Grid.Column="1" Grid.Row="1" Margin="0,0,0,0" Background="{Binding TagColor}"/>
+                                   Grid.Column="1" Grid.Row="1" Background="{Binding TagColor}"/>
                     </Border>
+
+                    <TextBlock x:Name="MediaTitle" TextAlignment="Center" Margin="8,4,8,4" FontSize="12" FontWeight="Bold" Grid.Column="0" Grid.Row="1"
+                               Grid.ColumnSpan="2" Text="{Binding Title}"
+                               TextWrapping="Wrap"/>
+                    <TextBlock x:Name="Provider" Margin="8,4,4,4" FontSize="8" 
+                               Text="{Binding Provider}" Grid.Column="0" 
+                               Grid.Row="2"
+                               TextAlignment="Left"
+                               VerticalAlignment="Center"
+                               ></TextBlock>
+                    <TextBlock x:Name="SeriesOrMovieDetails" Text="{Binding SeasonOrRuntimeInformation}"
+                               FontSize="8" Grid.Column="0" Grid.Row="3"
+                               Margin="8,4,4,4" 
+                               VerticalAlignment="Center"
+                               ></TextBlock>
+
+                    
+                    <ItemsControl VerticalAlignment="Center" IsTabStop="False" Margin="8,4,4,8" Grid.Column="0" Grid.Row="4" FocusVisualStyle="{x:Null}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <DockPanel></DockPanel>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+
+
+                        <RadioButton Width="15" Height="15" GroupName="RatingGroup" Template="{StaticResource starTemplate}"
+                                     Content="RadioButton" HorizontalAlignment="Left"  Grid.Row="4" VerticalAlignment="Top"/>
+                        <RadioButton Width="15" Height="15" GroupName="RatingGroup" Template="{StaticResource starTemplate}"
+                                     Content="RadioButton" HorizontalAlignment="Left"  Grid.Row="4" VerticalAlignment="Top"/>
+                        <RadioButton Width="15" Height="15" GroupName="RatingGroup" Template="{StaticResource starTemplate}"
+                                     Content="RadioButton" HorizontalAlignment="Left"  Grid.Row="4" VerticalAlignment="Top"/>
+                        <RadioButton Width="15" Height="15" GroupName="RatingGroup" Template="{StaticResource starTemplate}"
+                                     Content="RadioButton" HorizontalAlignment="Left"  Grid.Row="4" VerticalAlignment="Top"/>
+                        <RadioButton Width="15" Height="15" GroupName="RatingGroup" Template="{StaticResource starTemplate}"
+                                     Content="RadioButton" HorizontalAlignment="Left"  Grid.Row="4" VerticalAlignment="Top"/>
+                        <TextBlock x:Name="Rating" Text="{Binding Rating}"
+                                   FontSize="8" Margin="4,0,0,0" 
+                                   Grid.Column="0" Grid.Row="4" 
+                                   VerticalAlignment="Center"
+                                   ></TextBlock>
+                    </ItemsControl>
                 </Grid>
             </StackPanel>
         </Button>
