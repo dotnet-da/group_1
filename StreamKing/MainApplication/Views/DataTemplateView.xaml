@@ -22,36 +22,24 @@
                         <RowDefinition Height="10*"/>
                         <RowDefinition Height="10*"/>
                         <RowDefinition Height="20*"/>
+                        <RowDefinition Height="20*"/>
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="7*"/>
                         <ColumnDefinition Width="3*"/>
                     </Grid.ColumnDefinitions>
-                    <Border Style="{StaticResource InputBorder}"
-                        Margin="8,8,8,8"
-                        Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">
-                        <Image ></Image>
+                    <Border CornerRadius="12,12,0,0" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Margin="8,8,8,8">
+                        <Border.Background>
+                            <ImageBrush Stretch="Fill" ImageSource="https://image.tmdb.org/t/p/w500/eSVvx8xys2NuFhl8fevXt41wX7v.jpg"/>
+                        </Border.Background>
                     </Border>
 
-                    <TextBlock x:Name="MediaTitle" Margin="8,8,8,8" FontSize="12" Grid.Column="0" Grid.Row="1" Text="{Binding Title}"/>
-                    <TextBlock x:Name="Provider" Margin="8,8,8,8" FontSize="12" Text="{Binding Provider}" Grid.Column="0" Grid.Row="2"></TextBlock>
-                    <ItemsControl IsTabStop="False" Margin="8" FocusVisualStyle="{x:Null}">
-                        <ItemsControl.ItemsPanel>
-                            <ItemsPanelTemplate>
-                                <DockPanel></DockPanel>
-                            </ItemsPanelTemplate>
-                        </ItemsControl.ItemsPanel>
-                        <TextBlock x:Name="Sesons_TextBox" Text="{Binding SeasonString}"
-                                   FontSize="12" Margin="8,8,8,8" Grid.Column="0" Grid.Row="3">
-                            
-                        </TextBlock>
-                                   
-                        <TextBlock x:Name="AmountSeasnons_TextBox" Text="{Binding Rating}" FontSize="12" Margin="8,8,8,8" Grid.Column="0" Grid.Row="3" ></TextBlock>
-                    </ItemsControl>
-                    <TextBlock x:Name="Rating" Text="{Binding Rating}" FontSize="12" Margin="8,8,8,8" Grid.Column="0" Grid.Row="3" ></TextBlock>
-                    <Border Style="{StaticResource InputBorder}"
-                            Margin="8,8,8,8"
-                            Grid.Row="1" Grid.Column="1">
+                    <TextBlock x:Name="MediaTitle" Margin="8,8,8,8" FontSize="12" Grid.Column="0" Grid.Row="1" Text="{Binding Media.Title}"/>
+                    <TextBlock x:Name="Provider" Margin="8,8,8,8" FontSize="12" Text="{Binding Media.StreamingInfos}" Grid.Column="0" Grid.Row="2"></TextBlock>
+                    <TextBlock x:Name="SeriesOrMovieDetails" Text="{Binding SeasonOrRuntimeInformation}" FontSize="12" Margin="8,8,8,8" Grid.Column="0" Grid.Row="3"></TextBlock>
+
+                    <TextBlock x:Name="Rating" Text="{Binding Rating}" FontSize="12" Margin="8,8,8,8" Grid.Column="0" Grid.Row="4" ></TextBlock>
+                    <Border CornerRadius="12,12,12,12" Margin="8,8,8,8" Grid.Row="1" Grid.Column="1">
                         <TextBlock x:Name="TagTextBox"
                                    TextAlignment="Center"
                                    FontSize="12"

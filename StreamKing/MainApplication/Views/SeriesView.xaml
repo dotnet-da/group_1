@@ -5,15 +5,50 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:StreamKing.MainApplication.ViewModels"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="800" d:DesignWidth="600">
 
     <UserControl.DataContext>
-        <local:SeriesViewModel/>
+        <local:DataTemplateViewModel/>
     </UserControl.DataContext>
 
+    
     <Grid>
-        <ItemsControl IsTabStop="False" Grid.Row="1" Grid.Column="1" FontSize="16" VerticalAlignment="Center" Foreground="{StaticResource SecondaryColor}">
-            
+        <ItemsControl IsTabStop="False" FontSize="16" Foreground="{StaticResource SecondaryColor}" Background="{StaticResource PrimaryFocusColor}" >
+            <Grid Height="600" Width="400">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="50*"/>
+                    <RowDefinition Height="10*"/>
+                    <RowDefinition Height="10*"/>
+                    <RowDefinition Height="10*"/>
+                    <RowDefinition Height="20*"/>
+                    <RowDefinition Height="20*"/>
+                    <RowDefinition Height="20*"/>
+
+                </Grid.RowDefinitions>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="7*"/>
+                    <ColumnDefinition Width="3*"/>
+                </Grid.ColumnDefinitions>
+
+                <Border Style="{StaticResource InputBorder}"
+                        Margin="8,8,8,8"
+                        Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">
+                    <Image Source="{Binding Media.BackdropURL}"></Image>
+                </Border>
+
+                <TextBlock x:Name="MediaGenre" Margin="8,8,8,8" FontSize="10" Grid.Column="0" Grid.Row="1" Text="{Binding Media.Genres}"/>
+                <TextBlock x:Name="MediaTitle" Margin="8,8,8,8" FontSize="14" FontWeight="Black" Text="{Binding Media.Title}" Grid.Column="0" Grid.Row="2"></TextBlock>
+                <TextBlock x:Name="Seasons_TextBox" Text="{Binding SeasonString}" FontSize="12" Margin="8,8,8,8" Grid.Column="0" Grid.Row="3"></TextBlock>
+                <TextBlock x:Name="MediaDescription" Text="{Binding Media.Description}" FontSize="12" Margin="8,8,8,8" Grid.Column="0" Grid.Row="4" ></TextBlock>
+                <TextBlock x:Name="MediaRating" Text="Rating" FontSize="12" Margin="8,8,8,8" Grid.Column="0" Grid.Row="5" ></TextBlock>
+                <ListView Grid.Column="0" Grid.Row="6">
+                    <ListBox>
+                        
+                    </ListBox>
+                </ListView>
+
+            </Grid>
         </ItemsControl>
     </Grid>
 </UserControl>

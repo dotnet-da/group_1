@@ -23,5 +23,6 @@ namespace StreamKing.MainApplication.Views
         {
             InitializeComponent();
         }
+
     }
 }
