@@ -135,7 +135,14 @@ namespace StreamKing.Web.Services
                     iterationCount: 100000,
                     numBytesRequested: 256 / 8));
 
-                user = new Account { Username = model.Username, Password = model.Password };
+                user = new Account { 
+                    Username = model.Username, 
+                    Password = model.Password,
+                    FirstName = model.FirstName != null ? model.FirstName : "",
+                    LastName = model.LastName != null ? model.LastName : "",
+                    Region = model.Region != null ? model.Region : "US",
+                    Email = model.Email != null ? model.Email : ""
+                };
 
                 MediaServiceContext.Accounts.Add(user);
                 user.Log(new AccountLog

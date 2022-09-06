@@ -129,6 +129,7 @@ namespace StreamKing.Web.Controllers
             model.FailedLogins = null;
             model.Type = null;
             model.Created = null;
+            model.Username = null;
 
             if (sessionUser.Status == AccountStatus.Locked || sessionUser.Status == AccountStatus.ValidationRequired)
             {

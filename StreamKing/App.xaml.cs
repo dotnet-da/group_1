@@ -1,12 +1,18 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using StreamKing.Data.Accounts;
+using StreamKing.Data.Media;
+using StreamKing.Login;
+using StreamKing.MainApplication;
 using StreamKing.Web.Models;
 using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Input;
 
 namespace StreamKing
 {
@@ -16,13 +22,25 @@ namespace StreamKing
     public partial class App : Application
     {
         public static HttpClient _accountsApi { get; set; }
+        public static HttpClient _mediaApi { get; set; }
 
-        public static Guid _userId { get; set; }
-        public static string _apiToken { get; set; }
+        public static string WebApiUrl { get; set; } = "https://localhost:9595/api/";
 
+        public static Guid? _userId { get; set; }
+        public static string? _apiToken { get; set; }
+        public static Account? _currentUser { get; set; }
+        public static MainWindow? _mainWindow { get; set; }
+        public static LoginWindow? _loginWindow { get; set; }
+        public static List<Media> _mediaList { get; set; } = new List<Media>();
         public App()
         {
-            // Get data from accounts API
+            InitAccountsApi();
+            LoadMedia();
+            InitMediaApi();
+        }
+
+        public static void InitAccountsApi()
+        {
             _accountsApi = new HttpClient(new HttpClientHandler
             {
                 UseProxy = false
@@ -30,8 +48,63 @@ namespace StreamKing
             _accountsApi.DefaultRequestHeaders.Accept.Clear();
             _accountsApi.DefaultRequestHeaders.Accept.Add(
                                  new MediaTypeWithQualityHeaderValue("application/json"));
-            _accountsApi.BaseAddress = new Uri("https://localhost:9595/api/accounts/");
-            //_accountsApi.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _apiKey);
+            _accountsApi.BaseAddress = new Uri(WebApiUrl+"accounts/");
+
+        }
+
+        public static async void LoadMedia()
+        {
+            HttpClient tempApi = new HttpClient(new HttpClientHandler
+            {
+                UseProxy = false
+            });
+            tempApi.DefaultRequestHeaders.Accept.Clear();
+            tempApi.DefaultRequestHeaders.Accept.Add(
+                                 new MediaTypeWithQualityHeaderValue("application/json"));
+            tempApi.BaseAddress = new Uri(WebApiUrl + "media/");
+
+            HttpResponseMessage response = await tempApi.GetAsync("?type=movie&take=20");
+
+            if (!response.IsSuccessStatusCode)
+            {
+                MessageBox.Show("Error in LoadMedia:" + response.StatusCode);
+                return;
+            }
+
+            var content = await response.Content.ReadAsStringAsync();
+
+            try
+            {
+                var movieList = JArray.Parse(content).ToObject<List<Movie>>();
+                _mediaList.AddRange(movieList);
+                
+                //string message = "";
+                //message += "Now Elements:" + _mediaList.Count + "\n";
+
+                //foreach(var media in _mediaList)
+                //{
+                //    message += media.GetType()+": " + media.Title+"\n"; 
+                //}
+
+                //MessageBox.Show(message);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error in LoadMedia Parsing: " + ex.Message);
+            }
+
+        }
+
+        public static void InitMediaApi()
+        {
+            _mediaApi = new HttpClient(new HttpClientHandler
+            {
+                UseProxy = false
+            });
+            _mediaApi.DefaultRequestHeaders.Accept.Clear();
+            _mediaApi.DefaultRequestHeaders.Accept.Add(
+                                 new MediaTypeWithQualityHeaderValue("application/json"));
+            _mediaApi.BaseAddress = new Uri(WebApiUrl + "media/");
         }
 
         public static async Task<string> Login(string username, string password)
@@ -64,6 +137,12 @@ namespace StreamKing
                     message = "Success";
                     _userId = (Guid)joResponse["id"];
                     _apiToken = (string)joResponse["token"];
+
+                    Mouse.OverrideCursor = null;
+                    _mainWindow = new MainWindow();
+                    _mainWindow.Show();
+
+                    SetCurrentUser();
                 }
                 else
                 {
@@ -120,6 +199,68 @@ namespace StreamKing
             }
 
             return message;
+        }
+
+        public static async void SetCurrentUser()
+        {
+            _accountsApi.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _apiToken);
+
+            HttpResponseMessage response = await _accountsApi.GetAsync("session");
+
+
+            if (!response.IsSuccessStatusCode)
+            {
+                MessageBox.Show("Error in SetCurrentUser:" + response.StatusCode);
+                return;
+            }
+
+            var content = await response.Content.ReadAsStringAsync();
+
+            try
+            {
+                _currentUser = JObject.Parse(content).ToObject<Account>();
+                _mainWindow.UpdateHeader();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error in SetCurrentUser: " + ex.Message);
+            }
+        }
+
+        public static void Logout()
+        {
+            InitAccountsApi();
+            _currentUser = null;
+            _apiToken = null;
+            _userId = null;
+
+            _loginWindow = new LoginWindow();
+            _loginWindow.Show();
+
+            if (_mainWindow != null)
+            {
+                _mainWindow.Close();
+            }
+            _mainWindow = null;
+        }
+
+        public static async void SwitchRegion(string region)
+        {
+            UpdateRequest updateRequest = new UpdateRequest
+            {
+                Region = region,
+            };
+
+            var authenticateRequestContent = JsonConvert.SerializeObject(updateRequest);
+            var httpContent = new StringContent(authenticateRequestContent, Encoding.UTF8, "application/json");
+
+            HttpResponseMessage response = await _accountsApi.PutAsync("session", httpContent);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                MessageBox.Show("Error in SwitchRegion:" + response.StatusCode);
+                return;
+            }
         }
     }
 }

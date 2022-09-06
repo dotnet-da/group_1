@@ -29,12 +29,21 @@ namespace StreamKing.Login.Views
                 UsernameInput.Clear();
                 PasswordInput.Clear();
 
+                LoginWindow loginWindow = (LoginWindow)Window.GetWindow(this);
+
                 var status = await App.Login(username, password);
 
-                Mouse.OverrideCursor = null;
-
-                MessageBox.Show("Login status: " + status);
                 isLoggingIn = false;
+
+                if (status == "Success")
+                {
+                    loginWindow.Close();
+                }
+                else
+                {
+                    MessageBox.Show("Username or Password is incorrect!");
+                    Mouse.OverrideCursor = null;
+                }
             }
             else
             {
@@ -44,7 +53,7 @@ namespace StreamKing.Login.Views
 
         private void RegisterButton_Click(object sender, RoutedEventArgs e)
         {
-            Login loginWindow = (Login)Window.GetWindow(this);
+            LoginWindow loginWindow = (LoginWindow)Window.GetWindow(this);
             loginWindow.SetRegisterView();
         }
     }
