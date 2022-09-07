@@ -109,6 +109,8 @@ namespace StreamKing
             }
         }
 
+
+
         public static void InitMediaApi()
         {
             _mediaApi = new HttpClient(new HttpClientHandler
@@ -388,6 +390,84 @@ namespace StreamKing
                 MessageBox.Show("Error in SwitchRegion:" + response.StatusCode);
                 return;
             }
+        }
+
+        public static async void DeleteCurrentUser()
+        {
+            if (_currentUser is not null)
+            {
+                Console.WriteLine("Removing Current User(" + _currentUser.Id + "): " + _currentUser.Username);
+                Mouse.OverrideCursor = Cursors.Wait;
+
+                try
+                {
+                    string path = "session";
+                    Console.WriteLine("Delete from: " + path);
+                    HttpResponseMessage response = await _accountsApi.DeleteAsync(path);
+
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        MessageBox.Show("DeleteCurrentUser:" + response.StatusCode);
+                        Mouse.OverrideCursor = null;
+                        return;
+                    }
+                    var content = await response.Content.ReadAsStringAsync();
+                    var result = JObject.Parse(content).ToObject<DeleteResponse>();
+
+                    if (result.Status)
+                    {
+                        Console.WriteLine("Successful DeleteCurrentUser: " + content);
+                        Mouse.OverrideCursor = null;
+                        Logout();
+                    }
+                    else
+                    {
+                        Mouse.OverrideCursor = null;
+                        MessageBox.Show("User was not deleted: " + result.Message);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Error in DeleteCurrentUser: " + ex.Message);
+                    Mouse.OverrideCursor = null;
+
+                }
+            }
+
+        }
+        public static async void UpdateCurrentuser(UpdateRequest updateRequest)
+        {
+            string path = "session";
+            Console.WriteLine("Put to: " + path);
+            Mouse.OverrideCursor = Cursors.Wait;
+
+            var authenticateRequestContent = JsonConvert.SerializeObject(updateRequest);
+            var httpContent = new StringContent(authenticateRequestContent, Encoding.UTF8, "application/json");
+
+            HttpResponseMessage response = await _accountsApi.PutAsync("session", httpContent);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                MessageBox.Show("Error in UpdateCurrentuser:" + response.StatusCode);
+                return;
+            }
+
+            var content = await response.Content.ReadAsStringAsync();
+            var result = JObject.Parse(content).ToObject<UpdateResponse>();
+
+            if (result.Status)
+            {
+                Console.WriteLine("Successful UpdateCurrentuser: " + content);
+                Mouse.OverrideCursor = null;
+                MessageBox.Show("User was Updated: " + result.Message);
+                SetCurrentUser();
+            }
+            else
+            {
+                Mouse.OverrideCursor = null;
+                MessageBox.Show("User was not updated: " + result.Message);
+            }
+            
         }
     }
 }

@@ -34,10 +34,11 @@
             </Setter>
         </Style>
     </UserControl.Resources>
-    <Grid>
+    <Grid Background="{StaticResource PrimaryColor}">
         <Grid.RowDefinitions>
             <RowDefinition Height="48"></RowDefinition>
             <RowDefinition></RowDefinition>
+            <RowDefinition Height="48"></RowDefinition>
             <RowDefinition Height="48"></RowDefinition>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
@@ -73,6 +74,7 @@
         <ScrollViewer VerticalScrollBarVisibility="Auto"
                       Grid.Row="1"
                       Panel.ZIndex="0"
+                      Background="{StaticResource PrimaryHeaderColor}"
             Grid.Column="1">
             <ItemsControl FontSize="16"
             >
@@ -104,7 +106,7 @@
                 Grid.Column="0"
                 IsTabStop="False" Margin="8">
                 <TextBlock Text="Email" Foreground="{StaticResource SecondaryColor}"></TextBlock>
-                <TextBox x:Name="EmailInput" IsEnabled="False" TabIndex="1" Style="{StaticResource InputControlBox}"
+                <TextBox x:Name="EmailInput" TabIndex="1" Style="{StaticResource InputControlBox}"
                  ></TextBox>
             </ItemsControl>
             <ItemsControl 
@@ -139,7 +141,7 @@
                 Grid.Column="0"
                 IsTabStop="False" Margin="8">
                 <TextBlock Text="First Name" Foreground="{StaticResource SecondaryColor}"></TextBlock>
-                <TextBox x:Name="FirstNameInput" IsEnabled="False" TabIndex="1" Style="{StaticResource InputControlBox}"
+                <TextBox x:Name="FirstNameInput" TabIndex="1" Style="{StaticResource InputControlBox}"
                  ></TextBox>
             </ItemsControl>
             <ItemsControl 
@@ -148,7 +150,7 @@
                 Grid.Column="1"
                 IsTabStop="False" Margin="8">
                 <TextBlock Text="Last Name" Foreground="{StaticResource SecondaryColor}"></TextBlock>
-                <TextBox x:Name="LastNameInput" IsEnabled="False" TabIndex="1" Style="{StaticResource InputControlBox}"
+                <TextBox x:Name="LastNameInput" TabIndex="1" Style="{StaticResource InputControlBox}"
                  ></TextBox>
             </ItemsControl>
 
@@ -157,7 +159,7 @@
                 Grid.Column="0"
                 IsTabStop="False" Margin="8">
                 <TextBlock Text="Birthday" Foreground="{StaticResource SecondaryColor}"></TextBlock>
-                <TextBox x:Name="BirthdayInput" IsEnabled="False" TabIndex="1" Style="{StaticResource InputControlBox}"
+                <TextBox x:Name="BirthdayInput" TabIndex="1" Style="{StaticResource InputControlBox}"
                  ></TextBox>
             </ItemsControl>
             <ItemsControl 
@@ -189,6 +191,22 @@
                        VerticalAlignment="Center"
                        HorizontalAlignment="Center"
                        Foreground="{StaticResource SecondaryColor}">Settings</TextBlock>
+        </ItemsControl>
+        <ItemsControl Grid.Row="2" Grid.Column="1">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <DockPanel></DockPanel>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <Button x:Name="DeleteButton" Margin="64,0,0,0" 
+                    Style="{StaticResource SecondaryButton}" 
+                    Content="Delete" HorizontalAlignment="Left" VerticalAlignment="Center" Click="DeleteButton_Clicked" >
+
+                </Button>
+            <Button x:Name="UpdateButton" Margin="0,0,64,0" Style="{StaticResource PrimaryButton}" Content="Update" HorizontalAlignment="Right" VerticalAlignment="Center" Click="UpdateButton_Clicked">
+
+                </Button>
+            
         </ItemsControl>
     </Grid>
 </UserControl>

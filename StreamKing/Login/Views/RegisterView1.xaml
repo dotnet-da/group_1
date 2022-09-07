@@ -96,7 +96,7 @@
                         </ItemsPanelTemplate>
                     </ItemsControl.ItemsPanel>
                     <TextBlock TextAlignment="Center" Margin="0,0,8,0">Already have an Account?</TextBlock>
-                    <Button Content="Login here" x:Name="BackToLoginButton" TabIndex="5"  Style="{StaticResource TertiaryButton}" Click="BackToLoginButton_Click">
+                    <Button Content="Login here" x:Name="BackToLoginButton" TabIndex="5"  Style="{StaticResource TertiaryButton}" Click="BackToLoginButton_Click" Cursor="Hand">
                     </Button>
                 </ItemsControl>
 
