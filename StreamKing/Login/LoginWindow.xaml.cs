@@ -1,5 +1,7 @@
 ﻿using StreamKing.Login.Models;
 using StreamKing.Login.ViewModels;
+using StreamKing.MainApplication;
+using System;
 using System.Windows;
 
 namespace StreamKing.Login
@@ -15,21 +17,34 @@ namespace StreamKing.Login
             InitializeComponent();
             DataContext = new LoginViewModel();
             Udata = new UserData();
+
+            if (App._apiToken != null)
+            {
+                Console.WriteLine("Found apiToken, automatically logging in...");
+                App.GetWatchlist();
+                App._mainWindow = new MainWindow();
+                App._mainWindow.Show();
+                Close();
+
+                App.SetCurrentUser();
+            }
         }
 
         public void SetRegisterView()
         {
+            Height = 600;
             DataContext = new RegisterViewModel1();
         }
 
         public void SetRegisterView2()
         {
+            Height = 900;
             DataContext = new RegisterViewModel2();
         }
 
         public void SetLoginView()
         {
-            //Height = 480;
+            Height = 600;
             DataContext = new LoginViewModel();
         }
 
@@ -43,6 +58,6 @@ namespace StreamKing.Login
             Udata.password = "";
         }
 
-        
+
     }
 }

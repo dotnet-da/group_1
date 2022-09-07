@@ -6,12 +6,6 @@
              xmlns:local="clr-namespace:StreamKing.MainApplication.ViewModels"
              mc:Ignorable="d"
              d:DesignHeight="800" d:DesignWidth="600">
-
-    <UserControl.DataContext>
-        <local:DataTemplateViewModel/>
-    </UserControl.DataContext>
-
-
     <Grid>
         <ItemsControl IsTabStop="False" FontSize="16" Foreground="{StaticResource SecondaryColor}" Background="{StaticResource PrimaryFocusColor}" >
             <Grid Height="600" Width="400">

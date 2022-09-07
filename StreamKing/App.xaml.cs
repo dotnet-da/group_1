@@ -21,8 +21,8 @@ namespace StreamKing
     /// </summary>
     public partial class App : Application
     {
-        public static HttpClient _accountsApi { get; set; }
-        public static HttpClient _mediaApi { get; set; }
+        public static HttpClient? _accountsApi { get; set; }
+        public static HttpClient? _mediaApi { get; set; }
 
         public static string WebApiUrl { get; set; } = "https://localhost:9595/api/";
 
@@ -32,11 +32,13 @@ namespace StreamKing
         public static MainWindow? _mainWindow { get; set; }
         public static LoginWindow? _loginWindow { get; set; }
         public static List<Media> _mediaList { get; set; } = new List<Media>();
+        public static Watchlist? Watchlist { get; set; }
         public App()
         {
             InitAccountsApi();
-            //LoadMedia();
             InitMediaApi();
+            LoadMedia("?type=movie&take=50");
+            LoadMedia("?type=series&take=50");
         }
 
         public static void InitAccountsApi()
@@ -48,11 +50,11 @@ namespace StreamKing
             _accountsApi.DefaultRequestHeaders.Accept.Clear();
             _accountsApi.DefaultRequestHeaders.Accept.Add(
                                  new MediaTypeWithQualityHeaderValue("application/json"));
-            _accountsApi.BaseAddress = new Uri(WebApiUrl+"accounts/");
+            _accountsApi.BaseAddress = new Uri(WebApiUrl + "accounts/");
 
         }
 
-        public static async void LoadMedia()
+        public static async void LoadMedia(string url)
         {
             HttpClient tempApi = new HttpClient(new HttpClientHandler
             {
@@ -63,36 +65,48 @@ namespace StreamKing
                                  new MediaTypeWithQualityHeaderValue("application/json"));
             tempApi.BaseAddress = new Uri(WebApiUrl + "media/");
 
-            HttpResponseMessage response = await tempApi.GetAsync("?type=movie&take=20");
-
-            if (!response.IsSuccessStatusCode)
-            {
-                MessageBox.Show("Error in LoadMedia:" + response.StatusCode);
-                return;
-            }
-
-            var content = await response.Content.ReadAsStringAsync();
-
             try
             {
-                var movieList = JArray.Parse(content).ToObject<List<Movie>>();
-                _mediaList.AddRange(movieList);
-                
-                //string message = "";
-                //message += "Now Elements:" + _mediaList.Count + "\n";
+                HttpResponseMessage response = await tempApi.GetAsync(url);
+                if (!response.IsSuccessStatusCode)
+                {
+                    MessageBox.Show("Error in LoadMedia:" + response.StatusCode);
+                    return;
+                }
 
-                //foreach(var media in _mediaList)
-                //{
-                //    message += media.GetType()+": " + media.Title+"\n"; 
-                //}
+                var content = await response.Content.ReadAsStringAsync();
 
-                //MessageBox.Show(message);
+                try
+                {
+                    if (url.Contains("movie"))
+                    {
+                        var movieList = JArray.Parse(content).ToObject<List<Movie>>();
+                        _mediaList.AddRange(movieList);
+                        if (_mainWindow != null)
+                        {
+                            _mainWindow.SetMedialist();
+                        }
+                    }
+                    else if (url.Contains("series"))
+                    {
+                        var seriesList = JArray.Parse(content).ToObject<List<Series>>();
+                        _mediaList.AddRange(seriesList);
+                        if (_mainWindow != null)
+                        {
+                            _mainWindow.SetMedialist();
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error in LoadMedia Parsing: " + ex.Message);
+                }
+
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error in LoadMedia Parsing: " + ex.Message);
+                MessageBox.Show("Error in LoadMedia: " + ex.Message);
             }
-
         }
 
         public static void InitMediaApi()
@@ -105,6 +119,113 @@ namespace StreamKing
             _mediaApi.DefaultRequestHeaders.Accept.Add(
                                  new MediaTypeWithQualityHeaderValue("application/json"));
             _mediaApi.BaseAddress = new Uri(WebApiUrl + "media/");
+        }
+
+        public static async void GetWatchlist()
+        {
+            _mediaApi.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _apiToken);
+
+            try
+            {
+                HttpResponseMessage response = await _mediaApi.GetAsync("session/watchlists");
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    MessageBox.Show("GetWatchlist:" + response.StatusCode);
+                    return;
+                }
+
+                var content = await response.Content.ReadAsStringAsync();
+
+                Watchlist = JArray.Parse(content).ToObject<List<Watchlist>>()[0];
+                Console.WriteLine("Watchlist loaded: " + Watchlist.Id + ": " + Watchlist.Name);
+
+                if (_mainWindow != null)
+                {
+                    _mainWindow.SetWatchlist();
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error in GetWatchlist: " + ex.Message);
+            }
+        }
+        public static async Task<bool> AddSelectedMediaToWatchlist()
+        {
+            Media? selected = _mainWindow.GetSelectedMedia();
+            if (selected is not null && Watchlist is not null)
+            {
+                Console.WriteLine("Adding to Watchlist(" + Watchlist.Id + "): " + selected.Title);
+                WatchEntryRequest watchEntryRequest = new WatchEntryRequest
+                {
+                    Tag = "Watching",
+                };
+
+                if (selected.GetType() == typeof(Movie))
+                {
+                    watchEntryRequest.MovieId = selected.TmdbId;
+                }
+                else if (selected.GetType() == typeof(Series))
+                {
+                    watchEntryRequest.SeriesId = selected.TmdbId;
+                }
+
+                var watchEntryRequestContent = JsonConvert.SerializeObject(watchEntryRequest);
+                var httpContent = new StringContent(watchEntryRequestContent, Encoding.UTF8, "application/json");
+
+                try
+                {
+                    string path = "session/watchlists/" + Watchlist.Id + "/entries";
+                    Console.WriteLine("Post to: " + path);
+                    HttpResponseMessage response = await _mediaApi.PostAsync(path, httpContent);
+
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        MessageBox.Show("AddSelectedMediaToWatchlist:" + response.StatusCode);
+                        return false;
+                    }
+                    var content = await response.Content.ReadAsStringAsync();
+                    Console.WriteLine("Successful AddSelectedMediaToWatchlist: " + content);
+
+                    GetWatchlist();
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Error in GetWatchlist: " + ex.Message);
+                }
+            }
+            return true;
+        }
+
+        public static async Task<bool> RemoveSelectedWatchEntryFromWatchlist()
+        {
+            WatchEntry? selected = _mainWindow.GetSelectedWatchEntry();
+            if (selected is not null && Watchlist is not null)
+            {
+                Console.WriteLine("Removing from Watchlist(" + Watchlist.Id + "): " + selected.Id);
+
+                try
+                {
+                    string path = "session/watchlists/" + Watchlist.Id + "/entries/" + selected.Id;
+                    Console.WriteLine("Delete from: " + path);
+                    HttpResponseMessage response = await _mediaApi.DeleteAsync(path);
+
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        MessageBox.Show("RemoveSelectedWatchEntryFromWatchlist:" + response.StatusCode);
+                        return false;
+                    }
+                    var content = await response.Content.ReadAsStringAsync();
+                    Console.WriteLine("Successful RemoveSelectedWatchEntryFromWatchlist: " + content);
+
+                    GetWatchlist();
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Error in RemoveSelectedWatchEntryFromWatchlist: " + ex.Message);
+                }
+            }
+            return true;
         }
 
         public static async Task<string> Login(string username, string password)
@@ -138,11 +259,14 @@ namespace StreamKing
                     _userId = (Guid)joResponse["id"];
                     _apiToken = (string)joResponse["token"];
 
+                    Console.WriteLine(_apiToken);
+
                     Mouse.OverrideCursor = null;
                     _mainWindow = new MainWindow();
                     _mainWindow.Show();
 
                     SetCurrentUser();
+                    GetWatchlist();
                 }
                 else
                 {
@@ -216,7 +340,10 @@ namespace StreamKing
             try
             {
                 _currentUser = JObject.Parse(content).ToObject<Account>();
+                _userId = _currentUser.Id;
                 _mainWindow.UpdateHeader();
+                _mainWindow.UpdateCurrentUser();
+
             }
             catch (Exception ex)
             {
@@ -230,6 +357,9 @@ namespace StreamKing
             _currentUser = null;
             _apiToken = null;
             _userId = null;
+            _accountsApi.DefaultRequestHeaders.Authorization = null;
+            _mediaApi.DefaultRequestHeaders.Authorization = null;
+            Watchlist = null;
 
             _loginWindow = new LoginWindow();
             _loginWindow.Show();

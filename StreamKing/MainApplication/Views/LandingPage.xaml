@@ -1,11 +1,71 @@
 ﻿<UserControl x:Class="StreamKing.MainApplication.Views.LandingPage"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:StreamKing.MainApplication.Views"
-             mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             xmlns:viewmodels="clr-namespace:StreamKing.MainApplication.ViewModels"
+             xmlns:views="clr-namespace:StreamKing.MainApplication.Views"
+             xmlns:models="clr-namespace:StreamKing.Data.Media;assembly=StreamKing.Data.Media"
+             mc:Ignorable="d"
+             d:DesignHeight="450"
+             d:DesignWidth="800">
+    <UserControl.Resources>
+        <Style TargetType="{x:Type ListBoxItem}">
+            <Setter Property="Background"
+                    Value="Transparent" />
+            <Setter Property="HorizontalContentAlignment"
+                    Value="{Binding HorizontalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}" />
+            <Setter Property="VerticalContentAlignment"
+                    Value="{Binding VerticalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}" />
+            <Setter Property="Padding"
+                    Value="2,0,0,0" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                        <Border x:Name="Bd"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                Background="{TemplateBinding Background}"
+                                Padding="{TemplateBinding Padding}"
+                                SnapsToDevicePixels="true">
+                            <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                              SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+                                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsSelected"
+                                     Value="true">
+                                <Setter Property="Background"
+                                        TargetName="Bd"
+                                        Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" />
+                                <Setter Property="Foreground"
+                                        Value="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}" />
+                            </Trigger>
+                            <MultiTrigger>
+                                <MultiTrigger.Conditions>
+                                    <Condition Property="IsSelected"
+                                               Value="true" />
+                                    <Condition Property="Selector.IsSelectionActive"
+                                               Value="false" />
+                                </MultiTrigger.Conditions>
+                                <Setter Property="Background"
+                                        TargetName="Bd"
+                                        Value="{DynamicResource {x:Static SystemColors.InactiveSelectionHighlightBrushKey}}" />
+                                <Setter Property="Foreground"
+                                        Value="{DynamicResource {x:Static SystemColors.InactiveSelectionHighlightTextBrushKey}}" />
+                            </MultiTrigger>
+                            <Trigger Property="IsEnabled"
+                                     Value="false">
+                                <Setter Property="Foreground"
+                                        Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition></RowDefinition>
@@ -13,14 +73,99 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition></ColumnDefinition>
         </Grid.ColumnDefinitions>
-        <ItemsControl Grid.Column="0" 
+        <ScrollViewer Grid.Column="1"
                       Grid.Row="0"
-                      VerticalAlignment="Center"
-                      HorizontalAlignment="Center">
-            <TextBlock FontSize="48" 
-                       VerticalAlignment="Center"
-                       HorizontalAlignment="Center"
-                       Foreground="{StaticResource SecondaryColor}">Welcome to StreamKing!</TextBlock>
-        </ItemsControl>
+                      Margin="48,0,0,0"
+                      VerticalScrollBarVisibility="Auto">
+            <ItemsControl Margin="0,24,0,48"
+                          VerticalAlignment="Top"
+                          HorizontalAlignment="Stretch">
+                <ItemsControl>
+                    <TextBlock FontSize="36"
+                               VerticalAlignment="Center"
+                               HorizontalAlignment="Left"
+                               Foreground="{StaticResource SecondaryColor}"
+                               Margin="8,8,8,16"
+                               Text="{Binding Watchlist.Name, FallbackValue='No Watchlist Found'}"></TextBlock>
+                    <ListBox x:Name="MovieWatchlistView"
+                             ItemsSource="{Binding Watchlist.MovieList, Mode=OneWay}"
+                             ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                             ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                             Background="Transparent"
+                             HorizontalAlignment="Stretch"
+                             MaxHeight="600"
+                             BorderThickness="0">
+                        <ListBox.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel />
+                            </ItemsPanelTemplate>
+                        </ListBox.ItemsPanel>
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <views:MediaTemplateView DataContext="{Binding}"/>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                    <ListBox x:Name="SeriesWatchlistView"
+                             ItemsSource="{Binding Watchlist.SeriesList, Mode=OneWay}"
+                             ScrollViewer.VerticalScrollBarVisibility="Auto"
+                             ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                             ScrollViewer.CanContentScroll="False"
+                             Background="Transparent"
+                             HorizontalAlignment="Stretch"
+                             MaxHeight="600"
+                             BorderThickness="0">
+                        <ListBox.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel />
+                            </ItemsPanelTemplate>
+                        </ListBox.ItemsPanel>
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <views:MediaTemplateView DataContext="{Binding}" />
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                    <!--<ListView x:Name="WatchlistListView"
+                          ScrollViewer.VerticalScrollBarVisibility="Visible"
+                            ScrollViewer.CanContentScroll="False"
+                          MaxHeight="600">
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn Width="256" Header="Title"
+                             DisplayMemberBinding="{Binding Title}"  />
+                            <GridViewColumn Width="140" Header="TmdbId"  
+                            DisplayMemberBinding="{Binding TmdbId}" />
+                        </GridView>
+                    </ListView.View>
+                </ListView>-->
+                </ItemsControl>
+                <TextBlock FontSize="36"
+                           VerticalAlignment="Center"
+                           HorizontalAlignment="Left"
+                           Foreground="{StaticResource SecondaryColor}"
+                           Margin="8,8,8,16">Discover new Movies and TV Shows</TextBlock>
+                <ListBox x:Name="DiscoverMediaListView"
+                         ItemsSource="{Binding MediaList, Mode=OneWay}"
+                         ScrollViewer.VerticalScrollBarVisibility="Auto"
+                         ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                         ScrollViewer.CanContentScroll="False"
+                         Background="Transparent"
+                         HorizontalAlignment="Stretch"
+                         MaxHeight="600"
+                         BorderThickness="0">
+                    <ListBox.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel />
+                        </ItemsPanelTemplate>
+                    </ListBox.ItemsPanel>
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <views:MediaTemplateView />
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </ItemsControl>
+        </ScrollViewer>
     </Grid>
 </UserControl>

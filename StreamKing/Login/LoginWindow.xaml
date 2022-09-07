@@ -8,7 +8,7 @@
         xmlns:views="clr-namespace:StreamKing.Login.Views"
         WindowStartupLocation="CenterScreen"
         Title="Login - Stream King"
-        Height="1000" Width="800">
+        Height="600" Width="800">
     <Window.Resources>
         <DataTemplate x:Name="RegisterView1Template" DataType="{x:Type viewmodels:RegisterViewModel1}">
             <views:RegisterView1 DataContext="{Binding}"/>
@@ -31,8 +31,8 @@
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="1*"></RowDefinition>
-            <RowDefinition Height="4*"></RowDefinition>
-            <RowDefinition Height="1*"></RowDefinition>
+            <RowDefinition Height="2*"></RowDefinition>
+            <RowDefinition Height="0.5*"></RowDefinition>
         </Grid.RowDefinitions>
 
         <ContentControl Grid.Row="1" Grid.Column="1" Content="{Binding}" IsTabStop="False" >

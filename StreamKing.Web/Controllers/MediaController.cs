@@ -283,10 +283,20 @@ namespace StreamKing.Web.Controllers
                 .Where(acc => acc.Id == sessionUser.Id)
                 .Include(acc => acc.Watchlists)
                 .ThenInclude(wl => wl.MovieList)
-                .ThenInclude(sl => sl.Movie)
+                .ThenInclude(ml => ml.Movie)
+                .ThenInclude(m => m.Genres)
+                .Include(acc => acc.Watchlists)
+                .ThenInclude(wl => wl.MovieList)
+                .ThenInclude(ml => ml.Movie)
+                .ThenInclude(m => m.StreamingInfos)
                 .Include(acc => acc.Watchlists)
                 .ThenInclude(wl => wl.SeriesList)
                 .ThenInclude(sl => sl.Series)
+                .ThenInclude(s => s.Genres)
+                .Include(acc => acc.Watchlists)
+                .ThenInclude(wl => wl.SeriesList)
+                .ThenInclude(sl => sl.Series)
+                .ThenInclude(s => s.StreamingInfos)
                 .Include(acc => acc.Watchlists)
                 .ThenInclude(wl => wl.SeriesList)
                 .ThenInclude(sl => sl.Seasons)
@@ -420,7 +430,7 @@ namespace StreamKing.Web.Controllers
                     return NotFound("Movie with TmdbId " + watchEntryRequest.MovieId + " not found");
                 }
 
-
+                Console.WriteLine("AddMovieEntryToSessionUserWatchlist: " + watchlistId + " - " + watchEntryRequest.MovieId);
 
                 try
                 {
@@ -428,9 +438,12 @@ namespace StreamKing.Web.Controllers
                         .Where(acc => acc.Id == sessionUser.Id)
                         .Include(acc => acc.Watchlists.Where(w => w.Id == watchlistId))
                         .ThenInclude(wl => wl.MovieList)
+                        .ThenInclude(m => m.Movie)
                         .FirstOrDefault();
 
                     var movielist = user.Watchlists.First().MovieList;
+
+                    if (movielist == null) return NotFound("movielist not found.");
 
                     MovieEntry movieEntry = movielist.FirstOrDefault(s => s.Movie.TmdbId == movie.TmdbId);
 
@@ -462,6 +475,9 @@ namespace StreamKing.Web.Controllers
                         .Where(acc => acc.Id == sessionUser.Id)
                         .Include(acc => acc.Watchlists.Where(w => w.Id == watchlistId))
                         .ThenInclude(wl => wl.SeriesList)
+                        .ThenInclude(s => s.Series)
+                        .Include(acc => acc.Watchlists.Where(w => w.Id == watchlistId))
+                        .ThenInclude(wl => wl.SeriesList)
                         .ThenInclude(sl => sl.Seasons)
                         .ThenInclude(sl => sl.Episodes)
                         .FirstOrDefault();
@@ -469,6 +485,8 @@ namespace StreamKing.Web.Controllers
                 if (user.Watchlists == null || user.Watchlists.Count == 0) return NotFound("Session User does not have a Watchlist with the id " + watchlistId + ".");
 
                 var serieslist = user.Watchlists.First().SeriesList;
+
+                if (serieslist == null) return NotFound("serieslist not found.");
 
                 Series? series;
                 Season? season;

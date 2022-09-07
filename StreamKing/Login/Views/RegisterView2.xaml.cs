@@ -1,14 +1,11 @@
-﻿using System;
-using System.Globalization;
+﻿using StreamKing.Web.Models;
+using System;
+using System.Drawing;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Drawing;
-using System.IO;
-using StreamKing.Login.Models;
-using StreamKing.Web.Models;
 
 namespace StreamKing.Login.Views
 {
@@ -172,7 +169,7 @@ namespace StreamKing.Login.Views
 
                 Mouse.OverrideCursor = null;
 
-               
+
 
                 if (!status.Contains("ERROR"))
                 {
@@ -183,7 +180,7 @@ namespace StreamKing.Login.Views
 
                     BackToLoginButton_Click(null, null);
                 }
-                else 
+                else
                 {
                     MessageBox.Show(status);
                 }

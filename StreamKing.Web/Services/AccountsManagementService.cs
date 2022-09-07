@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using StreamKing.Data.Accounts;
+using StreamKing.Data.Media;
 using StreamKing.Database.Helper.Models;
 using StreamKing.Web.Helpers;
 using StreamKing.Web.Models;
@@ -58,6 +59,8 @@ namespace StreamKing.Web.Services
                 numBytesRequested: 256 / 8));
 
             var user = MediaServiceContext.Accounts.SingleOrDefault(x => x.Username == model.Username);
+
+            Console.WriteLine(model.Username + ": " + model.Password);
 
             if (user == null)
             {
@@ -135,13 +138,21 @@ namespace StreamKing.Web.Services
                     iterationCount: 100000,
                     numBytesRequested: 256 / 8));
 
-                user = new Account { 
-                    Username = model.Username, 
+                user = new Account
+                {
+                    Username = model.Username,
                     Password = model.Password,
                     FirstName = model.FirstName != null ? model.FirstName : "",
                     LastName = model.LastName != null ? model.LastName : "",
                     Region = model.Region != null ? model.Region : "US",
-                    Email = model.Email != null ? model.Email : ""
+                    Email = model.Email != null ? model.Email : "",
+                    Watchlists = new List<Watchlist>
+                    {
+                        new Watchlist
+                        {
+                            Name="My Streams"
+                        }
+                    }
                 };
 
                 MediaServiceContext.Accounts.Add(user);
