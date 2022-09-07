@@ -7,7 +7,8 @@
              xmlns:res="clr-namespace:StreamKing.Resources"
              mc:Ignorable="d"
              Margin="16,16,16,16"
-             d:DesignWidth="900">
+             d:DesignWidth="900"
+             ScrollViewer.VerticalScrollBarVisibility="Auto">
     <UserControl.Resources>
         <res:ImageConverter x:Key="ImageConverter" />
         <res:BigImageConverter x:Key="BigImageConverter" />
@@ -15,6 +16,7 @@
         <converter:MediaTypeMovieVisibilityConverter x:Key="MediaTypeMovieVisibilityConverter" />
         <converter:MediaTypeSeriesVisibilityConverter x:Key="MediaTypeSeriesVisibilityConverter" />
         <converter:NullVisibilityConverter x:Key="NullVisibilityConverter" />
+        <converter:StreamingAvailabilityVisibilityConverter x:Key="StreamingAvailabilityVisibilityConverter" />
         <!-- This style is used for buttons, to remove the WPF default 'animated' mouse over effect -->
         <Style x:Key="MyButtonStyle"
                TargetType="Button">
@@ -46,148 +48,221 @@
             CornerRadius="16,16,16,16"
             Width="900"
             Background="Black">
-        <ItemsControl IsTabStop="False"
-                      FontSize="16"
-                      Foreground="{StaticResource SecondaryColor}">
+        <ScrollViewer VerticalScrollBarVisibility="Auto">
+            <ItemsControl IsTabStop="False"
+                          FontSize="16"
+                          Foreground="{StaticResource SecondaryColor}">
 
-            <StackPanel Width="900"
-                        HorizontalAlignment="Center">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition />
-                        <RowDefinition />
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                    </Grid.ColumnDefinitions>
+                <StackPanel Width="900"
+                            HorizontalAlignment="Center">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition />
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                        </Grid.ColumnDefinitions>
 
-                    <ItemsControl Grid.Column="0"
-                                  Grid.Row="0">
-                        <Border Height="450"
-                                Width="900"
-                                BorderBrush="{x:Null}"
-                                BorderThickness="0"
-                                CornerRadius="16,16,0,0">
-                            <!-- left-top and bottom-right round corners. -->
-                            <Border.Background>
-                                <ImageBrush ImageSource="{Binding Path=BackdropURL, 
+                        <ItemsControl Grid.Column="0"
+                                      Grid.Row="0">
+                            <Border Height="450"
+                                    Width="900"
+                                    BorderBrush="{x:Null}"
+                                    BorderThickness="0"
+                                    CornerRadius="16,16,0,0">
+                                <!-- left-top and bottom-right round corners. -->
+                                <Border.Background>
+                                    <ImageBrush ImageSource="{Binding Path=BackdropURL, 
                             Converter={StaticResource ImageConverter},
                             FallbackValue=https://image.tmdb.org/t/p/w1280/eSVvx8xys2NuFhl8fevXt41wX7v.jpg}"
-                                            Stretch="Fill"></ImageBrush>
-                            </Border.Background>
+                                                Stretch="Fill"></ImageBrush>
+                                </Border.Background>
 
-                            <ItemsControl Margin="0,16,0,0">
-                                <ItemsControl.Background>
-                                    <LinearGradientBrush StartPoint="0,1"
-                                                         EndPoint="0.1,0">
+                                <ItemsControl Margin="0,16,0,0">
+                                    <ItemsControl.Background>
+                                        <LinearGradientBrush StartPoint="0,1"
+                                                             EndPoint="0.1,0">
 
-                                        <GradientStop Color="#ff000000"
-                                                      Offset="0.2" />
+                                            <GradientStop Color="#ff000000"
+                                                          Offset="0.2" />
 
-                                        <GradientStop Color="#00000000"
-                                                      Offset="0.8" />
-                                    </LinearGradientBrush>
-                                </ItemsControl.Background>
-                                <Grid Height="{Binding RelativeSource={RelativeSource FindAncestor, 
+                                            <GradientStop Color="#00000000"
+                                                          Offset="0.8" />
+                                        </LinearGradientBrush>
+                                    </ItemsControl.Background>
+                                    <Grid Height="{Binding RelativeSource={RelativeSource FindAncestor, 
     AncestorType={x:Type ItemsControl}},Path=ActualHeight}">
-                                    <ItemsControl VerticalAlignment="Bottom"
-                                                  HorizontalAlignment="Left"
-                                                  Padding="16,8,16,16">
-                                        <TextBlock x:Name="MediaTmdbId"
-                                                   VerticalAlignment="Center"
-                                                   FontSize="12"
-                                                   Text="{Binding Path=TmdbId, FallbackValue=000000}"
-                                                   Foreground="{StaticResource SecondaryColor}" />
-                                        <TextBlock x:Name="MediaTitle"
-                                                   VerticalAlignment="Center"
-                                                   FontWeight="SemiBold"
-                                                   FontSize="18"
-                                                   Text="{Binding Path=Title, FallbackValue=Title}"
-                                                   Foreground="{StaticResource SecondaryColor}"
-                                                   TextTrimming="CharacterEllipsis" />
-                                        <StackPanel Orientation="Horizontal">
-                                            <TextBlock x:Name="MediaMovie"
+                                        <ItemsControl VerticalAlignment="Bottom"
+                                                      HorizontalAlignment="Left"
+                                                      Padding="16,8,16,16">
+                                            <TextBlock x:Name="MediaTmdbId"
                                                        VerticalAlignment="Center"
-                                                       FontSize="14"
-                                                       Text="Movie • "
-                                                       Visibility="{Binding Converter={StaticResource MediaTypeMovieVisibilityConverter}}"
+                                                       FontSize="12"
+                                                       Text="{Binding Path=TmdbId, FallbackValue=000000}"
                                                        Foreground="{StaticResource SecondaryColor}" />
-                                            <TextBlock x:Name="MediaSeries"
+                                            <TextBlock x:Name="MediaTitle"
                                                        VerticalAlignment="Center"
-                                                       FontSize="14"
-                                                       Text="Series • "
-                                                       Visibility="{Binding Converter={StaticResource MediaTypeSeriesVisibilityConverter}}"
-                                                       Foreground="{StaticResource SecondaryColor}" />
-                                            <TextBlock x:Name="MovieRuntime"
-                                                       VerticalAlignment="Center"
-                                                       FontSize="14"
-                                                       Visibility="{Binding Converter={StaticResource MediaTypeMovieVisibilityConverter}}"
-                                                       Text="{Binding Path=Runtime,Converter={StaticResource RuntimeFormatConverter}, FallbackValue=1h 21min}"
-                                                       Foreground="{StaticResource SecondaryColor}" />
-                                            <TextBlock x:Name="SeriesSeasonsCount"
-                                                       VerticalAlignment="Center"
-                                                       FontSize="14"
-                                                       Visibility="{Binding Converter={StaticResource MediaTypeSeriesVisibilityConverter}}"
-                                                       Text="{Binding Path=Seasons.Count, StringFormat={}{0} Seasons, FallbackValue=3 Seasons}"
-                                                       Foreground="{StaticResource SecondaryColor}" />
-                                            <TextBlock x:Name="MediaReleaseYear"
-                                                       VerticalAlignment="Center"
-                                                       FontSize="14"
-                                                       Text="{Binding Path=Release, StringFormat=' • {0:yyyy}', FallbackValue= • 1970}"
-                                                       Foreground="{StaticResource SecondaryColor}" />
-                                        </StackPanel>
+                                                       FontWeight="SemiBold"
+                                                       FontSize="32"
+                                                       Text="{Binding Path=Title, FallbackValue=Title}"
+                                                       Foreground="{StaticResource SecondaryColor}"
+                                                       TextTrimming="CharacterEllipsis" />
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock x:Name="MediaMovie"
+                                                           VerticalAlignment="Center"
+                                                           FontSize="14"
+                                                           Text="Movie • "
+                                                           Visibility="{Binding Converter={StaticResource MediaTypeMovieVisibilityConverter}}"
+                                                           Foreground="{StaticResource SecondaryColor}" />
+                                                <TextBlock x:Name="MediaSeries"
+                                                           VerticalAlignment="Center"
+                                                           FontSize="14"
+                                                           Text="Series • "
+                                                           Visibility="{Binding Converter={StaticResource MediaTypeSeriesVisibilityConverter}}"
+                                                           Foreground="{StaticResource SecondaryColor}" />
+                                                <TextBlock x:Name="MovieRuntime"
+                                                           VerticalAlignment="Center"
+                                                           FontSize="14"
+                                                           Visibility="{Binding Converter={StaticResource MediaTypeMovieVisibilityConverter}}"
+                                                           Text="{Binding Path=Runtime,Converter={StaticResource RuntimeFormatConverter}, FallbackValue=1h 21min}"
+                                                           Foreground="{StaticResource SecondaryColor}" />
+                                                <TextBlock x:Name="SeriesSeasonsCount"
+                                                           VerticalAlignment="Center"
+                                                           FontSize="14"
+                                                           Visibility="{Binding Converter={StaticResource MediaTypeSeriesVisibilityConverter}}"
+                                                           Text="{Binding Path=Seasons.Count, StringFormat={}{0} Seasons, FallbackValue=3 Seasons}"
+                                                           Foreground="{StaticResource SecondaryColor}" />
+                                                <TextBlock x:Name="MediaReleaseYear"
+                                                           VerticalAlignment="Center"
+                                                           FontSize="14"
+                                                           Text="{Binding Path=Release, StringFormat=' • {0:yyyy}', FallbackValue= • 1970}"
+                                                           Foreground="{StaticResource SecondaryColor}" />
+                                            </StackPanel>
+                                            <ListBox ItemsSource="{Binding Genres}"
+                                                     Margin="-4,8,0,0"
+                                                     ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                                                     ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                                     ScrollViewer.CanContentScroll="False"
+                                                     IsHitTestVisible="False"
+                                                     Background="Transparent"
+                                                     BorderThickness="0">
+                                                <ListBox.ItemsPanel>
+                                                    <ItemsPanelTemplate>
+                                                        <WrapPanel />
+                                                    </ItemsPanelTemplate>
+                                                </ListBox.ItemsPanel>
+                                                <ListBox.ItemTemplate>
+                                                    <DataTemplate>
+                                                        <Border CornerRadius="10"
+                                                                Padding="12,2,12,2"
+                                                                Background="{StaticResource PrimaryFocusColor}">
+                                                            <TextBlock TextAlignment="Center"
+                                                                       VerticalAlignment="Center"
+                                                                       FontSize="14"
+                                                                       Foreground="{StaticResource SecondaryColor}"
+                                                                       Text="{Binding Name}"></TextBlock>
+                                                        </Border>
+                                                    </DataTemplate>
+                                                </ListBox.ItemTemplate>
+                                            </ListBox>
 
-                                    </ItemsControl>
-                                </Grid>
-                            </ItemsControl>
+                                        </ItemsControl>
+                                    </Grid>
+                                </ItemsControl>
 
-                        </Border>
-                    </ItemsControl>
-
-                    <Button Height="48"
-                            Width="48"
-                            Background="Transparent"
-                            VerticalAlignment="Top"
-                            HorizontalAlignment="Right"
-                            Click="Button_Click"
-                            Cursor="Hand"
-                            BorderBrush="{x:Null}"
-                            Style="{StaticResource MyButtonStyle}"
-                            >
-                        <StackPanel>
-                            <Image Source="../../Assets/Images/close.png" />
-                        </StackPanel>
-                    </Button>
-                    <!--<TextBlock x:Name="Provider" Margin="8,8,8,8" FontSize="12" Text="{Binding Media.StreamingInfos}" Grid.Column="0" Grid.Row="2"></TextBlock>-->
-                    <!--<TextBlock x:Name="SeriesOrMovieDetails" Text="{Binding SeasonOrRuntimeInformation}" FontSize="12" Margin="8,8,8,8" Grid.Column="0" Grid.Row="3"></TextBlock>-->
-
-                    <!--<TextBlock x:Name="Rating" Text="5" FontSize="12" Margin="8,8,8,8" Grid.Column="0" Grid.Row="4" ></TextBlock>
-                    <Border CornerRadius="12,12,12,12" Margin="8,8,8,8" Grid.Row="1" Grid.Column="1">
-                        <TextBlock x:Name="TagTextBox"
-                                   TextAlignment="Center"
-                                   FontSize="12"
-                                   Visibility="Visible" Text="Watching"
-                                   Grid.Column="1" Grid.Row="1" Margin="0,0,0,0" Background="{Binding TagColor}"/>
-                    </Border>-->
-                    <ItemsControl Grid.Row="1" 
-                                  HorizontalAlignment="Left">
-                        <ItemsControl Padding="16,8,16,16">
-                            <StackPanel Orientation="Vertical"
-                                        Width="512">
-                                <TextBlock x:Name="MediaDescription"
-                                           VerticalAlignment="Center"
-                                           TextWrapping="Wrap"
-                                           FontSize="14"
-                                           Text="{Binding Path=Description, FallbackValue=...}"
-                                           Foreground="{StaticResource SecondaryColor}" />
-
-                            </StackPanel>
-                                
+                            </Border>
                         </ItemsControl>
-                    </ItemsControl>
-                </Grid>
 
-            </StackPanel>
-        </ItemsControl>
+                        <Button Height="32"
+                                Width="32"
+                                Margin="0,8,8,0"
+                                Background="Transparent"
+                                VerticalAlignment="Top"
+                                HorizontalAlignment="Right"
+                                Click="Button_Click"
+                                Cursor="Hand"
+                                BorderBrush="{x:Null}"
+                                Style="{StaticResource MyButtonStyle}">
+                            <StackPanel>
+                                <Image Source="../../Assets/Images/close.png" />
+                            </StackPanel>
+                        </Button>
+                        <ItemsControl Grid.Row="1"
+                                      HorizontalAlignment="Left">
+                            <StackPanel Orientation="Horizontal">
+                                <ItemsControl Padding="16,8,48,16">
+
+                                    <StackPanel Orientation="Vertical"
+                                                Width="512">
+                                        <TextBlock x:Name="MediaDescription"
+                                                   VerticalAlignment="Center"
+                                                   TextWrapping="Wrap"
+                                                   FontSize="14"
+                                                   Text="{Binding Path=Description, FallbackValue=...}"
+                                                   Foreground="{StaticResource SecondaryColor}" />
+
+
+                                    </StackPanel>
+
+
+                                </ItemsControl>
+
+                                <ItemsControl>
+                                    <ListBox ItemsSource="{Binding StreamingInfos}"
+                                             Margin="8,8,0,0"
+                                             ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                                             ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                             ScrollViewer.CanContentScroll="False"
+                                             IsHitTestVisible="False"
+                                             Background="Transparent"
+                                             BorderThickness="0">
+                                        <ListBox.ItemTemplate>
+                                            <DataTemplate>
+                                                <Border CornerRadius="10"
+                                                        Padding="12,2,12,2"
+                                                        Margin="0,4,0,0"
+                                                        Background="{StaticResource PrimaryFocusColor}">
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <TextBlock TextAlignment="Center"
+                                                                   VerticalAlignment="Center"
+                                                                   FontSize="14"
+                                                                   Foreground="{StaticResource SecondaryColor}"
+                                                                   Text="{Binding Country}"></TextBlock>
+                                                        <TextBlock Text=" : "
+                                                                   VerticalAlignment="Center"
+                                                                   TextAlignment="Center"
+                                                                   FontSize="14"
+                                                                   Foreground="{StaticResource SecondaryColor}">
+
+                                                        </TextBlock>
+                                                        <TextBlock TextAlignment="Center"
+                                                                   VerticalAlignment="Center"
+                                                                   FontSize="14"
+                                                                   Foreground="{StaticResource SecondaryColor}"
+                                                                   Text="{Binding Name}"></TextBlock>
+                                                    </StackPanel>
+                                                </Border>
+                                            </DataTemplate>
+                                        </ListBox.ItemTemplate>
+                                    </ListBox>
+                                    <TextBlock x:Name="StreamingInfoEmpty"
+                                               VerticalAlignment="Center"
+                                               FontSize="14"
+                                               Margin="8,0,0,0"
+                                               Visibility="{Binding StreamingInfos.Count, Converter={StaticResource StreamingAvailabilityVisibilityConverter}, FallbackValue=Visibility.Visible}"
+                                               Text="Not available for streaming."
+                                               Foreground="{StaticResource SecondaryColor}" />
+                                </ItemsControl>
+                            </StackPanel>
+
+                        </ItemsControl>
+
+                    </Grid>
+
+                </StackPanel>
+            </ItemsControl>
+        </ScrollViewer>
+
     </Border>
 
 </UserControl>

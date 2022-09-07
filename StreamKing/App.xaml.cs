@@ -4,6 +4,7 @@ using StreamKing.Data.Accounts;
 using StreamKing.Data.Media;
 using StreamKing.Login;
 using StreamKing.MainApplication;
+using StreamKing.MainApplication.ViewModels;
 using StreamKing.Web.Models;
 using System;
 using System.Collections.Generic;
@@ -84,7 +85,8 @@ namespace StreamKing
                         _mediaList.AddRange(movieList);
                         if (_mainWindow is not null)
                         {
-                            _mainWindow.UpdateMediaListView();
+                            //_mainWindow.UpdateMediaListView();
+                            //_mainWindow.UpdateDataContext();
                         }
                     }
                     else if (url.Contains("series"))
@@ -93,7 +95,8 @@ namespace StreamKing
                         _mediaList.AddRange(seriesList);
                         if(_mainWindow is not null)
                         {
-                            _mainWindow.UpdateMediaListView();
+                            //_mainWindow.UpdateMediaListView();
+                            //_mainWindow.UpdateDataContext();
                         }
                     }
                 }

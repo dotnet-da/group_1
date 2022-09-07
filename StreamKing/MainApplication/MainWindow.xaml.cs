@@ -36,6 +36,16 @@ namespace StreamKing.MainApplication
             if(media is not null)
             {
                 Console.WriteLine("New selected media: " + media.Title);
+                Console.WriteLine("StreamingInfos: ");
+                foreach (var streamInfo in media.StreamingInfos)
+                {
+                    Console.WriteLine("    "+streamInfo.Country + ": " + streamInfo.Name);
+                }
+                Console.WriteLine("Genres: ");
+                foreach (var genre in media.Genres)
+                {
+                    Console.WriteLine(genre.Name);
+                }
             }
             else
             {
@@ -45,13 +55,9 @@ namespace StreamKing.MainApplication
 
         public void UpdateMediaListView()
         {
-            if(_viewModel.MainPage.GetType() == typeof(LandingPageViewModel))
+            if (_viewModel.MainPage.GetType() == typeof(LandingPageViewModel))
             {
-                Dispatcher.Invoke(() =>
-                {
-                    (_viewModel.MainPage as LandingPageViewModel).MediaList = App._mediaList;
-                    UpdateDataContext();
-                });
+                //(_viewModel.MainPage as LandingPageViewModel).SetMediaList();
             }
         }
 

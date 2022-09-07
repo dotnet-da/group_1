@@ -119,6 +119,12 @@
                                                Visibility="{Binding Converter={StaticResource MediaTypeSeriesVisibilityConverter}}"
                                                Text="{Binding Path=Seasons.Count, StringFormat={}{0} Seasons, FallbackValue=3 Seasons}"
                                                Foreground="{StaticResource SecondaryColor}" />
+                                    <TextBlock x:Name="MediaRating"
+                                               VerticalAlignment="Center"
+                                               FontSize="12"
+                                               Visibility="{Binding Converter={StaticResource MediaTypeMovieVisibilityConverter}}"
+                                               Text="{Binding Path=Rating, StringFormat=' • ★ {0:#,#.0}', FallbackValue= • ★ 1.0}"
+                                               Foreground="{StaticResource SecondaryColor}" />
                                 </StackPanel>
 
                             </ItemsControl>
