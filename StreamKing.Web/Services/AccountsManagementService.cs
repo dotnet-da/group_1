@@ -59,6 +59,8 @@ namespace StreamKing.Web.Services
 
             var user = MediaServiceContext.Accounts.SingleOrDefault(x => x.Username == model.Username);
 
+            Console.WriteLine(model.Username + ": " + model.Password);
+
             if (user == null)
             {
                 return null;

@@ -4,8 +4,18 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:StreamKing.MainApplication.Views"
+             xmlns:viewmodels="clr-namespace:StreamKing.MainApplication.ViewModels"
+             xmlns:views="clr-namespace:StreamKing.MainApplication.Views"
+             xmlns:models="clr-namespace:StreamKing.Data.Media;assembly=StreamKing.Data.Media"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+
+    </UserControl.Resources>
+    
+    <UserControl.DataContext>
+        <viewmodels:LandingPageViewModel/>
+    </UserControl.DataContext>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition></RowDefinition>
@@ -13,14 +23,63 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition></ColumnDefinition>
         </Grid.ColumnDefinitions>
-        <ItemsControl Grid.Column="0" 
+        <ScrollViewer Grid.Column="1" 
                       Grid.Row="0"
-                      VerticalAlignment="Center"
-                      HorizontalAlignment="Center">
-            <TextBlock FontSize="48" 
+                      Margin="48,0,0,0">
+            <ItemsControl 
+                Margin="0,24,48,48"
+                      VerticalAlignment="Top"
+                      HorizontalAlignment="Stretch">
+                <ItemsControl>
+                    <TextBlock FontSize="36" 
+                       VerticalAlignment="Center"
+                       HorizontalAlignment="Left"
+                       Foreground="{StaticResource SecondaryColor}"
+                       Margin="8,8,8,16">My Streams</TextBlock>
+                    <TextBlock FontSize="24" 
                        VerticalAlignment="Center"
                        HorizontalAlignment="Center"
-                       Foreground="{StaticResource SecondaryColor}">Welcome to StreamKing!</TextBlock>
-        </ItemsControl>
+                       Foreground="{StaticResource SecondaryColor}"
+                       Margin="8,8,8,16">Nothing here yet ...</TextBlock>
+                    <!--<ListView x:Name="WatchlistListView"
+                          ScrollViewer.VerticalScrollBarVisibility="Visible"
+                            ScrollViewer.CanContentScroll="False"
+                          MaxHeight="600">
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn Width="256" Header="Title"
+                             DisplayMemberBinding="{Binding Title}"  />
+                            <GridViewColumn Width="140" Header="TmdbId"  
+                            DisplayMemberBinding="{Binding TmdbId}" />
+                        </GridView>
+                    </ListView.View>
+                </ListView>-->
+                </ItemsControl>
+                <TextBlock FontSize="36" 
+                       VerticalAlignment="Center"
+                       HorizontalAlignment="Left"
+                       Foreground="{StaticResource SecondaryColor}"
+                       Margin="8,8,8,16">Discover new Movies and TV Shows</TextBlock>
+                <ListBox x:Name="DiscoverMediaListView"
+                          ScrollViewer.VerticalScrollBarVisibility="Visible"
+                            ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                          ScrollViewer.CanContentScroll="False"
+                          Background="Transparent"
+                          HorizontalAlignment="Stretch"
+                          MaxHeight="600"
+                         >
+                    <ListBox.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel />
+                        </ItemsPanelTemplate>
+                    </ListBox.ItemsPanel>
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <views:DataTemplateView/>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </ItemsControl>
+        </ScrollViewer>
     </Grid>
 </UserControl>

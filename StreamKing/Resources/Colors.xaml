@@ -9,6 +9,10 @@
     <!--<Color x:Key="PrimaryFocusColorValue">#B30015</Color>-->
     <SolidColorBrush x:Key="PrimaryFocusColor" Color="{StaticResource PrimaryFocusColorValue}" />
 
+    <Color x:Key="PrimaryHeaderColorValue">#222222</Color>
+    <!--<Color x:Key="PrimaryColorValue">#F2001C</Color>-->
+    <SolidColorBrush x:Key="PrimaryHeaderColor" Color="{StaticResource PrimaryHeaderColorValue}" />
+
     <Color x:Key="SecondaryColorValue" >White</Color>
     <SolidColorBrush x:Key="SecondaryColor" Color="{StaticResource SecondaryColorValue}" />
 

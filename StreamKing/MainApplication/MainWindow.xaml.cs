@@ -30,7 +30,14 @@ namespace StreamKing.MainApplication
 
         public void SetLandingPageView()
         {
-            _viewModel.MainPage = new LandingPageViewModel();
+            _viewModel.MainPage = new LandingPageViewModel { MediaList = App._mediaList};
+            DataContext = null;
+            DataContext = _viewModel;
+        }
+
+        public void UpdateCurrentUser()
+        {
+            _viewModel.Account = App._currentUser;
             DataContext = null;
             DataContext = _viewModel;
         }
@@ -38,14 +45,16 @@ namespace StreamKing.MainApplication
         public void UpdateHeader()
         {
             string? Region;
-            try
+
+            if(App._currentUser is not null)
             {
                 Region = App._currentUser.Region;
             }
-            catch (System.Exception)
+            else
             {
                 Region = null;
             }
+
 
             if (Region == "DE")
             {

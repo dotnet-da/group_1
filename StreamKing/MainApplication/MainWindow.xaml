@@ -4,11 +4,11 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
-        Title="StreamKing" Height="800" Width="1280"
+        Title="StreamKing" Height="800" Width="1420"
         Background="{StaticResource PrimaryColor}"
         WindowStartupLocation="CenterScreen"
         xmlns:viewmodels="clr-namespace:StreamKing.MainApplication.ViewModels"
-        xmlns:views="clr-namespace:StreamKing.MainApplication.Views">
+        xmlns:views="clr-namespace:StreamKing.MainApplication.Views" xmlns:simpleXamlContent="clr-namespace:StreamKing.Resources">
     <Window.Resources>
         <DataTemplate x:Name="LandingPageViewTemplate" DataType="{x:Type viewmodels:LandingPageViewModel}">
             <views:LandingPage DataContext="{Binding}"/>
@@ -26,8 +26,8 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        
-        <ItemsControl x:Name="HeaderItemsControl" Grid.Row="0" Background="{StaticResource PrimaryColor}">
+
+        <ItemsControl x:Name="HeaderItemsControl" Grid.Row="0" Background="{StaticResource PrimaryHeaderColor}">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
                     <DockPanel></DockPanel>
@@ -50,7 +50,6 @@
                          Height="32" 
                          Width="320" 
                          Margin="8,8,0,8">
-                    Search
                 </TextBox>
                 <Button x:Name="HeaderSearchButton" FocusVisualStyle="{x:Null}" Cursor="Hand" HorizontalAlignment="Right" Height="24" Width="24" BorderThickness="0" Margin="8,8,24,8" Background="Transparent">
                        <Image Source="../Assets/Images/icon_search.png"/>
@@ -85,7 +84,7 @@
             </ItemsControl>
 
         </ItemsControl>
-        <ItemsControl x:Name="BodyItemsControl" Grid.Row="1" Background="{StaticResource PrimaryFocusColor}">
+        <ItemsControl Panel.ZIndex="1000"  x:Name="BodyItemsControl" Grid.Row="1">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition></ColumnDefinition>
@@ -96,13 +95,13 @@
                               VerticalAlignment="Top"
                               HorizontalAlignment="Right"
                               Panel.ZIndex="999"
-                              Background="{StaticResource PrimaryColor}">
-                    <StackPanel Background="{StaticResource PrimaryColor}">
+                              Background="{StaticResource PrimaryHeaderColor}">
+                    <StackPanel Background="{StaticResource PrimaryHeaderColor}">
                         <Button x:Name="RegionSwitchUS"   Click="RegionSwitch_Clicked" 
                             Height="40" 
                                 FontSize="16"
                                 Foreground="{StaticResource SecondaryColor}"
-                                Background="{StaticResource PrimaryColor}"
+                                Background="{StaticResource PrimaryHeaderColor}"
                                 FocusVisualStyle="{x:Null}"
                                 Cursor="Hand">
                             <StackPanel Orientation="Horizontal">
@@ -118,7 +117,7 @@
                             Height="40"
                                 FontSize="16"
                                 Foreground="{StaticResource SecondaryColor}"
-                                Background="{StaticResource PrimaryColor}"
+                                Background="{StaticResource PrimaryHeaderColor}"
                                 FocusVisualStyle="{x:Null}"
                                 Cursor="Hand">
                             <StackPanel Orientation="Horizontal">
@@ -135,7 +134,7 @@
                             Height="40" 
                                 FontSize="16"
                                 Foreground="{StaticResource SecondaryColor}"
-                                Background="{StaticResource PrimaryColor}"
+                                Background="{StaticResource PrimaryHeaderColor}"
                                 FocusVisualStyle="{x:Null}"
                                 Cursor="Hand">
                             <StackPanel Orientation="Horizontal">
@@ -156,17 +155,27 @@
                               HorizontalAlignment="Right"
                               Panel.ZIndex="1000"
                               Background="{StaticResource PrimaryColor}">
-                    <StackPanel Background="{StaticResource PrimaryColor}">
+                    <StackPanel Background="{StaticResource PrimaryHeaderColor}">
+                        <StackPanel.Resources>
+                            <simpleXamlContent:AccountTypeVisibilityConverter x:Key="AccountTypeVisibilityConverter"/>
+                        </StackPanel.Resources>
                         <Button Height="40"
                                 FontSize="16"
                                 Foreground="{StaticResource SecondaryColor}"
-                                Background="{StaticResource PrimaryColor}"
+                                Background="{StaticResource PrimaryHeaderColor}"
                                 FocusVisualStyle="{x:Null}"
                                 Cursor="Hand" Click="SettingsButton_Clicked">Settings</Button>
+                        <Button Height="40"
+                                FontSize="16"
+                                Foreground="{StaticResource SecondaryColor}"
+                                Background="{StaticResource PrimaryHeaderColor}"
+                                FocusVisualStyle="{x:Null}"
+                                Visibility="{Binding Account, Converter={StaticResource AccountTypeVisibilityConverter}}"
+                                Cursor="Hand">Administration</Button>
                         <Button Height="40" 
                                 FontSize="16"
                                 Foreground="{StaticResource SecondaryColor}"
-                                Background="{StaticResource PrimaryColor}"
+                                Background="{StaticResource PrimaryHeaderColor}"
                                 FocusVisualStyle="{x:Null}"
                                 Cursor="Hand" Click="Logout_Clicked">Logout</Button>
                     </StackPanel>

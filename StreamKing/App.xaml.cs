@@ -35,7 +35,8 @@ namespace StreamKing
         public App()
         {
             InitAccountsApi();
-            //LoadMedia();
+            LoadMedia("?type=movie&take=50");
+            LoadMedia("?type=series&take=50");
             InitMediaApi();
         }
 
@@ -52,7 +53,7 @@ namespace StreamKing
 
         }
 
-        public static async void LoadMedia()
+        public static async void LoadMedia(string url)
         {
             HttpClient tempApi = new HttpClient(new HttpClientHandler
             {
@@ -63,7 +64,7 @@ namespace StreamKing
                                  new MediaTypeWithQualityHeaderValue("application/json"));
             tempApi.BaseAddress = new Uri(WebApiUrl + "media/");
 
-            HttpResponseMessage response = await tempApi.GetAsync("?type=movie&take=20");
+            HttpResponseMessage response = await tempApi.GetAsync(url);
 
             if (!response.IsSuccessStatusCode)
             {
@@ -75,9 +76,16 @@ namespace StreamKing
 
             try
             {
-                var movieList = JArray.Parse(content).ToObject<List<Movie>>();
-                _mediaList.AddRange(movieList);
-                
+                if (url.Contains("movie"))
+                {
+                    var movieList = JArray.Parse(content).ToObject<List<Movie>>();
+                    _mediaList.AddRange(movieList);
+                } else if (url.Contains("series"))
+                {
+                    var seriesList = JArray.Parse(content).ToObject<List<Series>>();
+                    _mediaList.AddRange(seriesList);
+                }
+
                 //string message = "";
                 //message += "Now Elements:" + _mediaList.Count + "\n";
 
@@ -86,7 +94,7 @@ namespace StreamKing
                 //    message += media.GetType()+": " + media.Title+"\n"; 
                 //}
 
-                //MessageBox.Show(message);
+                // MessageBox.Show("finished: "+url + ", now in medialist: "+_mediaList.Count);
             }
             catch (Exception ex)
             {
@@ -217,6 +225,7 @@ namespace StreamKing
             {
                 _currentUser = JObject.Parse(content).ToObject<Account>();
                 _mainWindow.UpdateHeader();
+                _mainWindow.UpdateCurrentUser();
             }
             catch (Exception ex)
             {

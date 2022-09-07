@@ -19,17 +19,19 @@ namespace StreamKing.Login
 
         public void SetRegisterView()
         {
+            Height = 600;
             DataContext = new RegisterViewModel1();
         }
 
         public void SetRegisterView2()
         {
+            Height = 900;
             DataContext = new RegisterViewModel2();
         }
 
         public void SetLoginView()
         {
-            //Height = 480;
+            Height = 600;
             DataContext = new LoginViewModel();
         }
 
