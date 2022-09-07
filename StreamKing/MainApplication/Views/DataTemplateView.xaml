@@ -83,7 +83,8 @@
                                 FontWeight="SemiBold"
                                 FontSize="16" 
                                 Text="{Binding Path=Title, FallbackValue=Title}"
-                                Foreground="{StaticResource SecondaryColor}"/>
+                                Foreground="{StaticResource SecondaryColor}"
+                                           TextTrimming="CharacterEllipsis"/>
                                 <StackPanel Orientation="Horizontal">
                                     <TextBlock x:Name="MediaMovie" 
                                                 VerticalAlignment="Center"
