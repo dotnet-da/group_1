@@ -46,7 +46,7 @@
                                    Grid.Column="1" Grid.Row="1" Background="{Binding TagColor}"/>
                     </Border>
 
-                    <TextBlock x:Name="MediaTitle" TextAlignment="Center" Margin="8,4,8,4" FontSize="12" FontWeight="Bold" Grid.Column="0" Grid.Row="1"
+                    <TextBlock x:Name="MediaTitle" TextAlignment="Left" Margin="8,4,8,4" FontSize="12" FontWeight="Bold" Grid.Column="0" Grid.Row="1"
                                Grid.ColumnSpan="2" Text="{Binding Title}"
                                TextWrapping="Wrap"/>
                     <TextBlock x:Name="Provider" Margin="8,4,4,4" FontSize="8" 
@@ -92,8 +92,7 @@
                                    ></TextBlock>
                     </ItemsControl>
                     <ItemsControl VerticalAlignment="Center" IsTabStop="False" Margin="8,4,4,8" Grid.Column="0" Grid.Row="4" >
-                        <ItemsControl VerticalAlignment="Center" IsTabStop="False" Margin="8,4,4,8" Grid.Column="0" Grid.Row="4" FocusVisualStyle="{x:Null}">
-                            <ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemsPanel>
                                 <ItemsPanelTemplate>
                                     <DockPanel></DockPanel>
                                 </ItemsPanelTemplate>
@@ -103,24 +102,23 @@
                             <RadioButton Width="15" Height="15" GroupName="RatingGroup" Template="{StaticResource starTemplateFull}"
                                          Content="RadioButton" HorizontalAlignment="Left"  Grid.Row="4" VerticalAlignment="Top"
                                          x:Name="FOneStar" Focusable="False" IsHitTestVisible="False"
-                                         Visibility="{Binding Path=VisibilityOne, Converter={StaticResource BoolToVisConverter}}"/>
+                                         Visibility="{Binding VisibilityOne}"/>
                             <RadioButton Width="15" Height="15" GroupName="RatingGroup" Template="{StaticResource starTemplateFull}"
                                          Content="RadioButton" HorizontalAlignment="Left"  Grid.Row="4" VerticalAlignment="Top"
                                          x:Name="FTwoStar" Focusable="False" IsHitTestVisible="False"
-                                         Visibility="{Binding Path=VisibilityTwo, Converter={StaticResource BoolToVisConverter}}"/>
+                                         Visibility="{Binding VisibilityTwo}"/>
                             <RadioButton Width="15" Height="15" GroupName="RatingGroup" Template="{StaticResource starTemplateFull}"
                                           Content="RadioButton" HorizontalAlignment="Left"  Grid.Row="4" VerticalAlignment="Top"
                                           x:Name="FThreeStar" Focusable="False" IsHitTestVisible="False"
-                                          Visibility="{Binding Path=VisibilityThree, Converter={StaticResource BoolToVisConverter}}"/>
+                                          Visibility="{Binding VisibilityThree}"/>
                             <RadioButton Width="15" Height="15" GroupName="RatingGroup" Template="{StaticResource starTemplateFull}"
                                           Content="RadioButton" HorizontalAlignment="Left"  Grid.Row="4" VerticalAlignment="Top"
                                           x:Name="FFourStar" Focusable="False" IsHitTestVisible="False"
-                                          Visibility="{Binding Path=VisibilityFour, Converter={StaticResource BoolToVisConverter}}"/>
-                            <RadioButton Width="15" Height="15" GroupName="RatingGroup" Template="{StaticResource starTemplateFull}"
+                                          Visibility="{Binding VisibilityFour}"/>
+                        <RadioButton Width="15" Height="15" GroupName="RatingGroup" Template="{StaticResource starTemplateFull}"
                                           Content="RadioButton" HorizontalAlignment="Left"  Grid.Row="4" VerticalAlignment="Top"
                                           x:Name="FFiveStar" Focusable="False" IsHitTestVisible="False"
-                                          Visibility="{Binding Path=VisibilityFive, Converter={StaticResource BoolToVisConverter}}"/>
-                        </ItemsControl>
+                                          Visibility="{Binding VisibilityFive}"/>
                     </ItemsControl>
                 </Grid>
             </StackPanel>

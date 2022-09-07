@@ -24,7 +24,7 @@ namespace StreamKing.MainApplication.ViewModels
         /*
          * ProprtyChanged for visibility of StarRating
          */
-        private Visibility visibilityOne;
+        private Visibility visibilityOne = Visibility.Visible;
         public Visibility VisibilityOne
         {
             get
@@ -123,7 +123,7 @@ namespace StreamKing.MainApplication.ViewModels
             SeasonString = "Seasons";
             AmountSeasons = 3;
             TagColor = "Red";
-            Rating = 2.5f;
+            Rating = 0.5f;
             showRatingStars(Rating);
             ImageURL = Media.BackdropURL;
             ImageUri = new Uri(Media.BackdropURL);
@@ -194,47 +194,47 @@ namespace StreamKing.MainApplication.ViewModels
 
         private void showFiveStars()
         {
-            visibilityOne = Visibility.Visible;
-            visibilityTwo = Visibility.Visible;
-            visibilityThree = Visibility.Visible;
-            visibilityFour = Visibility.Visible;
-            visibilityFive = Visibility.Visible;
+            VisibilityOne = Visibility.Visible;
+            VisibilityTwo = Visibility.Visible;
+            VisibilityThree = Visibility.Visible;
+            VisibilityFour = Visibility.Visible;
+            VisibilityFive = Visibility.Visible;
         }
 
         private void showFourStar()
         {
-            visibilityOne = Visibility.Visible;
-            visibilityTwo = Visibility.Visible;
-            visibilityThree = Visibility.Visible;
-            visibilityFour = Visibility.Visible;
-            visibilityFive = Visibility.Hidden;
+            VisibilityOne = Visibility.Visible;
+            VisibilityTwo = Visibility.Visible;
+            VisibilityThree = Visibility.Visible;
+            VisibilityFour = Visibility.Visible;
+            VisibilityFive = Visibility.Hidden;
         }
 
         private void showThreeStar()
         {
-            visibilityOne = Visibility.Visible;
-            visibilityTwo = Visibility.Visible;
-            visibilityThree = Visibility.Visible;
-            visibilityFour = Visibility.Hidden;
-            visibilityFive = Visibility.Hidden;
+            VisibilityOne = Visibility.Visible;
+            VisibilityTwo = Visibility.Visible;
+            VisibilityThree = Visibility.Visible;
+            VisibilityFour = Visibility.Hidden;
+            VisibilityFive = Visibility.Hidden;
         }
 
         private void showTwoStar()
         {
-            visibilityOne = Visibility.Visible;
-            visibilityTwo = Visibility.Visible;
-            visibilityThree = Visibility.Hidden;
-            visibilityFour = Visibility.Hidden;
-            visibilityFive = Visibility.Hidden;
+            VisibilityOne = Visibility.Visible;
+            VisibilityTwo = Visibility.Visible;
+            VisibilityThree = Visibility.Hidden;
+            VisibilityFour = Visibility.Hidden;
+            VisibilityFive = Visibility.Hidden;
         }
 
         private void showOneStar()
         {
-            visibilityOne = Visibility.Visible;
-            visibilityTwo = Visibility.Hidden;
-            visibilityThree = Visibility.Hidden;
-            visibilityFour = Visibility.Hidden;
-            visibilityFive = Visibility.Hidden;
+            VisibilityOne = Visibility.Visible;
+            VisibilityTwo = Visibility.Hidden;
+            VisibilityThree = Visibility.Hidden;
+            VisibilityFour = Visibility.Hidden;
+            VisibilityFive = Visibility.Hidden;
         }
 
         public DataTemplateViewModel(Media media)
