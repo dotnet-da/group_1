@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using StreamKing.Data.Accounts;
+using StreamKing.Data.Media;
 using StreamKing.Database.Helper.Models;
 using StreamKing.Web.Helpers;
 using StreamKing.Web.Models;
@@ -144,7 +145,14 @@ namespace StreamKing.Web.Services
                     FirstName = model.FirstName != null ? model.FirstName : "",
                     LastName = model.LastName != null ? model.LastName : "",
                     Region = model.Region != null ? model.Region : "US",
-                    Email = model.Email != null ? model.Email : ""
+                    Email = model.Email != null ? model.Email : "",
+                    Watchlists = new List<Watchlist>
+                    {
+                        new Watchlist
+                        {
+                            Name="My Streams"
+                        }
+                    }
                 };
 
                 MediaServiceContext.Accounts.Add(user);

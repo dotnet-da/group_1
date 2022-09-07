@@ -21,13 +21,13 @@ namespace StreamKing
     /// </summary>
     public partial class App : Application
     {
-        public static HttpClient _accountsApi { get; set; }
-        public static HttpClient _mediaApi { get; set; }
+        public static HttpClient? _accountsApi { get; set; }
+        public static HttpClient? _mediaApi { get; set; }
 
         public static string WebApiUrl { get; set; } = "https://localhost:9595/api/";
 
         public static Guid? _userId { get; set; }
-        public static string? _apiToken { get; set; } = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImRmNDZhMWMyLWY5ZmYtNDUwOC05OWQwLTg4NmVlNGY2NzUzYyIsImF1dGgiOiJBZG1pbiIsIm5iZiI6MTY2MjU0NTM4OSwiZXhwIjoxNjYzMTUwMTg5LCJpYXQiOjE2NjI1NDUzODl9.OJeI8L9S91EOrUwjSGUhwy5lxhIglrJEvQWd5VNnAe0";
+        public static string? _apiToken { get; set; }
         public static Account? _currentUser { get; set; }
         public static MainWindow? _mainWindow { get; set; }
         public static LoginWindow? _loginWindow { get; set; }
@@ -357,6 +357,9 @@ namespace StreamKing
             _currentUser = null;
             _apiToken = null;
             _userId = null;
+            _accountsApi.DefaultRequestHeaders.Authorization = null;
+            _mediaApi.DefaultRequestHeaders.Authorization = null;
+            Watchlist = null;
 
             _loginWindow = new LoginWindow();
             _loginWindow.Show();
