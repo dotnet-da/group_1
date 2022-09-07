@@ -1,5 +1,7 @@
-﻿using StreamKing.Login.ViewModels;
+﻿using StreamKing.Data.Media;
+using StreamKing.Login.ViewModels;
 using StreamKing.MainApplication.ViewModels;
+using System;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -24,6 +26,25 @@ namespace StreamKing.MainApplication
         public void SetSettingsView()
         {
             _viewModel.MainPage = new SettingsPageViewModel();
+            UpdateDataContext();
+        }
+
+        public void SetSelectedMedia(Media? media)
+        {
+            _viewModel.SelectedMedia = media;
+            UpdateDataContext();
+            if(media is not null)
+            {
+                Console.WriteLine("New selected media: " + media.Title);
+            }
+            else
+            {
+                Console.WriteLine("Deleted selected media");
+            }
+        }
+
+        public void UpdateDataContext()
+        {
             DataContext = null;
             DataContext = _viewModel;
         }
@@ -31,15 +52,13 @@ namespace StreamKing.MainApplication
         public void SetLandingPageView()
         {
             _viewModel.MainPage = new LandingPageViewModel { MediaList = App._mediaList};
-            DataContext = null;
-            DataContext = _viewModel;
+            UpdateDataContext();
         }
 
         public void UpdateCurrentUser()
         {
             _viewModel.Account = App._currentUser;
-            DataContext = null;
-            DataContext = _viewModel;
+            UpdateDataContext();
         }
 
         public void UpdateHeader()
@@ -68,8 +87,7 @@ namespace StreamKing.MainApplication
             {
                 _viewModel.ActiveRegionImage = "../Assets/Images/region_US.jpg";
             }
-            DataContext = null;
-            DataContext = _viewModel;
+            UpdateDataContext();
         }
 
         private void ProfileButton_Click(object sender, RoutedEventArgs e)
@@ -136,8 +154,7 @@ namespace StreamKing.MainApplication
             {
                 RegionSwitch.Visibility = Visibility.Collapsed;
             }
-            DataContext = null;
-            DataContext = _viewModel;
+            UpdateDataContext();
         }
 
         private void Logout_Clicked(object sender, RoutedEventArgs e)

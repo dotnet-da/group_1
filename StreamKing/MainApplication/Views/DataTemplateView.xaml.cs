@@ -33,6 +33,8 @@ namespace StreamKing.MainApplication.Views
             {
                 Media currentMedia = (Media)DataContext;
                 Console.WriteLine("(" + currentMedia.GetType() + ")" + currentMedia.TmdbId + ": " + currentMedia.Title);
+
+                ((MainWindow)Window.GetWindow(this)).SetSelectedMedia(currentMedia);
             }
         }
     }

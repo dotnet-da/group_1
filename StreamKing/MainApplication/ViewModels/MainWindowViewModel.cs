@@ -13,6 +13,7 @@ namespace StreamKing.MainApplication.ViewModels
         public List<Media>? MediaList { get; set; }
 
         public Account? Account { get; set; }
+        public Media? SelectedMedia { get; set; } = null;
 
         public MainWindowViewModel()
         {
