@@ -4,7 +4,6 @@ using StreamKing.Data.Accounts;
 using StreamKing.Data.Media;
 using StreamKing.Login;
 using StreamKing.MainApplication;
-using StreamKing.MainApplication.ViewModels;
 using StreamKing.Web.Models;
 using System;
 using System.Collections.Generic;
@@ -33,13 +32,13 @@ namespace StreamKing
         public static MainWindow? _mainWindow { get; set; }
         public static LoginWindow? _loginWindow { get; set; }
         public static List<Media> _mediaList { get; set; } = new List<Media>();
+        public static Watchlist? Watchlist { get; set; }
         public App()
         {
             InitAccountsApi();
+            InitMediaApi();
             LoadMedia("?type=movie&take=50");
             LoadMedia("?type=series&take=50");
-            InitMediaApi();
-            
         }
 
         public static void InitAccountsApi()
@@ -51,7 +50,7 @@ namespace StreamKing
             _accountsApi.DefaultRequestHeaders.Accept.Clear();
             _accountsApi.DefaultRequestHeaders.Accept.Add(
                                  new MediaTypeWithQualityHeaderValue("application/json"));
-            _accountsApi.BaseAddress = new Uri(WebApiUrl+"accounts/");
+            _accountsApi.BaseAddress = new Uri(WebApiUrl + "accounts/");
 
         }
 
@@ -74,7 +73,7 @@ namespace StreamKing
                     MessageBox.Show("Error in LoadMedia:" + response.StatusCode);
                     return;
                 }
-                
+
                 var content = await response.Content.ReadAsStringAsync();
 
                 try
@@ -83,20 +82,18 @@ namespace StreamKing
                     {
                         var movieList = JArray.Parse(content).ToObject<List<Movie>>();
                         _mediaList.AddRange(movieList);
-                        if (_mainWindow is not null)
+                        if (_mainWindow != null)
                         {
-                            //_mainWindow.UpdateMediaListView();
-                            //_mainWindow.UpdateDataContext();
+                            _mainWindow.SetMedialist();
                         }
                     }
                     else if (url.Contains("series"))
                     {
                         var seriesList = JArray.Parse(content).ToObject<List<Series>>();
                         _mediaList.AddRange(seriesList);
-                        if(_mainWindow is not null)
+                        if (_mainWindow != null)
                         {
-                            //_mainWindow.UpdateMediaListView();
-                            //_mainWindow.UpdateDataContext();
+                            _mainWindow.SetMedialist();
                         }
                     }
                 }
@@ -124,6 +121,39 @@ namespace StreamKing
             _mediaApi.BaseAddress = new Uri(WebApiUrl + "media/");
         }
 
+        public static async void GetWatchlist()
+        {
+            _mediaApi.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _apiToken);
+
+            try
+            {
+                HttpResponseMessage response = await _mediaApi.GetAsync("session/watchlists");
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    MessageBox.Show("GetWatchlist:" + response.StatusCode);
+                    return;
+                }
+
+                var content = await response.Content.ReadAsStringAsync();
+
+                Watchlist = JArray.Parse(content).ToObject<List<Watchlist>>()[0];
+                Console.WriteLine("Watchlist loaded: " + Watchlist.Id + ": " + Watchlist.Name);
+
+                if (_mainWindow != null)
+                {
+                    _mainWindow.SetWatchlist();
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error in GetWatchlist: " + ex.Message);
+            }
+        }
+        public static void AddSelectedMediaToWatchlist()
+        {
+
+        }
         public static async Task<string> Login(string username, string password)
         {
             string message = "";
@@ -162,6 +192,7 @@ namespace StreamKing
                     _mainWindow.Show();
 
                     SetCurrentUser();
+                    GetWatchlist();
                 }
                 else
                 {
@@ -238,6 +269,7 @@ namespace StreamKing
                 _userId = _currentUser.Id;
                 _mainWindow.UpdateHeader();
                 _mainWindow.UpdateCurrentUser();
+
             }
             catch (Exception ex)
             {

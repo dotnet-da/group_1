@@ -1,9 +1,4 @@
 ﻿using StreamKing.Login.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace StreamKing.Login.ViewModels
 {
@@ -54,7 +49,7 @@ namespace StreamKing.Login.ViewModels
         }
 
         // default Constructor
-        public RegisterViewModel1() 
+        public RegisterViewModel1()
         {
             _userData = LoginWindow.Udata;
         }

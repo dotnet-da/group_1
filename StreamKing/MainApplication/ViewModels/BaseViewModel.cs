@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel;
 
 namespace StreamKing.MainApplication.ViewModels
 {
@@ -12,7 +7,7 @@ namespace StreamKing.MainApplication.ViewModels
         public event PropertyChangedEventHandler? PropertyChanged;
 
         //[CallerMember]
-        protected virtual void RaisePropertyChanged( string propertyName = "")
+        protected virtual void RaisePropertyChanged(string propertyName = "")
         {
             if (!string.IsNullOrEmpty(propertyName))
             {

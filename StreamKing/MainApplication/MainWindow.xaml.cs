@@ -1,7 +1,7 @@
 ﻿using StreamKing.Data.Media;
-using StreamKing.Login.ViewModels;
 using StreamKing.MainApplication.ViewModels;
 using System;
+using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -19,6 +19,7 @@ namespace StreamKing.MainApplication
             DataContext = _viewModel;
 
             InitializeComponent();
+            SetWatchlist();
             UpdateHeader();
             App._mainWindow = this;
         }
@@ -29,17 +30,39 @@ namespace StreamKing.MainApplication
             UpdateDataContext();
         }
 
+        public void SetWatchlist()
+        {
+            if (_viewModel.MainPage is not null && App.Watchlist is not null)
+            {
+                ((LandingPageViewModel)_viewModel.MainPage).Watchlist = App.Watchlist;
+                Console.WriteLine("Updated Watchlist: " + ((LandingPageViewModel)_viewModel.MainPage).Watchlist.Name);
+                UpdateDataContext();
+            }
+        }
+
+        public void SetMedialist()
+        {
+            if (_viewModel.MainPage is not null && App._mediaList is not null)
+            {
+                Dispatcher.BeginInvoke(() =>
+                {
+                    ((LandingPageViewModel)_viewModel.MainPage).MediaList = new ObservableCollection<Media>(App._mediaList);
+                    Console.WriteLine("Updated MediaList: " + ((LandingPageViewModel)_viewModel.MainPage).MediaList.Count);
+                });
+            }
+        }
+
         public void SetSelectedMedia(Media? media)
         {
             _viewModel.SelectedMedia = media;
             UpdateDataContext();
-            if(media is not null)
+            if (media is not null)
             {
                 Console.WriteLine("New selected media: " + media.Title);
                 Console.WriteLine("StreamingInfos: ");
                 foreach (var streamInfo in media.StreamingInfos)
                 {
-                    Console.WriteLine("    "+streamInfo.Country + ": " + streamInfo.Name);
+                    Console.WriteLine("    " + streamInfo.Country + ": " + streamInfo.Name);
                 }
                 Console.WriteLine("Genres: ");
                 foreach (var genre in media.Genres)
@@ -52,15 +75,6 @@ namespace StreamKing.MainApplication
                 Console.WriteLine("Deleted selected media");
             }
         }
-
-        public void UpdateMediaListView()
-        {
-            if (_viewModel.MainPage.GetType() == typeof(LandingPageViewModel))
-            {
-                //(_viewModel.MainPage as LandingPageViewModel).SetMediaList();
-            }
-        }
-
         public void UpdateDataContext()
         {
             DataContext = null;
@@ -69,7 +83,8 @@ namespace StreamKing.MainApplication
 
         public void SetLandingPageView()
         {
-            _viewModel.MainPage = new LandingPageViewModel { MediaList = App._mediaList};
+            Console.WriteLine(App._mediaList.Count);
+            _viewModel.MainPage = new LandingPageViewModel { MediaList = new ObservableCollection<Media>(App._mediaList), Watchlist = App.Watchlist };
             UpdateDataContext();
         }
 
@@ -83,7 +98,7 @@ namespace StreamKing.MainApplication
         {
             string? Region;
 
-            if(App._currentUser is not null)
+            if (App._currentUser is not null)
             {
                 Region = App._currentUser.Region;
             }

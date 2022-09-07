@@ -66,10 +66,6 @@
             </Setter>
         </Style>
     </UserControl.Resources>
-
-    <UserControl.DataContext>
-        <viewmodels:LandingPageViewModel />
-    </UserControl.DataContext>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition></RowDefinition>
@@ -89,7 +85,8 @@
                                VerticalAlignment="Center"
                                HorizontalAlignment="Left"
                                Foreground="{StaticResource SecondaryColor}"
-                               Margin="8,8,8,16">My Streams</TextBlock>
+                               Margin="8,8,8,16"
+                               Text="{Binding Watchlist.Name, FallbackValue='No Watchlist Found'}"></TextBlock>
                     <TextBlock FontSize="24"
                                VerticalAlignment="Center"
                                HorizontalAlignment="Center"
@@ -115,6 +112,7 @@
                            Foreground="{StaticResource SecondaryColor}"
                            Margin="8,8,8,16">Discover new Movies and TV Shows</TextBlock>
                 <ListBox x:Name="DiscoverMediaListView"
+                         ItemsSource="{Binding MediaList, Mode=OneWay}"
                          ScrollViewer.VerticalScrollBarVisibility="Auto"
                          ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                          ScrollViewer.CanContentScroll="False"

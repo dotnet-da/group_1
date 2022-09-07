@@ -1,6 +1,7 @@
 ﻿using StreamKing.Data.Accounts;
 using StreamKing.Data.Media;
 using System.Collections.Generic;
+using System.Windows;
 
 namespace StreamKing.MainApplication.ViewModels
 {
@@ -15,6 +16,8 @@ namespace StreamKing.MainApplication.ViewModels
         public Account? Account { get; set; }
         public Media? SelectedMedia { get; set; } = null;
 
+        public Watchlist? Watchlist { get; set; } = null;
+
         public MainWindowViewModel()
         {
             MainPage = new LandingPageViewModel();
@@ -23,7 +26,7 @@ namespace StreamKing.MainApplication.ViewModels
         }
     }
 
-    public class MainPage
+    public class MainPage : DependencyObject
     {
 
     }

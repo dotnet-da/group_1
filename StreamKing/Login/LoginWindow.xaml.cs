@@ -21,7 +21,7 @@ namespace StreamKing.Login
             if (App._apiToken != null)
             {
                 Console.WriteLine("Found apiToken, automatically logging in...");
-
+                App.GetWatchlist();
                 App._mainWindow = new MainWindow();
                 App._mainWindow.Show();
                 Close();
@@ -58,6 +58,6 @@ namespace StreamKing.Login
             Udata.password = "";
         }
 
-        
+
     }
 }

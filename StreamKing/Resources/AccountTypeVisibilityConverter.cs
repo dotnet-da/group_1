@@ -1,8 +1,8 @@
-﻿using System;
+﻿using StreamKing.Data.Accounts;
+using System;
 using System.Globalization;
-using System.Windows.Data;
 using System.Windows;
-using StreamKing.Data.Accounts;
+using System.Windows.Data;
 
 namespace StreamKing.Resources
 {
@@ -10,7 +10,7 @@ namespace StreamKing.Resources
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if(value == null)
+            if (value == null)
             {
                 return Visibility.Collapsed;
             }

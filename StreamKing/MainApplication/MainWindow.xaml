@@ -247,6 +247,7 @@
                         Grid.Column="0"
                         IsTabStop="False"
                         Panel.ZIndex="2000"
+                        VerticalAlignment="Center"
                         Visibility="{Binding SelectedMedia, Converter={StaticResource NullVisibilityConverter}}">
             <views:DetailedMediaTemplateView DataContext="{Binding SelectedMedia}" />
         </ContentControl>

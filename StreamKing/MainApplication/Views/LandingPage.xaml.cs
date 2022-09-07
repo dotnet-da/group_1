@@ -10,12 +10,6 @@ namespace StreamKing.MainApplication.Views
         public LandingPage()
         {
             InitializeComponent();
-            SetMediaList();
-        }
-
-        public void SetMediaList()
-        {
-            DiscoverMediaListView.ItemsSource = App._mediaList;
         }
     }
 }

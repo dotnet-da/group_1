@@ -43,6 +43,34 @@
                 </Setter.Value>
             </Setter>
         </Style>
+
+        <!-- This style is used for buttons, to remove the WPF default 'animated' mouse over effect -->
+        <Style x:Key="MyButtonStyle2"
+               TargetType="Button">
+            <Setter Property="OverridesDefaultStyle"
+                    Value="True" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Name="border"
+                                CornerRadius="8"
+                                Background="{TemplateBinding Background}"
+                                Cursor="Hand">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver"
+                                     Value="True">
+                                <Setter TargetName="border"
+                                        Property="Background"
+                                        Value="{StaticResource SecondaryDisabledColor}" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </UserControl.Resources>
     <Border x:Name="Mask"
             CornerRadius="16,16,16,16"
@@ -188,72 +216,87 @@
                             </StackPanel>
                         </Button>
                         <ItemsControl Grid.Row="1"
-                                      HorizontalAlignment="Left">
-                            <StackPanel Orientation="Horizontal">
-                                <ItemsControl Padding="16,8,48,16">
+                                      HorizontalAlignment="Stretch">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition />
+                                    <RowDefinition />
+                                </Grid.RowDefinitions>
 
-                                    <StackPanel Orientation="Vertical"
-                                                Width="512">
-                                        <TextBlock x:Name="MediaDescription"
+                                <StackPanel Orientation="Horizontal" Grid.Row="0">
+                                    <ItemsControl Padding="16,8,48,16">
+                                        <StackPanel Orientation="Vertical"
+                                                    Width="512">
+                                            <TextBlock x:Name="MediaDescription"
+                                                       VerticalAlignment="Center"
+                                                       TextWrapping="Wrap"
+                                                       FontSize="14"
+                                                       Text="{Binding Path=Description, FallbackValue=...}"
+                                                       Foreground="{StaticResource SecondaryColor}" />
+                                        </StackPanel>
+                                    </ItemsControl>
+                                    <ItemsControl>
+                                        <ListBox ItemsSource="{Binding StreamingInfos}"
+                                                 Margin="8,8,0,0"
+                                                 ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                                                 ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                                 ScrollViewer.CanContentScroll="False"
+                                                 IsHitTestVisible="False"
+                                                 Background="Transparent"
+                                                 BorderThickness="0">
+                                            <ListBox.ItemTemplate>
+                                                <DataTemplate>
+                                                    <Border CornerRadius="10"
+                                                            Padding="12,2,12,2"
+                                                            Margin="0,4,0,0"
+                                                            Background="{StaticResource PrimaryFocusColor}">
+                                                        <StackPanel Orientation="Horizontal">
+                                                            <TextBlock TextAlignment="Center"
+                                                                       VerticalAlignment="Center"
+                                                                       FontSize="14"
+                                                                       Foreground="{StaticResource SecondaryColor}"
+                                                                       Text="{Binding Country}"></TextBlock>
+                                                            <TextBlock Text=" : "
+                                                                       VerticalAlignment="Center"
+                                                                       TextAlignment="Center"
+                                                                       FontSize="14"
+                                                                       Foreground="{StaticResource SecondaryColor}">
+
+                                                            </TextBlock>
+                                                            <TextBlock TextAlignment="Center"
+                                                                       VerticalAlignment="Center"
+                                                                       FontSize="14"
+                                                                       Foreground="{StaticResource SecondaryColor}"
+                                                                       Text="{Binding Name}"></TextBlock>
+                                                        </StackPanel>
+                                                    </Border>
+                                                </DataTemplate>
+                                            </ListBox.ItemTemplate>
+                                        </ListBox>
+                                        <TextBlock x:Name="StreamingInfoEmpty"
                                                    VerticalAlignment="Center"
-                                                   TextWrapping="Wrap"
                                                    FontSize="14"
-                                                   Text="{Binding Path=Description, FallbackValue=...}"
+                                                   Margin="8,0,0,0"
+                                                   Visibility="{Binding StreamingInfos.Count, Converter={StaticResource StreamingAvailabilityVisibilityConverter}, FallbackValue=Visible}"
+                                                   Text="Not available for streaming."
                                                    Foreground="{StaticResource SecondaryColor}" />
-
-
+                                    </ItemsControl>
+                                </StackPanel>
+                                <ItemsControl Grid.Row="1"
+                                              Margin="0,32,0,0"
+                                              Padding="8,8,8,8">
+                                    <StackPanel Orientation="Horizontal"
+                                                HorizontalAlignment="Right">
+                                        <Button Style="{StaticResource MyButtonStyle2}"
+                                                Click="AddToWatchlistButton_Clicked">
+                                            <Button.Content>
+                                                <TextBlock Padding="8,8,8,8"> + Add to Watchlist</TextBlock>
+                                            </Button.Content>
+                                        </Button>
                                     </StackPanel>
-
-
                                 </ItemsControl>
-
-                                <ItemsControl>
-                                    <ListBox ItemsSource="{Binding StreamingInfos}"
-                                             Margin="8,8,0,0"
-                                             ScrollViewer.VerticalScrollBarVisibility="Disabled"
-                                             ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                                             ScrollViewer.CanContentScroll="False"
-                                             IsHitTestVisible="False"
-                                             Background="Transparent"
-                                             BorderThickness="0">
-                                        <ListBox.ItemTemplate>
-                                            <DataTemplate>
-                                                <Border CornerRadius="10"
-                                                        Padding="12,2,12,2"
-                                                        Margin="0,4,0,0"
-                                                        Background="{StaticResource PrimaryFocusColor}">
-                                                    <StackPanel Orientation="Horizontal">
-                                                        <TextBlock TextAlignment="Center"
-                                                                   VerticalAlignment="Center"
-                                                                   FontSize="14"
-                                                                   Foreground="{StaticResource SecondaryColor}"
-                                                                   Text="{Binding Country}"></TextBlock>
-                                                        <TextBlock Text=" : "
-                                                                   VerticalAlignment="Center"
-                                                                   TextAlignment="Center"
-                                                                   FontSize="14"
-                                                                   Foreground="{StaticResource SecondaryColor}">
-
-                                                        </TextBlock>
-                                                        <TextBlock TextAlignment="Center"
-                                                                   VerticalAlignment="Center"
-                                                                   FontSize="14"
-                                                                   Foreground="{StaticResource SecondaryColor}"
-                                                                   Text="{Binding Name}"></TextBlock>
-                                                    </StackPanel>
-                                                </Border>
-                                            </DataTemplate>
-                                        </ListBox.ItemTemplate>
-                                    </ListBox>
-                                    <TextBlock x:Name="StreamingInfoEmpty"
-                                               VerticalAlignment="Center"
-                                               FontSize="14"
-                                               Margin="8,0,0,0"
-                                               Visibility="{Binding StreamingInfos.Count, Converter={StaticResource StreamingAvailabilityVisibilityConverter}, FallbackValue=Visibility.Visible}"
-                                               Text="Not available for streaming."
-                                               Foreground="{StaticResource SecondaryColor}" />
-                                </ItemsControl>
-                            </StackPanel>
+                            </Grid>
+                            
 
                         </ItemsControl>
 
