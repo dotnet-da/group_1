@@ -137,8 +137,9 @@ namespace StreamKing.Web.Services
                     iterationCount: 100000,
                     numBytesRequested: 256 / 8));
 
-                user = new Account { 
-                    Username = model.Username, 
+                user = new Account
+                {
+                    Username = model.Username,
                     Password = model.Password,
                     FirstName = model.FirstName != null ? model.FirstName : "",
                     LastName = model.LastName != null ? model.LastName : "",

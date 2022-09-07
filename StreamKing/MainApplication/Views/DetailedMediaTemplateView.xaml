@@ -7,8 +7,7 @@
              xmlns:res="clr-namespace:StreamKing.Resources"
              mc:Ignorable="d"
              Margin="16,16,16,16"
-             d:DesignWidth="900"
-             ScrollViewer.VerticalScrollBarVisibility="Auto">
+             d:DesignWidth="900">
     <UserControl.Resources>
         <res:ImageConverter x:Key="ImageConverter" />
         <res:BigImageConverter x:Key="BigImageConverter" />
@@ -17,6 +16,9 @@
         <converter:MediaTypeSeriesVisibilityConverter x:Key="MediaTypeSeriesVisibilityConverter" />
         <converter:NullVisibilityConverter x:Key="NullVisibilityConverter" />
         <converter:StreamingAvailabilityVisibilityConverter x:Key="StreamingAvailabilityVisibilityConverter" />
+        <converter:GenresConverter x:Key="GenresConverter" />
+        <converter:StreamingInfosConverter x:Key="StreamingInfosConverter" />
+
         <!-- This style is used for buttons, to remove the WPF default 'animated' mouse over effect -->
         <Style x:Key="MyButtonStyle"
                TargetType="Button">
@@ -100,7 +102,7 @@
                                     CornerRadius="16,16,0,0">
                                 <!-- left-top and bottom-right round corners. -->
                                 <Border.Background>
-                                    <ImageBrush ImageSource="{Binding Path=BackdropURL, 
+                                    <ImageBrush ImageSource="{Binding  
                             Converter={StaticResource ImageConverter},
                             FallbackValue=https://image.tmdb.org/t/p/w1280/eSVvx8xys2NuFhl8fevXt41wX7v.jpg}"
                                                 Stretch="Fill"></ImageBrush>
@@ -126,15 +128,48 @@
                                             <TextBlock x:Name="MediaTmdbId"
                                                        VerticalAlignment="Center"
                                                        FontSize="12"
+                                                       Visibility="{Binding TmdbId, Converter={StaticResource NullVisibilityConverter}, FallbackValue=Collapsed}"
                                                        Text="{Binding Path=TmdbId, FallbackValue=000000}"
                                                        Foreground="{StaticResource SecondaryColor}" />
+                                            <TextBlock x:Name="MovieEntryTmdbId"
+                                                       VerticalAlignment="Center"
+                                                       FontSize="12"
+                                                       Visibility="{Binding Movie, Converter={StaticResource NullVisibilityConverter}, FallbackValue=Collapsed}"
+                                                       Text="{Binding Movie.TmdbId, FallbackValue=000000}"
+                                                       Foreground="{StaticResource SecondaryColor}" />
+                                            <TextBlock x:Name="SeriesEntryTmdbId"
+                                                       VerticalAlignment="Center"
+                                                       FontSize="12"
+                                                       Visibility="{Binding Series, Converter={StaticResource NullVisibilityConverter}, FallbackValue=Collapsed}"
+                                                       Text="{Binding Series.TmdbId, FallbackValue=000000}"
+                                                       Foreground="{StaticResource SecondaryColor}" />
+
+
                                             <TextBlock x:Name="MediaTitle"
                                                        VerticalAlignment="Center"
                                                        FontWeight="SemiBold"
                                                        FontSize="32"
+                                                       Visibility="{Binding TmdbId, Converter={StaticResource NullVisibilityConverter}, FallbackValue=Collapsed}"
                                                        Text="{Binding Path=Title, FallbackValue=Title}"
                                                        Foreground="{StaticResource SecondaryColor}"
                                                        TextTrimming="CharacterEllipsis" />
+                                            <TextBlock x:Name="MovieEntryTitle"
+                                                       VerticalAlignment="Center"
+                                                       FontWeight="SemiBold"
+                                                       FontSize="32"
+                                                       Visibility="{Binding Movie, Converter={StaticResource NullVisibilityConverter}, FallbackValue=Collapsed}"
+                                                       Text="{Binding Path=Movie.Title, FallbackValue=Title}"
+                                                       Foreground="{StaticResource SecondaryColor}"
+                                                       TextTrimming="CharacterEllipsis" />
+                                            <TextBlock x:Name="SeriesEntryTitle"
+                                                       VerticalAlignment="Center"
+                                                       FontWeight="SemiBold"
+                                                       FontSize="32"
+                                                       Visibility="{Binding Series, Converter={StaticResource NullVisibilityConverter}, FallbackValue=Collapsed}"
+                                                       Text="{Binding Path=Series.Title, FallbackValue=Title}"
+                                                       Foreground="{StaticResource SecondaryColor}"
+                                                       TextTrimming="CharacterEllipsis" />
+
                                             <StackPanel Orientation="Horizontal">
                                                 <TextBlock x:Name="MediaMovie"
                                                            VerticalAlignment="Center"
@@ -148,25 +183,68 @@
                                                            Text="Series • "
                                                            Visibility="{Binding Converter={StaticResource MediaTypeSeriesVisibilityConverter}}"
                                                            Foreground="{StaticResource SecondaryColor}" />
+                                                <TextBlock x:Name="MediaWatchlistMovie"
+                                                           VerticalAlignment="Center"
+                                                           FontSize="14"
+                                                           Text="Movie • "
+                                                           Visibility="{Binding Movie,Converter={StaticResource MediaTypeMovieVisibilityConverter}, FallbackValue=Collapsed}"
+                                                           Foreground="{StaticResource SecondaryColor}" />
+                                                <TextBlock x:Name="MediaWatchlistSeries"
+                                                           VerticalAlignment="Center"
+                                                           FontSize="14"
+                                                           Text="Series • "
+                                                           Visibility="{Binding Series, Converter={StaticResource MediaTypeSeriesVisibilityConverter}, FallbackValue=Collapsed}"
+                                                           Foreground="{StaticResource SecondaryColor}" />
+
+
                                                 <TextBlock x:Name="MovieRuntime"
                                                            VerticalAlignment="Center"
                                                            FontSize="14"
                                                            Visibility="{Binding Converter={StaticResource MediaTypeMovieVisibilityConverter}}"
                                                            Text="{Binding Path=Runtime,Converter={StaticResource RuntimeFormatConverter}, FallbackValue=1h 21min}"
                                                            Foreground="{StaticResource SecondaryColor}" />
+                                                <TextBlock x:Name="WatchlistMovieRuntime"
+                                                           VerticalAlignment="Center"
+                                                           FontSize="14"
+                                                           Visibility="{Binding Movie,Converter={StaticResource MediaTypeMovieVisibilityConverter}, FallbackValue=Collapsed}"
+                                                           Text="{Binding Path=Movie.Runtime,Converter={StaticResource RuntimeFormatConverter}, FallbackValue=1h 21min}"
+                                                           Foreground="{StaticResource SecondaryColor}" />
+
+
                                                 <TextBlock x:Name="SeriesSeasonsCount"
                                                            VerticalAlignment="Center"
                                                            FontSize="14"
                                                            Visibility="{Binding Converter={StaticResource MediaTypeSeriesVisibilityConverter}}"
                                                            Text="{Binding Path=Seasons.Count, StringFormat={}{0} Seasons, FallbackValue=3 Seasons}"
                                                            Foreground="{StaticResource SecondaryColor}" />
+                                                <TextBlock x:Name="WatchlistSeriesSeasonsCount"
+                                                           VerticalAlignment="Center"
+                                                           FontSize="14"
+                                                           Visibility="{Binding Series, Converter={StaticResource MediaTypeSeriesVisibilityConverter}, FallbackValue=Collapsed}"
+                                                           Text="{Binding Path=Series.Seasons.Count, StringFormat={}{0} Seasons, FallbackValue='- Seasons'}"
+                                                           Foreground="{StaticResource SecondaryColor}" />
+
+
                                                 <TextBlock x:Name="MediaReleaseYear"
                                                            VerticalAlignment="Center"
                                                            FontSize="14"
+                                                           Visibility="{Binding Release, Converter={StaticResource NullVisibilityConverter}, FallbackValue=Collapsed}"
                                                            Text="{Binding Path=Release, StringFormat=' • {0:yyyy}', FallbackValue= • 1970}"
                                                            Foreground="{StaticResource SecondaryColor}" />
+                                                <TextBlock x:Name="MovieEntryReleaseYear"
+                                                           VerticalAlignment="Center"
+                                                           FontSize="14"
+                                                           Visibility="{Binding Movie, Converter={StaticResource NullVisibilityConverter}, FallbackValue=Collapsed}"
+                                                           Text="{Binding Path=Movie.Release, StringFormat=' • {0:yyyy}', FallbackValue= • 1970}"
+                                                           Foreground="{StaticResource SecondaryColor}" />
+                                                <TextBlock x:Name="SeriesEntryReleaseYear"
+                                                           VerticalAlignment="Center"
+                                                           FontSize="14"
+                                                           Visibility="{Binding Series, Converter={StaticResource NullVisibilityConverter}, FallbackValue=Collapsed}"
+                                                           Text="{Binding Path=Series.Release, StringFormat=' • {0:yyyy}', FallbackValue= • 1970}"
+                                                           Foreground="{StaticResource SecondaryColor}" />
                                             </StackPanel>
-                                            <ListBox ItemsSource="{Binding Genres}"
+                                            <ListBox ItemsSource="{Binding Converter={StaticResource GenresConverter}}"
                                                      Margin="-4,8,0,0"
                                                      ScrollViewer.VerticalScrollBarVisibility="Disabled"
                                                      ScrollViewer.HorizontalScrollBarVisibility="Disabled"
@@ -217,13 +295,16 @@
                         </Button>
                         <ItemsControl Grid.Row="1"
                                       HorizontalAlignment="Stretch">
+
                             <Grid>
                                 <Grid.RowDefinitions>
                                     <RowDefinition />
                                     <RowDefinition />
                                 </Grid.RowDefinitions>
 
-                                <StackPanel Orientation="Horizontal" Grid.Row="0">
+                                <StackPanel Orientation="Horizontal"
+                                            Grid.Row="0"
+                                            ScrollViewer.VerticalScrollBarVisibility="Auto">
                                     <ItemsControl Padding="16,8,48,16">
                                         <StackPanel Orientation="Vertical"
                                                     Width="512">
@@ -231,12 +312,27 @@
                                                        VerticalAlignment="Center"
                                                        TextWrapping="Wrap"
                                                        FontSize="14"
+                                                       Visibility="{Binding Description, Converter={StaticResource NullVisibilityConverter}, FallbackValue=Collapsed}"
                                                        Text="{Binding Path=Description, FallbackValue=...}"
+                                                       Foreground="{StaticResource SecondaryColor}" />
+                                            <TextBlock x:Name="MovieEntryDescription"
+                                                       VerticalAlignment="Center"
+                                                       TextWrapping="Wrap"
+                                                       FontSize="14"
+                                                       Visibility="{Binding Movie, Converter={StaticResource NullVisibilityConverter}, FallbackValue=Collapsed}"
+                                                       Text="{Binding Path=Movie.Description, FallbackValue=...}"
+                                                       Foreground="{StaticResource SecondaryColor}" />
+                                            <TextBlock x:Name="SeriesEntryDescription"
+                                                       VerticalAlignment="Center"
+                                                       TextWrapping="Wrap"
+                                                       FontSize="14"
+                                                       Visibility="{Binding Series, Converter={StaticResource NullVisibilityConverter}, FallbackValue=Collapsed}"
+                                                       Text="{Binding Path=Series.Description, FallbackValue=...}"
                                                        Foreground="{StaticResource SecondaryColor}" />
                                         </StackPanel>
                                     </ItemsControl>
                                     <ItemsControl>
-                                        <ListBox ItemsSource="{Binding StreamingInfos}"
+                                        <ListBox ItemsSource="{Binding Converter={StaticResource StreamingInfosConverter}}"
                                                  Margin="8,8,0,0"
                                                  ScrollViewer.VerticalScrollBarVisibility="Disabled"
                                                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
@@ -277,7 +373,7 @@
                                                    VerticalAlignment="Center"
                                                    FontSize="14"
                                                    Margin="8,0,0,0"
-                                                   Visibility="{Binding StreamingInfos.Count, Converter={StaticResource StreamingAvailabilityVisibilityConverter}, FallbackValue=Visible}"
+                                                   Visibility="{Binding Converter={StaticResource StreamingAvailabilityVisibilityConverter}, FallbackValue=Visible}"
                                                    Text="Not available for streaming."
                                                    Foreground="{StaticResource SecondaryColor}" />
                                     </ItemsControl>
@@ -288,24 +384,30 @@
                                     <StackPanel Orientation="Horizontal"
                                                 HorizontalAlignment="Right">
                                         <Button Style="{StaticResource MyButtonStyle2}"
-                                                Click="AddToWatchlistButton_Clicked">
+                                                Click="AddToWatchlistButton_Clicked"
+                                                x:Name="AddToWatchlistButton"
+                                                Visibility="{Binding TmdbId, Converter={StaticResource NullVisibilityConverter} , FallbackValue=Collapsed}">
                                             <Button.Content>
                                                 <TextBlock Padding="8,8,8,8"> + Add to Watchlist</TextBlock>
+                                            </Button.Content>
+                                        </Button>
+                                        <Button Style="{StaticResource MyButtonStyle2}"
+                                                x:Name="RemoveFromWatchlistButton"
+                                                Click="RemoveFromWatchlistButton_Clicked"
+                                                Visibility="{Binding Id, Converter={StaticResource NullVisibilityConverter} , FallbackValue=Collapsed}">
+                                            <Button.Content>
+                                                <TextBlock Padding="8,8,8,8"> - Remove from Watchlist</TextBlock>
                                             </Button.Content>
                                         </Button>
                                     </StackPanel>
                                 </ItemsControl>
                             </Grid>
-                            
-
                         </ItemsControl>
-
                     </Grid>
 
                 </StackPanel>
             </ItemsControl>
         </ScrollViewer>
-
     </Border>
 
 </UserControl>

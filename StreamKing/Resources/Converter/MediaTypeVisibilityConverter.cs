@@ -14,6 +14,14 @@ namespace StreamKing.Resources.Converter
             {
                 return Visibility.Collapsed;
             }
+            try
+            {
+                ((Media)value).GetType();
+            }
+            catch (Exception)
+            {
+                return Visibility.Collapsed;
+            }
 
             return (((Media)value).GetType() == typeof(Movie)) ? Visibility.Visible : Visibility.Collapsed;
         }
@@ -29,6 +37,14 @@ namespace StreamKing.Resources.Converter
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             if (value == null)
+            {
+                return Visibility.Collapsed;
+            }
+            try
+            {
+                ((Media)value).GetType();
+            }
+            catch (Exception)
             {
                 return Visibility.Collapsed;
             }

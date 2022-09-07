@@ -36,8 +36,41 @@ namespace StreamKing.MainApplication
             {
                 ((LandingPageViewModel)_viewModel.MainPage).Watchlist = App.Watchlist;
                 Console.WriteLine("Updated Watchlist: " + ((LandingPageViewModel)_viewModel.MainPage).Watchlist.Name);
+                Console.WriteLine("   SeriesList: ");
+                foreach (var entry in ((LandingPageViewModel)_viewModel.MainPage).Watchlist.SeriesList)
+                {
+                    Console.WriteLine("   " + entry.Tag + ": " + entry.Series.Title);
+                }
+                Console.WriteLine("   MovieList: " + ((LandingPageViewModel)_viewModel.MainPage).Watchlist.Name);
+
+                foreach (var entry in ((LandingPageViewModel)_viewModel.MainPage).Watchlist.MovieList)
+                {
+                    Console.WriteLine("   " + entry.Tag + ": " + entry.Movie.Title);
+                }
                 UpdateDataContext();
             }
+        }
+
+        public Media? GetSelectedMedia()
+        {
+            if (_viewModel.SelectedMedia is not null)
+            {
+                return _viewModel.SelectedMedia;
+            }
+            return null;
+        }
+
+        public WatchEntry? GetSelectedWatchEntry()
+        {
+            if (_viewModel.SelectedMovieEntry is not null)
+            {
+                return _viewModel.SelectedMovieEntry;
+            }
+            if (_viewModel.SelectedSeriesEntry is not null)
+            {
+                return _viewModel.SelectedSeriesEntry;
+            }
+            return null;
         }
 
         public void SetMedialist()
@@ -59,20 +92,86 @@ namespace StreamKing.MainApplication
             if (media is not null)
             {
                 Console.WriteLine("New selected media: " + media.Title);
-                Console.WriteLine("StreamingInfos: ");
-                foreach (var streamInfo in media.StreamingInfos)
+                if (media.StreamingInfos is not null)
                 {
-                    Console.WriteLine("    " + streamInfo.Country + ": " + streamInfo.Name);
+                    Console.WriteLine("StreamingInfos: ");
+                    foreach (var streamInfo in media.StreamingInfos)
+                    {
+                        Console.WriteLine("    " + streamInfo.Country + ": " + streamInfo.Name);
+                    }
                 }
-                Console.WriteLine("Genres: ");
-                foreach (var genre in media.Genres)
+                if (media.Genres is not null)
                 {
-                    Console.WriteLine(genre.Name);
+                    Console.WriteLine("Genres: ");
+                    foreach (var genre in media.Genres)
+                    {
+                        Console.WriteLine(genre.Name);
+                    }
                 }
             }
             else
             {
                 Console.WriteLine("Deleted selected media");
+            }
+        }
+
+        public void SetSelectedMovieEntry(MovieEntry? media)
+        {
+            _viewModel.SelectedMovieEntry = media;
+            UpdateDataContext();
+            if (media is not null)
+            {
+                Console.WriteLine("New selected media: " + media.Movie.Title);
+                if (media.Movie.StreamingInfos is not null)
+                {
+                    Console.WriteLine("StreamingInfos: ");
+                    foreach (var streamInfo in media.Movie.StreamingInfos)
+                    {
+                        Console.WriteLine("    " + streamInfo.Country + ": " + streamInfo.Name);
+                    }
+                }
+                if (media.Movie.Genres is not null)
+                {
+                    Console.WriteLine("Genres: ");
+                    foreach (var genre in media.Movie.Genres)
+                    {
+                        Console.WriteLine(genre.Name);
+                    }
+                }
+            }
+            else
+            {
+                Console.WriteLine("Deleted selected movieentry");
+            }
+        }
+
+        public void SetSelectedSeriesEntry(SeriesEntry? media)
+        {
+            _viewModel.SelectedSeriesEntry = media;
+            UpdateDataContext();
+            if (media is not null)
+            {
+                Console.WriteLine("New selected media: " + media.Series.Title);
+                if (media.Series.StreamingInfos is not null)
+                {
+                    Console.WriteLine("StreamingInfos: ");
+                    foreach (var streamInfo in media.Series.StreamingInfos)
+                    {
+                        Console.WriteLine("    " + streamInfo.Country + ": " + streamInfo.Name);
+                    }
+                }
+                if (media.Series.Genres is not null)
+                {
+                    Console.WriteLine("Genres: ");
+                    foreach (var genre in media.Series.Genres)
+                    {
+                        Console.WriteLine(genre.Name);
+                    }
+                }
+            }
+            else
+            {
+                Console.WriteLine("Deleted selected seriesentry");
             }
         }
         public void UpdateDataContext()

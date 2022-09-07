@@ -7,6 +7,11 @@ namespace StreamKing.MainApplication.ViewModels
 {
     public class LandingPageViewModel : MainPage, INotifyPropertyChanged
     {
+        public LandingPageViewModel()
+        {
+            MediaList = new ObservableCollection<Media>(App._mediaList);
+        }
+
         private ObservableCollection<Media> _mediaList;
         public ObservableCollection<Media> MediaList
         {
@@ -24,10 +29,43 @@ namespace StreamKing.MainApplication.ViewModels
             }
         }
 
+        public ObservableCollection<Media> _mediaWatchlist;
+        public ObservableCollection<Media> MediaWatchlist
+        {
+            get
+            {
+                return _mediaWatchlist;
+            }
+            set
+            {
+                if (value != _mediaWatchlist)
+                {
+                    _mediaWatchlist = value;
+                    OnPropertyChanged("MediaWatchlist");
+                }
+            }
+        }
+
         public Watchlist Watchlist
         {
             get { return (Watchlist)GetValue(WatchlistProperty); }
-            set { SetValue(WatchlistProperty, value); }
+            set
+            {
+                SetValue(WatchlistProperty, value);
+                ObservableCollection<Media> result = new ObservableCollection<Media>();
+                if (Watchlist != null)
+                {
+                    foreach (var movie in Watchlist.MovieList)
+                    {
+                        result.Add(movie.Movie);
+                    }
+                    foreach (var series in Watchlist.SeriesList)
+                    {
+                        result.Add(series.Series);
+                    }
+                }
+                _mediaWatchlist = result;
+            }
         }
         public static readonly DependencyProperty WatchlistProperty =
                DependencyProperty.Register("Watchlist", typeof(Watchlist), typeof(LandingPageViewModel), new PropertyMetadata());

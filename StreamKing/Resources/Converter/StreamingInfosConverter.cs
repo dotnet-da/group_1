@@ -1,22 +1,18 @@
 ﻿using StreamKing.Data.Media;
 using System;
 using System.Collections.Generic;
-using System.Globalization;
-using System.Windows;
 using System.Windows.Data;
 
 namespace StreamKing.Resources.Converter
 {
-    public class StreamingAvailabilityVisibilityConverter : IValueConverter
+    public class StreamingInfosConverter : IValueConverter
     {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
             if (value == null)
-            {
-                return Visibility.Visible;
-            }
+                return null;
 
-            List<StreamingInfo> s = new List<StreamingInfo>();
+            List<StreamingInfo>? s = null;
             try
             {
                 s = (value as Media).StreamingInfos;
@@ -35,19 +31,15 @@ namespace StreamKing.Resources.Converter
                     }
                     catch (Exception)
                     {
-                        return Visibility.Visible;
+
                     }
                 }
             }
-            if (s == null)
-            {
-                return Visibility.Visible;
-            }
 
-            return (s.Count > 0) ? Visibility.Collapsed : Visibility.Visible;
+            return s;
         }
 
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
             throw new NotImplementedException();
         }

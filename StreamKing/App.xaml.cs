@@ -150,10 +150,84 @@ namespace StreamKing
                 Console.WriteLine("Error in GetWatchlist: " + ex.Message);
             }
         }
-        public static void AddSelectedMediaToWatchlist()
+        public static async Task<bool> AddSelectedMediaToWatchlist()
         {
+            Media? selected = _mainWindow.GetSelectedMedia();
+            if (selected is not null && Watchlist is not null)
+            {
+                Console.WriteLine("Adding to Watchlist(" + Watchlist.Id + "): " + selected.Title);
+                WatchEntryRequest watchEntryRequest = new WatchEntryRequest
+                {
+                    Tag = "Watching",
+                };
 
+                if (selected.GetType() == typeof(Movie))
+                {
+                    watchEntryRequest.MovieId = selected.TmdbId;
+                }
+                else if (selected.GetType() == typeof(Series))
+                {
+                    watchEntryRequest.SeriesId = selected.TmdbId;
+                }
+
+                var watchEntryRequestContent = JsonConvert.SerializeObject(watchEntryRequest);
+                var httpContent = new StringContent(watchEntryRequestContent, Encoding.UTF8, "application/json");
+
+                try
+                {
+                    string path = "session/watchlists/" + Watchlist.Id + "/entries";
+                    Console.WriteLine("Post to: " + path);
+                    HttpResponseMessage response = await _mediaApi.PostAsync(path, httpContent);
+
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        MessageBox.Show("AddSelectedMediaToWatchlist:" + response.StatusCode);
+                        return false;
+                    }
+                    var content = await response.Content.ReadAsStringAsync();
+                    Console.WriteLine("Successful AddSelectedMediaToWatchlist: " + content);
+
+                    GetWatchlist();
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Error in GetWatchlist: " + ex.Message);
+                }
+            }
+            return true;
         }
+
+        public static async Task<bool> RemoveSelectedWatchEntryFromWatchlist()
+        {
+            WatchEntry? selected = _mainWindow.GetSelectedWatchEntry();
+            if (selected is not null && Watchlist is not null)
+            {
+                Console.WriteLine("Removing from Watchlist(" + Watchlist.Id + "): " + selected.Id);
+
+                try
+                {
+                    string path = "session/watchlists/" + Watchlist.Id + "/entries/" + selected.Id;
+                    Console.WriteLine("Delete from: " + path);
+                    HttpResponseMessage response = await _mediaApi.DeleteAsync(path);
+
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        MessageBox.Show("RemoveSelectedWatchEntryFromWatchlist:" + response.StatusCode);
+                        return false;
+                    }
+                    var content = await response.Content.ReadAsStringAsync();
+                    Console.WriteLine("Successful RemoveSelectedWatchEntryFromWatchlist: " + content);
+
+                    GetWatchlist();
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Error in RemoveSelectedWatchEntryFromWatchlist: " + ex.Message);
+                }
+            }
+            return true;
+        }
+
         public static async Task<string> Login(string username, string password)
         {
             string message = "";

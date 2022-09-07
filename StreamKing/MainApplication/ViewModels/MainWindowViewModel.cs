@@ -15,6 +15,8 @@ namespace StreamKing.MainApplication.ViewModels
 
         public Account? Account { get; set; }
         public Media? SelectedMedia { get; set; } = null;
+        public MovieEntry? SelectedMovieEntry { get; set; } = null;
+        public SeriesEntry? SelectedSeriesEntry { get; set; } = null;
 
         public Watchlist? Watchlist { get; set; } = null;
 

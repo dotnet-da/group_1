@@ -87,11 +87,45 @@
                                Foreground="{StaticResource SecondaryColor}"
                                Margin="8,8,8,16"
                                Text="{Binding Watchlist.Name, FallbackValue='No Watchlist Found'}"></TextBlock>
-                    <TextBlock FontSize="24"
-                               VerticalAlignment="Center"
-                               HorizontalAlignment="Center"
-                               Foreground="{StaticResource SecondaryColor}"
-                               Margin="8,8,8,16">Nothing here yet ...</TextBlock>
+                    <ListBox x:Name="MovieWatchlistView"
+                             ItemsSource="{Binding Watchlist.MovieList, Mode=OneWay}"
+                             ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                             ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                             Background="Transparent"
+                             HorizontalAlignment="Stretch"
+                             MaxHeight="600"
+                             BorderThickness="0">
+                        <ListBox.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel />
+                            </ItemsPanelTemplate>
+                        </ListBox.ItemsPanel>
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <views:MediaTemplateView DataContext="{Binding}"/>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                    <ListBox x:Name="SeriesWatchlistView"
+                             ItemsSource="{Binding Watchlist.SeriesList, Mode=OneWay}"
+                             ScrollViewer.VerticalScrollBarVisibility="Auto"
+                             ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                             ScrollViewer.CanContentScroll="False"
+                             Background="Transparent"
+                             HorizontalAlignment="Stretch"
+                             MaxHeight="600"
+                             BorderThickness="0">
+                        <ListBox.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel />
+                            </ItemsPanelTemplate>
+                        </ListBox.ItemsPanel>
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <views:MediaTemplateView DataContext="{Binding}" />
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
                     <!--<ListView x:Name="WatchlistListView"
                           ScrollViewer.VerticalScrollBarVisibility="Visible"
                             ScrollViewer.CanContentScroll="False"

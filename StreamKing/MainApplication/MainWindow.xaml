@@ -251,5 +251,23 @@
                         Visibility="{Binding SelectedMedia, Converter={StaticResource NullVisibilityConverter}}">
             <views:DetailedMediaTemplateView DataContext="{Binding SelectedMedia}" />
         </ContentControl>
+        <ContentControl x:Name="DetailedMovieEntryContentControl"
+                        Grid.Row="1"
+                        Grid.Column="0"
+                        IsTabStop="False"
+                        Panel.ZIndex="2000"
+                        VerticalAlignment="Center"
+                        Visibility="{Binding SelectedMovieEntry, Converter={StaticResource NullVisibilityConverter}}">
+            <views:DetailedMediaTemplateView DataContext="{Binding SelectedMovieEntry}" />
+        </ContentControl>
+        <ContentControl x:Name="DetailedSeriesEntryContentControl"
+                        Grid.Row="1"
+                        Grid.Column="0"
+                        IsTabStop="False"
+                        Panel.ZIndex="2000"
+                        VerticalAlignment="Center"
+                        Visibility="{Binding SelectedSeriesEntry, Converter={StaticResource NullVisibilityConverter}}">
+            <views:DetailedMediaTemplateView DataContext="{Binding SelectedSeriesEntry}" />
+        </ContentControl>
     </Grid>
 </Window>
