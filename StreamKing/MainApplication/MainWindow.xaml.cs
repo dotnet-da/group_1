@@ -43,6 +43,18 @@ namespace StreamKing.MainApplication
             }
         }
 
+        public void UpdateMediaListView()
+        {
+            if(_viewModel.MainPage.GetType() == typeof(LandingPageViewModel))
+            {
+                Dispatcher.Invoke(() =>
+                {
+                    (_viewModel.MainPage as LandingPageViewModel).MediaList = App._mediaList;
+                    UpdateDataContext();
+                });
+            }
+        }
+
         public void UpdateDataContext()
         {
             DataContext = null;

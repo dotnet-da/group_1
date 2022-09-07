@@ -19,9 +19,9 @@ namespace StreamKing.MainApplication.Views
     /// <summary>
     /// Interaktionslogik für Window1.xaml
     /// </summary>
-    public partial class DataTemplateView : UserControl
+    public partial class MediaTemplateView : UserControl
     {
-        public DataTemplateView()
+        public MediaTemplateView()
         {
             InitializeComponent();
         }

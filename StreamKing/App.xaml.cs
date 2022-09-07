@@ -27,7 +27,7 @@ namespace StreamKing
         public static string WebApiUrl { get; set; } = "https://localhost:9595/api/";
 
         public static Guid? _userId { get; set; }
-        public static string? _apiToken { get; set; }
+        public static string? _apiToken { get; set; } = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImRmNDZhMWMyLWY5ZmYtNDUwOC05OWQwLTg4NmVlNGY2NzUzYyIsImF1dGgiOiJBZG1pbiIsIm5iZiI6MTY2MjU0NTM4OSwiZXhwIjoxNjYzMTUwMTg5LCJpYXQiOjE2NjI1NDUzODl9.OJeI8L9S91EOrUwjSGUhwy5lxhIglrJEvQWd5VNnAe0";
         public static Account? _currentUser { get; set; }
         public static MainWindow? _mainWindow { get; set; }
         public static LoginWindow? _loginWindow { get; set; }
@@ -38,6 +38,7 @@ namespace StreamKing
             LoadMedia("?type=movie&take=50");
             LoadMedia("?type=series&take=50");
             InitMediaApi();
+            
         }
 
         public static void InitAccountsApi()
@@ -81,11 +82,19 @@ namespace StreamKing
                     {
                         var movieList = JArray.Parse(content).ToObject<List<Movie>>();
                         _mediaList.AddRange(movieList);
+                        if (_mainWindow is not null)
+                        {
+                            _mainWindow.UpdateMediaListView();
+                        }
                     }
                     else if (url.Contains("series"))
                     {
                         var seriesList = JArray.Parse(content).ToObject<List<Series>>();
                         _mediaList.AddRange(seriesList);
+                        if(_mainWindow is not null)
+                        {
+                            _mainWindow.UpdateMediaListView();
+                        }
                     }
                 }
                 catch (Exception ex)
@@ -142,6 +151,8 @@ namespace StreamKing
                     message = "Success";
                     _userId = (Guid)joResponse["id"];
                     _apiToken = (string)joResponse["token"];
+
+                    Console.WriteLine(_apiToken);
 
                     Mouse.OverrideCursor = null;
                     _mainWindow = new MainWindow();
@@ -221,6 +232,7 @@ namespace StreamKing
             try
             {
                 _currentUser = JObject.Parse(content).ToObject<Account>();
+                _userId = _currentUser.Id;
                 _mainWindow.UpdateHeader();
                 _mainWindow.UpdateCurrentUser();
             }

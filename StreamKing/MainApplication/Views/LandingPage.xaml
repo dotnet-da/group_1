@@ -129,7 +129,7 @@
                     </ListBox.ItemsPanel>
                     <ListBox.ItemTemplate>
                         <DataTemplate>
-                            <views:DataTemplateView />
+                            <views:MediaTemplateView />
                         </DataTemplate>
                     </ListBox.ItemTemplate>
                 </ListBox>

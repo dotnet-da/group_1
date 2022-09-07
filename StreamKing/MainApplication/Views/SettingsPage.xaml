@@ -6,6 +6,34 @@
              xmlns:local="clr-namespace:StreamKing.MainApplication.Views"
              mc:Ignorable="d" 
              d:DesignHeight="650" d:DesignWidth="1000">
+    <UserControl.Resources>
+        <!-- This style is used for buttons, to remove the WPF default 'animated' mouse over effect -->
+        <Style x:Key="MyButtonStyle"
+               TargetType="Button">
+            <Setter Property="OverridesDefaultStyle"
+                    Value="True" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Name="border"
+                                CornerRadius="32"
+                                Background="{TemplateBinding Background}">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver"
+                                     Value="True">
+                                <Setter TargetName="border"
+                                        Property="Background"
+                                        Value="{StaticResource SecondaryDisabledColor}" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="48"></RowDefinition>
@@ -17,14 +45,19 @@
             <ColumnDefinition Width="4*"></ColumnDefinition>
             <ColumnDefinition Width="1*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
-        <ItemsControl Grid.Row="0" VerticalAlignment="Center" >
-            <Button x:Name="BackButton" 
-                Width="72" 
-                    Height="32" 
-                    VerticalAlignment="Center" 
-                    HorizontalAlignment="Left"
-                    Margin="16,8,8,8" Click="BackButton_Click">
-                Back
+        <ItemsControl Grid.Row="0" Grid.Column="2"  HorizontalAlignment="Left" >
+            <Button Height="48"
+                    Width="48"
+                    Background="Transparent"
+                    VerticalAlignment="Top"
+                    HorizontalAlignment="Right"
+                    Click="BackButton_Click"
+                    Cursor="Hand"
+                    BorderBrush="{x:Null}"
+                    Style="{StaticResource MyButtonStyle}">
+                <StackPanel>
+                    <Image Source="../../Assets/Images/close.png" />
+                </StackPanel>
             </Button>
         </ItemsControl>
         <ItemsControl

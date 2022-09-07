@@ -25,4 +25,22 @@ namespace StreamKing.Resources
             throw new NotImplementedException();
         }
     }
+
+    public class BigImageConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            string s = value as string;
+
+            if (s == null)
+                return null;
+
+            return new BitmapImage(new Uri("https://image.tmdb.org/t/p/w780" + s, UriKind.Absolute));
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
 }

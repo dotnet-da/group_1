@@ -1,0 +1,193 @@
+﻿<UserControl x:Class="StreamKing.MainApplication.Views.DetailedMediaTemplateView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:converter="clr-namespace:StreamKing.Resources.Converter"
+             xmlns:res="clr-namespace:StreamKing.Resources"
+             mc:Ignorable="d"
+             Margin="16,16,16,16"
+             d:DesignWidth="900">
+    <UserControl.Resources>
+        <res:ImageConverter x:Key="ImageConverter" />
+        <res:BigImageConverter x:Key="BigImageConverter" />
+        <converter:RuntimeFormatConverter x:Key="RuntimeFormatConverter" />
+        <converter:MediaTypeMovieVisibilityConverter x:Key="MediaTypeMovieVisibilityConverter" />
+        <converter:MediaTypeSeriesVisibilityConverter x:Key="MediaTypeSeriesVisibilityConverter" />
+        <converter:NullVisibilityConverter x:Key="NullVisibilityConverter" />
+        <!-- This style is used for buttons, to remove the WPF default 'animated' mouse over effect -->
+        <Style x:Key="MyButtonStyle"
+               TargetType="Button">
+            <Setter Property="OverridesDefaultStyle"
+                    Value="True" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Name="border"
+                                CornerRadius="32"
+                                Background="{TemplateBinding Background}">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver"
+                                     Value="True">
+                                <Setter TargetName="border"
+                                        Property="Background"
+                                        Value="{StaticResource SecondaryDisabledColor}" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
+    <Border x:Name="Mask"
+            CornerRadius="16,16,16,16"
+            Width="900"
+            Background="Black">
+        <ItemsControl IsTabStop="False"
+                      FontSize="16"
+                      Foreground="{StaticResource SecondaryColor}">
+
+            <StackPanel Width="900"
+                        HorizontalAlignment="Center">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                    </Grid.ColumnDefinitions>
+
+                    <ItemsControl Grid.Column="0"
+                                  Grid.Row="0">
+                        <Border Height="450"
+                                Width="900"
+                                BorderBrush="{x:Null}"
+                                BorderThickness="0"
+                                CornerRadius="16,16,0,0">
+                            <!-- left-top and bottom-right round corners. -->
+                            <Border.Background>
+                                <ImageBrush ImageSource="{Binding Path=BackdropURL, 
+                            Converter={StaticResource ImageConverter},
+                            FallbackValue=https://image.tmdb.org/t/p/w1280/eSVvx8xys2NuFhl8fevXt41wX7v.jpg}"
+                                            Stretch="Fill"></ImageBrush>
+                            </Border.Background>
+
+                            <ItemsControl Margin="0,16,0,0">
+                                <ItemsControl.Background>
+                                    <LinearGradientBrush StartPoint="0,1"
+                                                         EndPoint="0.1,0">
+
+                                        <GradientStop Color="#ff000000"
+                                                      Offset="0.2" />
+
+                                        <GradientStop Color="#00000000"
+                                                      Offset="0.8" />
+                                    </LinearGradientBrush>
+                                </ItemsControl.Background>
+                                <Grid Height="{Binding RelativeSource={RelativeSource FindAncestor, 
+    AncestorType={x:Type ItemsControl}},Path=ActualHeight}">
+                                    <ItemsControl VerticalAlignment="Bottom"
+                                                  HorizontalAlignment="Left"
+                                                  Padding="16,8,16,16">
+                                        <TextBlock x:Name="MediaTmdbId"
+                                                   VerticalAlignment="Center"
+                                                   FontSize="12"
+                                                   Text="{Binding Path=TmdbId, FallbackValue=000000}"
+                                                   Foreground="{StaticResource SecondaryColor}" />
+                                        <TextBlock x:Name="MediaTitle"
+                                                   VerticalAlignment="Center"
+                                                   FontWeight="SemiBold"
+                                                   FontSize="18"
+                                                   Text="{Binding Path=Title, FallbackValue=Title}"
+                                                   Foreground="{StaticResource SecondaryColor}"
+                                                   TextTrimming="CharacterEllipsis" />
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock x:Name="MediaMovie"
+                                                       VerticalAlignment="Center"
+                                                       FontSize="14"
+                                                       Text="Movie • "
+                                                       Visibility="{Binding Converter={StaticResource MediaTypeMovieVisibilityConverter}}"
+                                                       Foreground="{StaticResource SecondaryColor}" />
+                                            <TextBlock x:Name="MediaSeries"
+                                                       VerticalAlignment="Center"
+                                                       FontSize="14"
+                                                       Text="Series • "
+                                                       Visibility="{Binding Converter={StaticResource MediaTypeSeriesVisibilityConverter}}"
+                                                       Foreground="{StaticResource SecondaryColor}" />
+                                            <TextBlock x:Name="MovieRuntime"
+                                                       VerticalAlignment="Center"
+                                                       FontSize="14"
+                                                       Visibility="{Binding Converter={StaticResource MediaTypeMovieVisibilityConverter}}"
+                                                       Text="{Binding Path=Runtime,Converter={StaticResource RuntimeFormatConverter}, FallbackValue=1h 21min}"
+                                                       Foreground="{StaticResource SecondaryColor}" />
+                                            <TextBlock x:Name="SeriesSeasonsCount"
+                                                       VerticalAlignment="Center"
+                                                       FontSize="14"
+                                                       Visibility="{Binding Converter={StaticResource MediaTypeSeriesVisibilityConverter}}"
+                                                       Text="{Binding Path=Seasons.Count, StringFormat={}{0} Seasons, FallbackValue=3 Seasons}"
+                                                       Foreground="{StaticResource SecondaryColor}" />
+                                            <TextBlock x:Name="MediaReleaseYear"
+                                                       VerticalAlignment="Center"
+                                                       FontSize="14"
+                                                       Text="{Binding Path=Release, StringFormat=' • {0:yyyy}', FallbackValue= • 1970}"
+                                                       Foreground="{StaticResource SecondaryColor}" />
+                                        </StackPanel>
+
+                                    </ItemsControl>
+                                </Grid>
+                            </ItemsControl>
+
+                        </Border>
+                    </ItemsControl>
+
+                    <Button Height="48"
+                            Width="48"
+                            Background="Transparent"
+                            VerticalAlignment="Top"
+                            HorizontalAlignment="Right"
+                            Click="Button_Click"
+                            Cursor="Hand"
+                            BorderBrush="{x:Null}"
+                            Style="{StaticResource MyButtonStyle}"
+                            >
+                        <StackPanel>
+                            <Image Source="../../Assets/Images/close.png" />
+                        </StackPanel>
+                    </Button>
+                    <!--<TextBlock x:Name="Provider" Margin="8,8,8,8" FontSize="12" Text="{Binding Media.StreamingInfos}" Grid.Column="0" Grid.Row="2"></TextBlock>-->
+                    <!--<TextBlock x:Name="SeriesOrMovieDetails" Text="{Binding SeasonOrRuntimeInformation}" FontSize="12" Margin="8,8,8,8" Grid.Column="0" Grid.Row="3"></TextBlock>-->
+
+                    <!--<TextBlock x:Name="Rating" Text="5" FontSize="12" Margin="8,8,8,8" Grid.Column="0" Grid.Row="4" ></TextBlock>
+                    <Border CornerRadius="12,12,12,12" Margin="8,8,8,8" Grid.Row="1" Grid.Column="1">
+                        <TextBlock x:Name="TagTextBox"
+                                   TextAlignment="Center"
+                                   FontSize="12"
+                                   Visibility="Visible" Text="Watching"
+                                   Grid.Column="1" Grid.Row="1" Margin="0,0,0,0" Background="{Binding TagColor}"/>
+                    </Border>-->
+                    <ItemsControl Grid.Row="1" 
+                                  HorizontalAlignment="Left">
+                        <ItemsControl Padding="16,8,16,16">
+                            <StackPanel Orientation="Vertical"
+                                        Width="512">
+                                <TextBlock x:Name="MediaDescription"
+                                           VerticalAlignment="Center"
+                                           TextWrapping="Wrap"
+                                           FontSize="14"
+                                           Text="{Binding Path=Description, FallbackValue=...}"
+                                           Foreground="{StaticResource SecondaryColor}" />
+
+                            </StackPanel>
+                                
+                        </ItemsControl>
+                    </ItemsControl>
+                </Grid>
+
+            </StackPanel>
+        </ItemsControl>
+    </Border>
+
+</UserControl>

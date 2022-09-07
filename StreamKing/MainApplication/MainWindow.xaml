@@ -4,77 +4,111 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
-        Title="StreamKing" Height="800" Width="1480"
-        Background="{StaticResource PrimaryColor}"
+        Title="StreamKing"
+        Height="800"
+        Width="1480"
         WindowStartupLocation="CenterScreen"
         xmlns:viewmodels="clr-namespace:StreamKing.MainApplication.ViewModels"
-        xmlns:views="clr-namespace:StreamKing.MainApplication.Views" xmlns:simpleXamlContent="clr-namespace:StreamKing.Resources">
+        xmlns:views="clr-namespace:StreamKing.MainApplication.Views"
+        xmlns:simpleXamlContent="clr-namespace:StreamKing.Resources"
+        xmlns:converter="clr-namespace:StreamKing.Resources.Converter">
     <Window.Resources>
-        <DataTemplate x:Name="LandingPageViewTemplate" DataType="{x:Type viewmodels:LandingPageViewModel}">
-            <views:LandingPage DataContext="{Binding}"/>
+        <DataTemplate x:Name="LandingPageViewTemplate"
+                      DataType="{x:Type viewmodels:LandingPageViewModel}">
+            <views:LandingPage DataContext="{Binding}" />
         </DataTemplate>
-        <DataTemplate x:Name="SettingsPageViewTemplate" DataType="{x:Type viewmodels:SettingsPageViewModel}">
-            <views:SettingsPage DataContext="{Binding}"/>
+        <DataTemplate x:Name="SettingsPageViewTemplate"
+                      DataType="{x:Type viewmodels:SettingsPageViewModel}">
+            <views:SettingsPage DataContext="{Binding}" />
         </DataTemplate>
+        <converter:NullVisibilityConverter x:Key="NullVisibilityConverter" />
     </Window.Resources>
     <Window.DataContext>
-        <viewmodels:MainWindowViewModel/>
+        <viewmodels:MainWindowViewModel />
     </Window.DataContext>
-    <Grid>
+    <Grid Background="{StaticResource PrimaryColor}">
         <Grid.RowDefinitions>
-            <RowDefinition Height="48"/>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="48" />
+            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
 
-        <ItemsControl x:Name="HeaderItemsControl" Grid.Row="0" Background="{StaticResource PrimaryHeaderColor}">
+        <ItemsControl x:Name="HeaderItemsControl"
+                      Grid.Row="0"
+                      Background="{StaticResource PrimaryHeaderColor}">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
                     <DockPanel></DockPanel>
                 </ItemsPanelTemplate>
             </ItemsControl.ItemsPanel>
-            <Image Source="../Assets/Images/LogoNB_small.png" Margin="16,8,8,8"/>
-            <TextBlock Foreground="{StaticResource SecondaryColor}" FontSize="24" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,8,8,8">StreamKing</TextBlock>
-            
-            <ItemsControl HorizontalAlignment="Right" >
+            <Image Source="../Assets/Images/LogoNB_small.png"
+                   Margin="16,8,8,8" />
+            <TextBlock Foreground="{StaticResource SecondaryColor}"
+                       FontSize="24"
+                       HorizontalAlignment="Left"
+                       VerticalAlignment="Center"
+                       Margin="0,8,8,8">StreamKing</TextBlock>
+
+            <ItemsControl HorizontalAlignment="Right">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
                         <DockPanel></DockPanel>
                     </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
-                
-                <TextBox x:Name="HeaderSearchInput" Style="{StaticResource InputControlBox}" 
-                         TextAlignment="Left" 
-                         VerticalAlignment="Center" 
-                         FontSize="16" 
-                         Height="32" 
-                         Width="320" 
+
+                <TextBox x:Name="HeaderSearchInput"
+                         Style="{StaticResource InputControlBox}"
+                         TextAlignment="Left"
+                         VerticalAlignment="Center"
+                         FontSize="16"
+                         Height="32"
+                         Width="320"
                          Margin="8,8,0,8">
                 </TextBox>
-                <Button x:Name="HeaderSearchButton" FocusVisualStyle="{x:Null}" Cursor="Hand" HorizontalAlignment="Right" Height="24" Width="24" BorderThickness="0" Margin="8,8,24,8" Background="Transparent">
-                       <Image Source="../Assets/Images/icon_search.png"/>
+                <Button x:Name="HeaderSearchButton"
+                        FocusVisualStyle="{x:Null}"
+                        Cursor="Hand"
+                        HorizontalAlignment="Right"
+                        Height="24"
+                        Width="24"
+                        BorderThickness="0"
+                        Margin="8,8,24,8"
+                        Background="Transparent">
+                    <Image Source="../Assets/Images/icon_search.png" />
                 </Button>
 
-                <Button x:Name="HeaderRegionButton" Cursor="Hand" HorizontalAlignment="Right" Height="32" Width="32"  Margin="8,8,8,8" Click="HeaderRegionButton_Click">
+                <Button x:Name="HeaderRegionButton"
+                        Cursor="Hand"
+                        HorizontalAlignment="Right"
+                        Height="32"
+                        Width="32"
+                        Margin="8,8,8,8"
+                        Click="HeaderRegionButton_Click">
                     <Button.Template>
                         <ControlTemplate>
                             <Grid>
                                 <Ellipse>
                                     <Ellipse.Fill>
-                                        <ImageBrush x:Name="HeaderRegionButtonImageBrush" ImageSource="{Binding ActiveRegionImage}"/>
+                                        <ImageBrush x:Name="HeaderRegionButtonImageBrush"
+                                                    ImageSource="{Binding ActiveRegionImage}" />
                                     </Ellipse.Fill>
                                 </Ellipse>
                             </Grid>
                         </ControlTemplate>
                     </Button.Template>
                 </Button>
-                <Button x:Name="HeaderProfileButton" Cursor="Hand" Height="32" Width="32" Margin="8,8,8,8" Click="HeaderProfileButton_Click" >
+                <Button x:Name="HeaderProfileButton"
+                        Cursor="Hand"
+                        Height="32"
+                        Width="32"
+                        Margin="8,8,8,8"
+                        Click="HeaderProfileButton_Click">
                     <Button.Template>
                         <ControlTemplate>
                             <Grid>
                                 <Ellipse>
                                     <Ellipse.Fill>
-                                        <ImageBrush ImageSource="../Assets/Images/profile_image.jpg"/>
+                                        <ImageBrush ImageSource="../Assets/Images/profile_image.jpg" />
                                     </Ellipse.Fill>
                                 </Ellipse>
                             </Grid>
@@ -84,72 +118,87 @@
             </ItemsControl>
 
         </ItemsControl>
-        <ItemsControl Panel.ZIndex="1000"  x:Name="BodyItemsControl" Grid.Row="1">
+        <ItemsControl Panel.ZIndex="1000"
+                      x:Name="BodyItemsControl"
+                      Grid.Row="1">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition></ColumnDefinition>
                 </Grid.ColumnDefinitions>
 
-                <ItemsControl x:Name="RegionSwitch" Width="172" Grid.Column="0" 
+                <ItemsControl x:Name="RegionSwitch"
+                              Width="172"
+                              Grid.Column="0"
                               Visibility="Collapsed"
                               VerticalAlignment="Top"
                               HorizontalAlignment="Right"
                               Panel.ZIndex="999"
                               Background="{StaticResource PrimaryHeaderColor}">
                     <StackPanel Background="{StaticResource PrimaryHeaderColor}">
-                        <Button x:Name="RegionSwitchUS"   Click="RegionSwitch_Clicked" 
-                            Height="40" 
+                        <Button x:Name="RegionSwitchUS"
+                                Click="RegionSwitch_Clicked"
+                                Height="40"
                                 FontSize="16"
                                 Foreground="{StaticResource SecondaryColor}"
                                 Background="{StaticResource PrimaryHeaderColor}"
                                 FocusVisualStyle="{x:Null}"
                                 Cursor="Hand">
                             <StackPanel Orientation="Horizontal">
-                                <Ellipse Height="24" Width="24">
+                                <Ellipse Height="24"
+                                         Width="24">
                                     <Ellipse.Fill>
-                                        <ImageBrush ImageSource="../Assets/Images/region_US.jpg"/>
+                                        <ImageBrush ImageSource="../Assets/Images/region_US.jpg" />
                                     </Ellipse.Fill>
                                 </Ellipse>
-                                <TextBlock VerticalAlignment="Center" Margin="8,0,0,0">USA</TextBlock>
+                                <TextBlock VerticalAlignment="Center"
+                                           Margin="8,0,0,0">USA</TextBlock>
                             </StackPanel>
                         </Button>
-                        <Button x:Name="RegionSwitchDE" Click="RegionSwitch_Clicked" 
-                            Height="40"
+                        <Button x:Name="RegionSwitchDE"
+                                Click="RegionSwitch_Clicked"
+                                Height="40"
                                 FontSize="16"
                                 Foreground="{StaticResource SecondaryColor}"
                                 Background="{StaticResource PrimaryHeaderColor}"
                                 FocusVisualStyle="{x:Null}"
                                 Cursor="Hand">
                             <StackPanel Orientation="Horizontal">
-                                <Ellipse Height="24" Width="24">
+                                <Ellipse Height="24"
+                                         Width="24">
                                     <Ellipse.Fill>
-                                        <ImageBrush ImageSource="../Assets/Images/region_DE.jpg"/>
+                                        <ImageBrush ImageSource="../Assets/Images/region_DE.jpg" />
                                     </Ellipse.Fill>
                                 </Ellipse>
-                                <TextBlock VerticalAlignment="Center" Margin="8,0,0,0">Germany</TextBlock>
+                                <TextBlock VerticalAlignment="Center"
+                                           Margin="8,0,0,0">Germany</TextBlock>
                             </StackPanel>
-                            </Button>
-                        
-                        <Button x:Name="RegionSwitchFI"  Click="RegionSwitch_Clicked" 
-                            Height="40" 
+                        </Button>
+
+                        <Button x:Name="RegionSwitchFI"
+                                Click="RegionSwitch_Clicked"
+                                Height="40"
                                 FontSize="16"
                                 Foreground="{StaticResource SecondaryColor}"
                                 Background="{StaticResource PrimaryHeaderColor}"
                                 FocusVisualStyle="{x:Null}"
                                 Cursor="Hand">
                             <StackPanel Orientation="Horizontal">
-                                <Ellipse Height="24" Width="24">
+                                <Ellipse Height="24"
+                                         Width="24">
                                     <Ellipse.Fill>
-                                        <ImageBrush ImageSource="../Assets/Images/region_FI.jpg"/>
+                                        <ImageBrush ImageSource="../Assets/Images/region_FI.jpg" />
                                     </Ellipse.Fill>
                                 </Ellipse>
-                                <TextBlock VerticalAlignment="Center" Margin="8,0,0,0">Finland</TextBlock>
+                                <TextBlock VerticalAlignment="Center"
+                                           Margin="8,0,0,0">Finland</TextBlock>
                             </StackPanel>
                         </Button>
                     </StackPanel>
                 </ItemsControl>
 
-                <ItemsControl x:Name="Menu" Width="128" Grid.Column="0" 
+                <ItemsControl x:Name="Menu"
+                              Width="128"
+                              Grid.Column="0"
                               Visibility="Collapsed"
                               VerticalAlignment="Top"
                               HorizontalAlignment="Right"
@@ -157,14 +206,15 @@
                               Background="{StaticResource PrimaryColor}">
                     <StackPanel Background="{StaticResource PrimaryHeaderColor}">
                         <StackPanel.Resources>
-                            <simpleXamlContent:AccountTypeVisibilityConverter x:Key="AccountTypeVisibilityConverter"/>
+                            <simpleXamlContent:AccountTypeVisibilityConverter x:Key="AccountTypeVisibilityConverter" />
                         </StackPanel.Resources>
                         <Button Height="40"
                                 FontSize="16"
                                 Foreground="{StaticResource SecondaryColor}"
                                 Background="{StaticResource PrimaryHeaderColor}"
                                 FocusVisualStyle="{x:Null}"
-                                Cursor="Hand" Click="SettingsButton_Clicked">Settings</Button>
+                                Cursor="Hand"
+                                Click="SettingsButton_Clicked">Settings</Button>
                         <Button Height="40"
                                 FontSize="16"
                                 Foreground="{StaticResource SecondaryColor}"
@@ -172,18 +222,33 @@
                                 FocusVisualStyle="{x:Null}"
                                 Visibility="{Binding Account, Converter={StaticResource AccountTypeVisibilityConverter}}"
                                 Cursor="Hand">Administration</Button>
-                        <Button Height="40" 
+                        <Button Height="40"
                                 FontSize="16"
                                 Foreground="{StaticResource SecondaryColor}"
                                 Background="{StaticResource PrimaryHeaderColor}"
                                 FocusVisualStyle="{x:Null}"
-                                Cursor="Hand" Click="Logout_Clicked">Logout</Button>
+                                Cursor="Hand"
+                                Click="Logout_Clicked">Logout</Button>
                     </StackPanel>
                 </ItemsControl>
             </Grid>
         </ItemsControl>
 
-        <ContentControl x:Name="ContentControl" Grid.Row="1" Grid.Column="0" Content="{Binding MainPage}" IsTabStop="False" Panel.ZIndex="1" >
+        <ContentControl x:Name="ContentControl"
+                        Grid.Row="1"
+                        Grid.Column="0"
+                        Content="{Binding MainPage}"
+                        IsTabStop="False"
+                        Panel.ZIndex="1">
+        </ContentControl>
+
+        <ContentControl x:Name="DetailedMediaContentControl"
+                        Grid.Row="1"
+                        Grid.Column="0"
+                        IsTabStop="False"
+                        Panel.ZIndex="2000"
+                        Visibility="{Binding SelectedMedia, Converter={StaticResource NullVisibilityConverter}}">
+            <views:DetailedMediaTemplateView DataContext="{Binding SelectedMedia}" />
         </ContentControl>
     </Grid>
 </Window>

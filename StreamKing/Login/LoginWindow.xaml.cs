@@ -1,5 +1,7 @@
 ﻿using StreamKing.Login.Models;
 using StreamKing.Login.ViewModels;
+using StreamKing.MainApplication;
+using System;
 using System.Windows;
 
 namespace StreamKing.Login
@@ -15,6 +17,17 @@ namespace StreamKing.Login
             InitializeComponent();
             DataContext = new LoginViewModel();
             Udata = new UserData();
+
+            if (App._apiToken != null)
+            {
+                Console.WriteLine("Found apiToken, automatically logging in...");
+
+                App._mainWindow = new MainWindow();
+                App._mainWindow.Show();
+                Close();
+
+                App.SetCurrentUser();
+            }
         }
 
         public void SetRegisterView()
