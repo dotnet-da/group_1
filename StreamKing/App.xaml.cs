@@ -64,43 +64,40 @@ namespace StreamKing
                                  new MediaTypeWithQualityHeaderValue("application/json"));
             tempApi.BaseAddress = new Uri(WebApiUrl + "media/");
 
-            HttpResponseMessage response = await tempApi.GetAsync(url);
-
-            if (!response.IsSuccessStatusCode)
-            {
-                MessageBox.Show("Error in LoadMedia:" + response.StatusCode);
-                return;
-            }
-
-            var content = await response.Content.ReadAsStringAsync();
-
             try
             {
-                if (url.Contains("movie"))
+                HttpResponseMessage response = await tempApi.GetAsync(url);
+                if (!response.IsSuccessStatusCode)
                 {
-                    var movieList = JArray.Parse(content).ToObject<List<Movie>>();
-                    _mediaList.AddRange(movieList);
-                } else if (url.Contains("series"))
+                    MessageBox.Show("Error in LoadMedia:" + response.StatusCode);
+                    return;
+                }
+                
+                var content = await response.Content.ReadAsStringAsync();
+
+                try
                 {
-                    var seriesList = JArray.Parse(content).ToObject<List<Series>>();
-                    _mediaList.AddRange(seriesList);
+                    if (url.Contains("movie"))
+                    {
+                        var movieList = JArray.Parse(content).ToObject<List<Movie>>();
+                        _mediaList.AddRange(movieList);
+                    }
+                    else if (url.Contains("series"))
+                    {
+                        var seriesList = JArray.Parse(content).ToObject<List<Series>>();
+                        _mediaList.AddRange(seriesList);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error in LoadMedia Parsing: " + ex.Message);
                 }
 
-                //string message = "";
-                //message += "Now Elements:" + _mediaList.Count + "\n";
-
-                //foreach(var media in _mediaList)
-                //{
-                //    message += media.GetType()+": " + media.Title+"\n"; 
-                //}
-
-                // MessageBox.Show("finished: "+url + ", now in medialist: "+_mediaList.Count);
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error in LoadMedia Parsing: " + ex.Message);
+                MessageBox.Show("Error in LoadMedia: " + ex.Message);
             }
-
         }
 
         public static void InitMediaApi()

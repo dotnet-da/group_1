@@ -25,5 +25,15 @@ namespace StreamKing.MainApplication.Views
         {
             InitializeComponent();
         }
+
+        private void MediaTemplateButton_Clicked(object sender, RoutedEventArgs e)
+        {
+            Console.WriteLine("MediaTemplateButton_Clicked");
+            if(DataContext is not null)
+            {
+                Media currentMedia = (Media)DataContext;
+                Console.WriteLine("(" + currentMedia.GetType() + ")" + currentMedia.TmdbId + ": " + currentMedia.Title);
+            }
+        }
     }
 }
