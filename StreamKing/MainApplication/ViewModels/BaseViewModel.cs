@@ -12,11 +12,11 @@ namespace StreamKing.MainApplication.ViewModels
         public event PropertyChangedEventHandler? PropertyChanged;
 
         //[CallerMember]
-        protected virtual void RaisePropertyChanged( string propertyName = "")
+        protected virtual void NotifyPropertyChanged( string propertyName)
         {
-            if (!string.IsNullOrEmpty(propertyName))
+            if (PropertyChanged != null)
             {
-                this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
             }
         }
     }

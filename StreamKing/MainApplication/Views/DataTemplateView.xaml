@@ -11,6 +11,9 @@
     <UserControl.DataContext>
         <local:DataTemplateViewModel/>
     </UserControl.DataContext>
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVisConverter" />
+    </UserControl.Resources>
 
     <ItemsControl IsTabStop="False" FontSize="16" Foreground="{StaticResource SecondaryColor}">
         <Button Background="{StaticResource PrimaryFocusColor}" Height="250" Width="150">
@@ -22,7 +25,7 @@
                         <RowDefinition Height="10*"/>
                         <RowDefinition Height="10*"/>
                         <RowDefinition Height="10*"/>
-    
+
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="7*"/>
@@ -30,9 +33,9 @@
                     </Grid.ColumnDefinitions>
                     <Border CornerRadius="12,12,0,0" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Margin="8,8,8,0">
                         <Border.Background>
-                            <ImageBrush Stretch="Fill" ImageSource="https://image.tmdb.org/t/p/w500/eSVvx8xys2NuFhl8fevXt41wX7v.jpg"/>
+                            <ImageBrush Stretch="Fill" ImageSource="{Binding ImageUri}"/>
                         </Border.Background>
-                        
+
                     </Border>
                     <Border CornerRadius="12,12,12,12" VerticalAlignment="Bottom" Margin="0,0,8,0" Grid.Row="0" Grid.Column="1">
                         <TextBlock x:Name="TagTextBox"
@@ -58,8 +61,8 @@
                                VerticalAlignment="Center"
                                ></TextBlock>
 
-                    
-                    <ItemsControl VerticalAlignment="Center" IsTabStop="False" Margin="8,4,4,8" Grid.Column="0" Grid.Row="4" FocusVisualStyle="{x:Null}">
+
+                    <ItemsControl VerticalAlignment="Center" IsTabStop="False" Margin="8,4,4,8" Grid.Column="0" Grid.Row="4">
                         <ItemsControl.ItemsPanel>
                             <ItemsPanelTemplate>
                                 <DockPanel></DockPanel>
@@ -67,21 +70,57 @@
                         </ItemsControl.ItemsPanel>
 
 
-                        <RadioButton Width="15" Height="15" GroupName="RatingGroup" Template="{StaticResource starTemplate}"
-                                     Content="RadioButton" HorizontalAlignment="Left"  Grid.Row="4" VerticalAlignment="Top"/>
-                        <RadioButton Width="15" Height="15" GroupName="RatingGroup" Template="{StaticResource starTemplate}"
-                                     Content="RadioButton" HorizontalAlignment="Left"  Grid.Row="4" VerticalAlignment="Top"/>
-                        <RadioButton Width="15" Height="15" GroupName="RatingGroup" Template="{StaticResource starTemplate}"
-                                     Content="RadioButton" HorizontalAlignment="Left"  Grid.Row="4" VerticalAlignment="Top"/>
-                        <RadioButton Width="15" Height="15" GroupName="RatingGroup" Template="{StaticResource starTemplate}"
-                                     Content="RadioButton" HorizontalAlignment="Left"  Grid.Row="4" VerticalAlignment="Top"/>
-                        <RadioButton Width="15" Height="15" GroupName="RatingGroup" Template="{StaticResource starTemplate}"
-                                     Content="RadioButton" HorizontalAlignment="Left"  Grid.Row="4" VerticalAlignment="Top"/>
+                        <RadioButton Width="15" Height="15" GroupName="RatingGroup" Template="{StaticResource starTemplateEmpty}"
+                                     Content="RadioButton" HorizontalAlignment="Left"  Grid.Row="4" VerticalAlignment="Top"
+                                     x:Name="OneStar" Focusable="False" IsHitTestVisible="False"/>
+                        <RadioButton Width="15" Height="15" GroupName="RatingGroup" Template="{StaticResource starTemplateEmpty}"
+                                     Content="RadioButton" HorizontalAlignment="Left"  Grid.Row="4" VerticalAlignment="Top"
+                                     x:Name="TwoStar" Focusable="False" IsHitTestVisible="False"/>
+                        <RadioButton Width="15" Height="15" GroupName="RatingGroup" Template="{StaticResource starTemplateEmpty}"
+                                     Content="RadioButton" HorizontalAlignment="Left"  Grid.Row="4" VerticalAlignment="Top"
+                                     x:Name="ThreeStar" Focusable="False" IsHitTestVisible="False"/>
+                        <RadioButton Width="15" Height="15" GroupName="RatingGroup" Template="{StaticResource starTemplateEmpty}"
+                                     Content="RadioButton" HorizontalAlignment="Left"  Grid.Row="4" VerticalAlignment="Top"
+                                     x:Name="FourStar" Focusable="False" IsHitTestVisible="False"/>
+                        <RadioButton Width="15" Height="15" GroupName="RatingGroup" Template="{StaticResource starTemplateEmpty}"
+                                     Content="RadioButton" HorizontalAlignment="Left"  Grid.Row="4" VerticalAlignment="Top"
+                                     x:Name="FiveStar" Focusable="False" IsHitTestVisible="False"/>
                         <TextBlock x:Name="Rating" Text="{Binding Rating}"
                                    FontSize="8" Margin="4,0,0,0" 
                                    Grid.Column="0" Grid.Row="4" 
                                    VerticalAlignment="Center"
                                    ></TextBlock>
+                    </ItemsControl>
+                    <ItemsControl VerticalAlignment="Center" IsTabStop="False" Margin="8,4,4,8" Grid.Column="0" Grid.Row="4" >
+                        <ItemsControl VerticalAlignment="Center" IsTabStop="False" Margin="8,4,4,8" Grid.Column="0" Grid.Row="4" FocusVisualStyle="{x:Null}">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <DockPanel></DockPanel>
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+
+
+                            <RadioButton Width="15" Height="15" GroupName="RatingGroup" Template="{StaticResource starTemplateFull}"
+                                         Content="RadioButton" HorizontalAlignment="Left"  Grid.Row="4" VerticalAlignment="Top"
+                                         x:Name="FOneStar" Focusable="False" IsHitTestVisible="False"
+                                         Visibility="{Binding Path=VisibilityOne, Converter={StaticResource BoolToVisConverter}}"/>
+                            <RadioButton Width="15" Height="15" GroupName="RatingGroup" Template="{StaticResource starTemplateFull}"
+                                         Content="RadioButton" HorizontalAlignment="Left"  Grid.Row="4" VerticalAlignment="Top"
+                                         x:Name="FTwoStar" Focusable="False" IsHitTestVisible="False"
+                                         Visibility="{Binding Path=VisibilityTwo, Converter={StaticResource BoolToVisConverter}}"/>
+                            <RadioButton Width="15" Height="15" GroupName="RatingGroup" Template="{StaticResource starTemplateFull}"
+                                          Content="RadioButton" HorizontalAlignment="Left"  Grid.Row="4" VerticalAlignment="Top"
+                                          x:Name="FThreeStar" Focusable="False" IsHitTestVisible="False"
+                                          Visibility="{Binding Path=VisibilityThree, Converter={StaticResource BoolToVisConverter}}"/>
+                            <RadioButton Width="15" Height="15" GroupName="RatingGroup" Template="{StaticResource starTemplateFull}"
+                                          Content="RadioButton" HorizontalAlignment="Left"  Grid.Row="4" VerticalAlignment="Top"
+                                          x:Name="FFourStar" Focusable="False" IsHitTestVisible="False"
+                                          Visibility="{Binding Path=VisibilityFour, Converter={StaticResource BoolToVisConverter}}"/>
+                            <RadioButton Width="15" Height="15" GroupName="RatingGroup" Template="{StaticResource starTemplateFull}"
+                                          Content="RadioButton" HorizontalAlignment="Left"  Grid.Row="4" VerticalAlignment="Top"
+                                          x:Name="FFiveStar" Focusable="False" IsHitTestVisible="False"
+                                          Visibility="{Binding Path=VisibilityFive, Converter={StaticResource BoolToVisConverter}}"/>
+                        </ItemsControl>
                     </ItemsControl>
                 </Grid>
             </StackPanel>
