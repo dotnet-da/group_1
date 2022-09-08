@@ -119,8 +119,25 @@
                                                Visibility="{Binding Series, Converter={StaticResource NullVisibilityConverter} , FallbackValue=Collapsed}"
                                                Text="{Binding Path=Id, StringFormat=' - {0}', FallbackValue=0}"
                                                Foreground="{StaticResource SecondaryColor}" />
+
+                                    
+
                                 </StackPanel>
-                                
+                                <!--WatchEntry-->
+                                <Border Background="{StaticResource PrimaryDarkAccentColor}"
+                                        CornerRadius="12"
+                                        Padding="8,2,8,2"
+                                        Margin="0,4,0,0"
+                                        Visibility="{Binding Tag, Converter={StaticResource NullVisibilityConverter} , FallbackValue=Collapsed}"
+                                        HorizontalAlignment="Left">
+                                    <TextBlock x:Name="ItemTagTextBlock"
+                                               VerticalAlignment="Center"
+                                               HorizontalAlignment="Center"
+                                               FontSize="14"
+                                               Text="{Binding Tag, FallbackValue=Tag}"
+                                               Foreground="{StaticResource SecondaryColor}" />
+                                </Border>
+
                                 <!--Normal Media-->
                                 <TextBlock x:Name="MediaTitle"
                                            VerticalAlignment="Center"
@@ -148,7 +165,7 @@
                                            Text="{Binding Path=Series.Title, FallbackValue=Title}"
                                            Foreground="{StaticResource SecondaryColor}"
                                            TextTrimming="CharacterEllipsis" />
-                                
+
                                 <StackPanel Orientation="Horizontal">
                                     <TextBlock x:Name="MediaMovie"
                                                VerticalAlignment="Center"
@@ -188,7 +205,7 @@
                                                Visibility="{Binding Movie,Converter={StaticResource MediaTypeMovieVisibilityConverter}, FallbackValue=Collapsed}"
                                                Text="{Binding Path=Movie.Runtime,Converter={StaticResource RuntimeFormatConverter}, FallbackValue=1h 21min}"
                                                Foreground="{StaticResource SecondaryColor}" />
-                                    
+
                                     <TextBlock x:Name="SeriesSeasonsCount"
                                                VerticalAlignment="Center"
                                                FontSize="12"

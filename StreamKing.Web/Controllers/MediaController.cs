@@ -458,6 +458,10 @@ namespace StreamKing.Web.Controllers
 
                         movielist.Add(movieEntry);
                     }
+                    else
+                    {
+                        movieEntry.Tag = watchEntryRequest.Tag;
+                    }
 
                     _mediaServiceContext.SaveChanges();
                     result = JObject.FromObject(new { status = true });

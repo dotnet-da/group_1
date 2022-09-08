@@ -51,5 +51,21 @@ namespace StreamKing.MainApplication.Views
                 App._mainWindow.SetSelectedSeriesEntry(null);
             }
         }
+
+        private async void UpdateTagButton_Clicked(object sender, RoutedEventArgs e)
+        {
+            string newTag = UpdateTagInput.Text;
+            UpdateTagButton.IsEnabled = false;
+            Mouse.OverrideCursor = Cursors.Wait;
+            var status = await App.UpdateSelectedWatchEntry(newTag);
+
+            UpdateTagButton.IsEnabled = true;
+            Mouse.OverrideCursor = null;
+            if (App._mainWindow is not null)
+            {
+                App._mainWindow.SetSelectedMovieEntry(null);
+                App._mainWindow.SetSelectedSeriesEntry(null);
+            }
+        }
     }
 }
