@@ -11,6 +11,13 @@
   <li>
     <a href="#setup-process">Setup Process</a>
   </li>
+  <li>
+    <a href="#description">Description</a>
+    <ul>
+      <li><a href="#er-model">ER Model</a></li>
+      <li><a href="#dump-file">Dump File</a></li>
+    </ul>
+  </li>
 </ol>
 <br/>
 
@@ -42,3 +49,12 @@ This chapter contains a list of all technologies that are being used in this pro
 <!-- Setup Process -->
 ## Setup Process
 **/TODO**
+
+<!-- DESCRIPTION -->
+## Description
+
+### ER Model
+<img src="./docs/er_model.png"/>
+
+### Dump File
+[a relative link](docs/StreamKingSQLDumpFile.sql)
