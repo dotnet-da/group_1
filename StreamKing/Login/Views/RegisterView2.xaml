@@ -51,13 +51,15 @@
                     </Border>
                     <Button x:Name="GenerateCaptcha"
                         Content="new"
+                        Focusable="True"
                         Width="30" Height="30"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Top"
                         Padding="0"
                         Click="GenerateCaptcha_Click"
                         Style="{StaticResource SecondaryButton}" Cursor="Hand"
-                        TextBlock.FontSize="12"/>
+                        TextBlock.FontSize="12"
+                            TabIndex="5"/>
                 </ItemsControl>
                 <TextBlock x:Name="VerifyCaptchaTextBlock" Text="Verify Captcha"></TextBlock>
                 <TextBox x:Name="InputCaptcha" Margin="0,0,0,0" TabIndex="4"
@@ -75,7 +77,9 @@
                         <DockPanel></DockPanel>
                     </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
-                <Button Content="Back" Margin="0,0,30,0" x:Name="BackButton" HorizontalAlignment="Left" TabIndex="4" Click="BackButton_Click" Cursor="Hand">
+                <Button Content="Back" Margin="0,0,30,0" x:Name="BackButton"
+                        HorizontalAlignment="Left" TabIndex="6"
+                        Click="BackButton_Click" Cursor="Hand">
                     <Button.Style>
                         <Style TargetType="{x:Type Button}" BasedOn="{StaticResource PrimaryButton}">
                             <Style.Triggers>
@@ -86,7 +90,10 @@
                         </Style>
                     </Button.Style>
                 </Button>
-                <Button Content="Sign Up" x:Name="SignUpButton" HorizontalAlignment="Right" TabIndex="4" Click="SignUpButton_Click" Cursor="Hand">
+                <Button Content="Sign Up" x:Name="SignUpButton"
+                        HorizontalAlignment="Right"
+                        TabIndex="7" Click="SignUpButton_Click" Cursor="Hand"
+                        IsDefault="True">
                     <Button.Style>
                         <Style TargetType="{x:Type Button}" BasedOn="{StaticResource PrimaryButton}">
                             <Style.Triggers>
@@ -108,7 +115,8 @@
                     </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
                     <TextBlock TextAlignment="Center" Margin="0,0,8,0">Already have an Account?</TextBlock>
-                    <Button Content="Login here" x:Name="BackToLoginButton" TabIndex="5"  Style="{StaticResource TertiaryButton}" Click="BackToLoginButton_Click">
+                    <Button Content="Login here" x:Name="BackToLoginButton"
+                            TabIndex="8"  Style="{StaticResource TertiaryButton}" Click="BackToLoginButton_Click" Cursor="Hand">
                     </Button>
                 </ItemsControl>
             </ItemsControl>

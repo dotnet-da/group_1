@@ -50,6 +50,7 @@
                                  HorizontalAlignment = "Left"
                                  VerticalAlignment = "Center"
                                  Click="radioUS_Click"
+                                 TabIndex="3"
                                  TextBlock.Foreground="{StaticResource SecondaryColor}"/>
                     <RadioButton Content="DE"
                                  x:Name="rb_de"
@@ -58,6 +59,7 @@
                                  HorizontalAlignment = "Left"
                                  VerticalAlignment = "Center"
                                  Click="radioDE_Click"
+                                 TabIndex="4"
                                  TextBlock.Foreground="{StaticResource SecondaryColor}"/>
                     <RadioButton Content="FI"
                                  x:Name="rb_fi"
@@ -66,6 +68,7 @@
                                  HorizontalAlignment = "Left"
                                  VerticalAlignment = "Center"
                                  Click="radioFI_Click"
+                                 TabIndex="5"
                                  TextBlock.Foreground="{StaticResource SecondaryColor}"/>
                 </ItemsControl>
 
@@ -75,7 +78,9 @@
 
             <ItemsControl IsTabStop="False" Margin="8" FocusVisualStyle="{x:Null}">
 
-                <Button Content="Next" x:Name="NextButton" HorizontalAlignment="Center" TabIndex="4" Click="NextButton_Clicked">
+                <Button Content="Next" x:Name="NextButton" HorizontalAlignment="Center"
+                        TabIndex="6" Click="NextButton_Clicked"
+                        IsDefault="True">
                     <Button.Style>
                         <Style TargetType="{x:Type Button}" BasedOn="{StaticResource PrimaryButton}">
                             <Style.Triggers>
@@ -96,7 +101,7 @@
                         </ItemsPanelTemplate>
                     </ItemsControl.ItemsPanel>
                     <TextBlock TextAlignment="Center" Margin="0,0,8,0">Already have an Account?</TextBlock>
-                    <Button Content="Login here" x:Name="BackToLoginButton" TabIndex="5"  Style="{StaticResource TertiaryButton}" Click="BackToLoginButton_Click">
+                    <Button Content="Login here" x:Name="BackToLoginButton" TabIndex="7"  Style="{StaticResource TertiaryButton}" Click="BackToLoginButton_Click" Cursor="Hand">
                     </Button>
                 </ItemsControl>
 

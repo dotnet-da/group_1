@@ -1,4 +1,5 @@
 ﻿using StreamKing.Data.Accounts;
+using StreamKing.Web.Models;
 using System;
 using System.Windows;
 using System.Windows.Controls;
@@ -44,6 +45,20 @@ namespace StreamKing.MainApplication.Views
 
                 RegionInput.Text = user.Region;
             }
+        }
+
+        private void DeleteButton_Clicked(object sender, RoutedEventArgs e)
+        {
+            if(MessageBox.Show("Are you sure you want to delete your Account?", "Attention", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
+            {
+                App.DeleteCurrentUser();
+            }            
+        }
+
+        private void UpdateButton_Clicked(object sender, RoutedEventArgs e)
+        {
+            var updateRequest = new UpdateRequest { Email = EmailInput.Text, FirstName = FirstNameInput.Text, LastName = LastNameInput.Text };
+            App.UpdateCurrentuser(updateRequest);
         }
     }
 }
