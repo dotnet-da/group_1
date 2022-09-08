@@ -2,18 +2,20 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using StreamKing.Database.Helper.Models;
 
 #nullable disable
 
-namespace database.helper.Migrations
+namespace StreamKing.Database.Helper.Migrations
 {
     [DbContext(typeof(MediaServiceContext))]
-    partial class MediaServiceContextModelSnapshot : ModelSnapshot
+    [Migration("20220907231828_AddMoreCascadeDeletions")]
+    partial class AddMoreCascadeDeletions
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

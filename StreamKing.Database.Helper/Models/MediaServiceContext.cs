@@ -26,6 +26,21 @@ namespace StreamKing.Database.Helper.Models
                 .WithOne()
                 .OnDelete(DeleteBehavior.Cascade);
 
+            modelBuilder.Entity<Account>()
+                .HasMany(b => b.Watchlists)
+                .WithOne()
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Watchlist>()
+                .HasMany(b => b.SeriesList)
+                .WithOne()
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Watchlist>()
+                .HasMany(b => b.MovieList)
+                .WithOne()
+                .OnDelete(DeleteBehavior.Cascade);
+
             modelBuilder.Entity<SeasonEntry>()
                 .HasMany(b => b.Episodes)
                 .WithOne()
