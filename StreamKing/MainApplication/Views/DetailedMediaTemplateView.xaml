@@ -131,6 +131,7 @@
                                                        Visibility="{Binding TmdbId, Converter={StaticResource NullVisibilityConverter}, FallbackValue=Collapsed}"
                                                        Text="{Binding Path=TmdbId, FallbackValue=000000}"
                                                        Foreground="{StaticResource SecondaryColor}" />
+
                                             <TextBlock x:Name="MovieEntryTmdbId"
                                                        VerticalAlignment="Center"
                                                        FontSize="12"
@@ -144,6 +145,20 @@
                                                        Text="{Binding Series.TmdbId, FallbackValue=000000}"
                                                        Foreground="{StaticResource SecondaryColor}" />
 
+                                            <!--WatchEntry-->
+                                            <Border Background="{StaticResource PrimaryDarkAccentColor}"
+                                                    CornerRadius="12"
+                                                    Padding="8,2,8,2"
+                                                    Margin="0,4,0,0"
+                                                    HorizontalAlignment="Left"
+                                                    Visibility="{Binding Tag, Converter={StaticResource NullVisibilityConverter} , FallbackValue=Collapsed}">
+                                                <TextBlock x:Name="ItemTagTextBlock"
+                                                           VerticalAlignment="Center"
+                                                           HorizontalAlignment="Center"
+                                                           FontSize="14"
+                                                           Text="{Binding Tag, FallbackValue=Tag}"
+                                                           Foreground="{StaticResource SecondaryColor}" />
+                                            </Border>
 
                                             <TextBlock x:Name="MediaTitle"
                                                        VerticalAlignment="Center"
@@ -389,6 +404,21 @@
                                                 Visibility="{Binding TmdbId, Converter={StaticResource NullVisibilityConverter} , FallbackValue=Collapsed}">
                                             <Button.Content>
                                                 <TextBlock Padding="8,8,8,8"> + Add to Watchlist</TextBlock>
+                                            </Button.Content>
+                                        </Button>
+                                        <TextBox Visibility="{Binding Id, Converter={StaticResource NullVisibilityConverter} , FallbackValue=Collapsed}"
+                                                 x:Name="UpdateTagInput"
+                                                 Text="{Binding Tag, FallbackValue=''}"
+                                                 Style="{StaticResource InputControlBox}">
+
+                                        </TextBox>
+                                        <Button Style="{StaticResource MyButtonStyle2}"
+                                                x:Name="UpdateTagButton"
+                                                Margin="16,0,48,0"
+                                                Visibility="{Binding Id, Converter={StaticResource NullVisibilityConverter} , FallbackValue=Collapsed}"
+                                                Click="UpdateTagButton_Clicked">
+                                            <Button.Content>
+                                                <TextBlock Padding="8,8,8,8">Update Tag</TextBlock>
                                             </Button.Content>
                                         </Button>
                                         <Button Style="{StaticResource MyButtonStyle2}"
