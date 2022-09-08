@@ -21,6 +21,10 @@
                       DataType="{x:Type viewmodels:SettingsPageViewModel}">
             <views:SettingsPage DataContext="{Binding}" />
         </DataTemplate>
+        <DataTemplate x:Name="AdminViewTemplate"
+                      DataType="{x:Type viewmodels:AdminViewModel}">
+            <views:AdminView DataContext="{Binding}" />
+        </DataTemplate>
         <converter:NullVisibilityConverter x:Key="NullVisibilityConverter" />
     </Window.Resources>
     <Window.DataContext>
@@ -221,7 +225,7 @@
                                 Background="{StaticResource PrimaryHeaderColor}"
                                 FocusVisualStyle="{x:Null}"
                                 Visibility="{Binding Account, Converter={StaticResource AccountTypeVisibilityConverter}}"
-                                Cursor="Hand">Administration</Button>
+                                Cursor="Hand" Click="AdminButton_Clicked">Administration</Button>
                         <Button Height="40"
                                 FontSize="16"
                                 Foreground="{StaticResource SecondaryColor}"

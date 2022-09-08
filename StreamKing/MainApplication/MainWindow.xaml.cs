@@ -30,6 +30,12 @@ namespace StreamKing.MainApplication
             UpdateDataContext();
         }
 
+        public void SetAdminView()
+        {
+            _viewModel.MainPage = new AdminViewModel();
+            UpdateDataContext();
+        }
+
         public void SetWatchlist()
         {
             if (_viewModel.MainPage is not null && App.Watchlist is not null)
@@ -302,6 +308,15 @@ namespace StreamKing.MainApplication
                 Menu.Visibility = Visibility.Collapsed;
             }
             SetSettingsView();
+        }
+
+        private void AdminButton_Clicked(object sender, RoutedEventArgs e)
+        {
+            if (Menu.Visibility == Visibility.Visible)
+            {
+                Menu.Visibility = Visibility.Collapsed;
+            }
+            SetAdminView();
         }
     }
 }

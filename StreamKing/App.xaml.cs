@@ -29,6 +29,7 @@ namespace StreamKing
         public static Guid? _userId { get; set; }
         public static string? _apiToken { get; set; }
         public static Account? _currentUser { get; set; }
+        public static List<Account> _allUsers { get; set; } = new List<Account>();
         public static MainWindow? _mainWindow { get; set; }
         public static LoginWindow? _loginWindow { get; set; }
         public static List<Media> _mediaList { get; set; } = new List<Media>();
@@ -108,8 +109,6 @@ namespace StreamKing
                 MessageBox.Show("Error in LoadMedia: " + ex.Message);
             }
         }
-
-
 
         public static void InitMediaApi()
         {
@@ -346,11 +345,45 @@ namespace StreamKing
                 _mainWindow.UpdateHeader();
                 _mainWindow.UpdateCurrentUser();
 
+                Console.WriteLine(_currentUser.Type);
+                if (_currentUser.Type == AccountType.Admin)
+                {
+                    GetAllUsers();
+                }
+
             }
             catch (Exception ex)
             {
                 MessageBox.Show("Error in SetCurrentUser: " + ex.Message);
             }
+        }
+
+        public static async void GetAllUsers()
+        {
+            _accountsApi.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _apiToken);
+
+            HttpResponseMessage response = await _accountsApi.GetAsync("");
+
+
+            if (!response.IsSuccessStatusCode)
+            {
+                MessageBox.Show("Error in GetAllUsers:" + response.StatusCode);
+                return;
+            }
+
+            var content = await response.Content.ReadAsStringAsync();
+
+            try
+            {
+                _allUsers = JArray.Parse(content).ToObject<List<Account>>();
+                Console.WriteLine(_allUsers.Count);
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error in GetAllUsers: " + ex.Message);
+            }
+
         }
 
         public static void Logout()
@@ -392,6 +425,7 @@ namespace StreamKing
             }
         }
 
+        //DeleteSelectedUser-Methode hinzufügen oder DeleteCurrentuser leicht überarbeiten
         public static async void DeleteCurrentUser()
         {
             if (_currentUser is not null)
