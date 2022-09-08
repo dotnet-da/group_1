@@ -39,6 +39,7 @@
                         <Trigger Property="IsFocused" Value="true">
                             <Setter Property="BorderThickness" TargetName="Border" Value="2"/>
                         </Trigger>
+                        
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
@@ -47,6 +48,25 @@
         <Style.Triggers>
             <Trigger Property="IsFocused" Value="true">
                 <Setter Property="Margin" Value="0"/>
+            </Trigger>
+            <Trigger Property="IsEnabled"
+                     Value="false">
+                <Setter Property="BorderBrush"
+                        Value="{StaticResource SecondaryDisabledColor}" />
+                <Setter Property="Foreground"
+                        Value="{StaticResource SecondaryDisabledColor}" />
+                <Setter Property="Background"
+                        Value="{StaticResource PrimaryFocusColor}" />
+            </Trigger>
+
+            <Trigger Property="TextBox.IsReadOnly"
+                     Value="True">
+                <Setter Property="BorderBrush"
+                        Value="{StaticResource SecondaryDisabledColor}" />
+                <Setter Property="Foreground"
+                        Value="{StaticResource SecondaryDisabledColor}" />
+                <Setter Property="Background"
+                        Value="{StaticResource PrimaryFocusColor}" />
             </Trigger>
         </Style.Triggers>
     </Style>

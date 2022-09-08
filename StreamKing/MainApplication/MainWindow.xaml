@@ -138,33 +138,43 @@
                         <Button x:Name="RegionSwitchUS"
                                 Click="RegionSwitch_Clicked"
                                 Height="40"
+                                Width="172"
                                 FontSize="16"
                                 Foreground="{StaticResource SecondaryColor}"
                                 Background="{StaticResource PrimaryHeaderColor}"
                                 FocusVisualStyle="{x:Null}"
+                                Style="{StaticResource RemoveButtonHoverStyle}"
                                 Cursor="Hand">
-                            <StackPanel Orientation="Horizontal">
+                            <StackPanel Orientation="Horizontal"
+                                        Width="172">
                                 <Ellipse Height="24"
-                                         Width="24">
+                                         Width="24"
+                                         HorizontalAlignment="Left"
+                                         Margin="40,0,0,0">
                                     <Ellipse.Fill>
                                         <ImageBrush ImageSource="../Assets/Images/region_US.png" />
                                     </Ellipse.Fill>
                                 </Ellipse>
                                 <TextBlock VerticalAlignment="Center"
-                                           Margin="8,0,0,0">USA</TextBlock>
+                                           Margin="8,0,0,0"
+                                           HorizontalAlignment="Left">USA</TextBlock>
                             </StackPanel>
                         </Button>
                         <Button x:Name="RegionSwitchDE"
                                 Click="RegionSwitch_Clicked"
                                 Height="40"
                                 FontSize="16"
+                                Width="172"
                                 Foreground="{StaticResource SecondaryColor}"
                                 Background="{StaticResource PrimaryHeaderColor}"
                                 FocusVisualStyle="{x:Null}"
+                                Style="{StaticResource RemoveButtonHoverStyle}"
                                 Cursor="Hand">
-                            <StackPanel Orientation="Horizontal">
+                            <StackPanel Orientation="Horizontal"
+                                        Width="172">
                                 <Ellipse Height="24"
-                                         Width="24">
+                                         Width="24"
+                                         Margin="40,0,0,0">
                                     <Ellipse.Fill>
                                         <ImageBrush ImageSource="../Assets/Images/region_DE.png" />
                                     </Ellipse.Fill>
@@ -181,10 +191,14 @@
                                 Foreground="{StaticResource SecondaryColor}"
                                 Background="{StaticResource PrimaryHeaderColor}"
                                 FocusVisualStyle="{x:Null}"
+                                Style="{StaticResource RemoveButtonHoverStyle}"
+                                HorizontalAlignment="Left"
                                 Cursor="Hand">
-                            <StackPanel Orientation="Horizontal">
+                            <StackPanel Orientation="Horizontal"
+                                        Width="172">
                                 <Ellipse Height="24"
-                                         Width="24">
+                                         Width="24"
+                                         Margin="40,0,0,0">
                                     <Ellipse.Fill>
                                         <ImageBrush ImageSource="../Assets/Images/region_FI.png" />
                                     </Ellipse.Fill>
@@ -197,7 +211,7 @@
                 </ItemsControl>
 
                 <ItemsControl x:Name="Menu"
-                              Width="128"
+                              Width="176"
                               Grid.Column="0"
                               Visibility="Collapsed"
                               VerticalAlignment="Top"
@@ -213,22 +227,40 @@
                                 Foreground="{StaticResource SecondaryColor}"
                                 Background="{StaticResource PrimaryHeaderColor}"
                                 FocusVisualStyle="{x:Null}"
+                                Style="{StaticResource RemoveButtonHoverStyle}"
                                 Cursor="Hand"
-                                Click="SettingsButton_Clicked">Settings</Button>
+                                HorizontalAlignment="Stretch"
+                                Click="SettingsButton_Clicked">
+                            <TextBlock TextAlignment="Left"
+                                       Margin="40,0,0,0"
+                                       Width="136">Settings</TextBlock>
+                        </Button>
                         <Button Height="40"
+                                Width="176"
                                 FontSize="16"
                                 Foreground="{StaticResource SecondaryColor}"
                                 Background="{StaticResource PrimaryHeaderColor}"
                                 FocusVisualStyle="{x:Null}"
+                                Style="{StaticResource RemoveButtonHoverStyle}"
                                 Visibility="{Binding Account, Converter={StaticResource AccountTypeVisibilityConverter}}"
-                                Cursor="Hand">Administration</Button>
+                                Cursor="Hand">
+                            <TextBlock TextAlignment="Left"
+                                       Margin="40,0,0,0"
+                                       Width="136">Administration</TextBlock>
+                        </Button>
                         <Button Height="40"
                                 FontSize="16"
-                                Foreground="{StaticResource SecondaryColor}"
+                                Foreground="{StaticResource PrimaryAccentColor}"
                                 Background="{StaticResource PrimaryHeaderColor}"
+                                Style="{StaticResource RemoveButtonHoverStyle}"
                                 FocusVisualStyle="{x:Null}"
+                                HorizontalAlignment="Stretch"
                                 Cursor="Hand"
-                                Click="Logout_Clicked">Logout</Button>
+                                Click="Logout_Clicked">
+                            <TextBlock TextAlignment="Left"
+                                       Margin="40,0,0,0"
+                                       Width="136">Logout</TextBlock>
+                        </Button>
                     </StackPanel>
                 </ItemsControl>
             </Grid>
