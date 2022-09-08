@@ -467,7 +467,7 @@ namespace StreamKing
                 Mouse.OverrideCursor = null;
                 MessageBox.Show("User was not updated: " + result.Message);
             }
-            
+
         }
     }
 }
