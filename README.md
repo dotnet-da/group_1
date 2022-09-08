@@ -45,14 +45,20 @@ This chapter contains a list of all technologies that are being used in this pro
 - Authorization of WebAPI with [JWT](https://jwt.io/introduction)
 #### Services
 - [Central postgresql server](https://code.fbi.h-da.de/lab-docs/db/-/wikis/postgresql/Zentraler-PostgreSQL-Server) from [h_da](https://h-da.de/en/) as a database (german documentation)
+- [The Movie Database API](https://developers.themoviedb.org/3) is used to retrieve initial Media and Series objects and their Streaming Availability
   
 <!-- Setup Process -->
 ## Setup Process
-**/TODO**
+(how to install the application, so that a new developer can start to work)
+
+//TODO
 
 <!-- DESCRIPTION -->
 ## Description
-
+The StreamKing Application is used to get Streaming Availability Informations for many Movies & Series in the Regions 
+USA, Germany and Finland. You are also able 
+to save these to your own personal Watchlist which is linked to your Account and is then being saved in our central 
+Database.
 ### ER Model
 This is the ER-Model for the PSQL Database, which was created with the help of the SAP PowerDesigner. 
 We didn't use the automatically created versions, e.g. from pgAdmin, because they weren't really readable and 
