@@ -147,7 +147,7 @@
                                 <Ellipse Height="24"
                                          Width="24">
                                     <Ellipse.Fill>
-                                        <ImageBrush ImageSource="../Assets/Images/region_US.jpg" />
+                                        <ImageBrush ImageSource="../Assets/Images/region_US.png" />
                                     </Ellipse.Fill>
                                 </Ellipse>
                                 <TextBlock VerticalAlignment="Center"
@@ -166,7 +166,7 @@
                                 <Ellipse Height="24"
                                          Width="24">
                                     <Ellipse.Fill>
-                                        <ImageBrush ImageSource="../Assets/Images/region_DE.jpg" />
+                                        <ImageBrush ImageSource="../Assets/Images/region_DE.png" />
                                     </Ellipse.Fill>
                                 </Ellipse>
                                 <TextBlock VerticalAlignment="Center"
@@ -186,7 +186,7 @@
                                 <Ellipse Height="24"
                                          Width="24">
                                     <Ellipse.Fill>
-                                        <ImageBrush ImageSource="../Assets/Images/region_FI.jpg" />
+                                        <ImageBrush ImageSource="../Assets/Images/region_FI.png" />
                                     </Ellipse.Fill>
                                 </Ellipse>
                                 <TextBlock VerticalAlignment="Center"

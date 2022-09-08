@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 
@@ -32,6 +33,7 @@ namespace StreamKing.Login.Views
                 LoginWindow loginWindow = (LoginWindow)Window.GetWindow(this);
 
                 var status = await App.Login(username, password);
+                Console.WriteLine("Login status: " + status);
 
                 isLoggingIn = false;
 
@@ -41,7 +43,7 @@ namespace StreamKing.Login.Views
                 }
                 else
                 {
-                    MessageBox.Show("Username or Password is incorrect!");
+                    MessageBox.Show("Something went wrong: " + status);
                     Mouse.OverrideCursor = null;
                 }
             }

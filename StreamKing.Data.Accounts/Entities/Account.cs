@@ -1,6 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using StreamKing.Data.Media;
+using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
-using StreamKing.Data.Media;
 
 namespace StreamKing.Data.Accounts
 {
