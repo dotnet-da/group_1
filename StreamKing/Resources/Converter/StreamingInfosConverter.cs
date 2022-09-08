@@ -13,27 +13,19 @@ namespace StreamKing.Resources.Converter
                 return null;
 
             List<StreamingInfo>? s = null;
-            try
+            if (value.GetType() == typeof(Media) || value.GetType() == typeof(Movie) || value.GetType() == typeof(Series))
             {
                 s = (value as Media).StreamingInfos;
-            }
-            catch (Exception)
-            {
-                try
-                {
-                    s = (value as MovieEntry).Movie.StreamingInfos;
-                }
-                catch (Exception)
-                {
-                    try
-                    {
-                        s = (value as SeriesEntry).Series.StreamingInfos;
-                    }
-                    catch (Exception)
-                    {
 
-                    }
-                }
+            }
+            else if (value.GetType() == typeof(MovieEntry))
+            {
+                s = (value as MovieEntry).Movie.StreamingInfos;
+
+            }
+            else if (value.GetType() == typeof(SeriesEntry))
+            {
+                s = (value as SeriesEntry).Series.StreamingInfos;
             }
 
             return s;

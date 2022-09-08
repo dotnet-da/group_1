@@ -230,6 +230,61 @@ namespace StreamKing
             return true;
         }
 
+
+
+        public static async Task<bool> UpdateSelectedWatchEntry(string? newTag)
+        {
+            WatchEntry? selected = _mainWindow.GetSelectedWatchEntry();
+
+            if (newTag.Length == 0)
+            {
+                newTag = null;
+            }
+
+            if (selected is not null && Watchlist is not null)
+            {
+                Console.WriteLine("Updating WatchEntry(" + selected.Id + "): " + newTag);
+                WatchEntryRequest watchEntryRequest = new WatchEntryRequest
+                {
+                    Tag = newTag,
+                };
+
+                if (selected.GetType() == typeof(MovieEntry))
+                {
+                    watchEntryRequest.MovieId = (selected as MovieEntry).Movie.TmdbId;
+                }
+                else if (selected.GetType() == typeof(SeriesEntry))
+                {
+                    watchEntryRequest.SeriesId = (selected as SeriesEntry).Series.TmdbId;
+                }
+
+                var watchEntryRequestContent = JsonConvert.SerializeObject(watchEntryRequest);
+                var httpContent = new StringContent(watchEntryRequestContent, Encoding.UTF8, "application/json");
+
+                try
+                {
+                    string path = "session/watchlists/" + Watchlist.Id + "/entries";
+                    Console.WriteLine("Post to: " + path);
+                    HttpResponseMessage response = await _mediaApi.PostAsync(path, httpContent);
+
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        MessageBox.Show("UpdateSelectedWatchEntry:" + response.StatusCode);
+                        return false;
+                    }
+                    var content = await response.Content.ReadAsStringAsync();
+                    Console.WriteLine("Successful UpdateSelectedWatchEntry: " + content);
+
+                    GetWatchlist();
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Error in UpdateSelectedWatchEntry: " + ex.Message);
+                }
+            }
+            return true;
+        }
+
         public static async Task<string> Login(string username, string password)
         {
             string message = "";
@@ -467,7 +522,7 @@ namespace StreamKing
                 Mouse.OverrideCursor = null;
                 MessageBox.Show("User was not updated: " + result.Message);
             }
-            
+
         }
     }
 }

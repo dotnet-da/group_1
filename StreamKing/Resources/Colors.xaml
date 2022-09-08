@@ -5,12 +5,18 @@
     <!--<Color x:Key="PrimaryColorValue">#F2001C</Color>-->
     <SolidColorBrush x:Key="PrimaryColor" Color="{StaticResource PrimaryColorValue}" />
 
+    <Color x:Key="PrimaryAccentColorValue">#F2001C</Color>
+    <SolidColorBrush x:Key="PrimaryAccentColor"
+                     Color="{StaticResource PrimaryAccentColorValue}" />
+
+    <Color x:Key="PrimaryDarkAccentColorValue">#B30015</Color>
+    <SolidColorBrush x:Key="PrimaryDarkAccentColor"
+                     Color="{StaticResource PrimaryDarkAccentColorValue}" />
+
     <Color x:Key="PrimaryFocusColorValue">#555555</Color>
-    <!--<Color x:Key="PrimaryFocusColorValue">#B30015</Color>-->
     <SolidColorBrush x:Key="PrimaryFocusColor" Color="{StaticResource PrimaryFocusColorValue}" />
 
     <Color x:Key="PrimaryHeaderColorValue">#222222</Color>
-    <!--<Color x:Key="PrimaryColorValue">#F2001C</Color>-->
     <SolidColorBrush x:Key="PrimaryHeaderColor" Color="{StaticResource PrimaryHeaderColorValue}" />
 
     <Color x:Key="SecondaryColorValue" >White</Color>

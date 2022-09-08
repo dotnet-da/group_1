@@ -89,12 +89,15 @@
                                Text="{Binding Watchlist.Name, FallbackValue='No Watchlist Found'}"></TextBlock>
                     <ListBox x:Name="MovieWatchlistView"
                              ItemsSource="{Binding Watchlist.MovieList, Mode=OneWay}"
-                             ScrollViewer.VerticalScrollBarVisibility="Disabled"
-                             ScrollViewer.HorizontalScrollBarVisibility="Auto"
                              Background="Transparent"
                              HorizontalAlignment="Stretch"
                              MaxHeight="600"
                              BorderThickness="0">
+                        <ListBox.Template>
+                            <ControlTemplate>
+                                <ItemsPresenter />
+                            </ControlTemplate>
+                        </ListBox.Template>
                         <ListBox.ItemsPanel>
                             <ItemsPanelTemplate>
                                 <WrapPanel />
@@ -108,13 +111,15 @@
                     </ListBox>
                     <ListBox x:Name="SeriesWatchlistView"
                              ItemsSource="{Binding Watchlist.SeriesList, Mode=OneWay}"
-                             ScrollViewer.VerticalScrollBarVisibility="Auto"
-                             ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                             ScrollViewer.CanContentScroll="False"
                              Background="Transparent"
                              HorizontalAlignment="Stretch"
                              MaxHeight="600"
                              BorderThickness="0">
+                        <ListBox.Template>
+                            <ControlTemplate>
+                                <ItemsPresenter />
+                            </ControlTemplate>
+                        </ListBox.Template>
                         <ListBox.ItemsPanel>
                             <ItemsPanelTemplate>
                                 <WrapPanel />
