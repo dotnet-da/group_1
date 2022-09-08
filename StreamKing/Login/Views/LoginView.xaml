@@ -22,7 +22,10 @@
             </ItemsControl>
             <ItemsControl IsTabStop="False"  Margin="8" FocusVisualStyle="{x:Null}">
                 
-                <Button Content="Login" x:Name="LoginButton" VerticalAlignment="Center" HorizontalAlignment="Center" TabIndex="3" Click="LoginButton_Click">
+                <Button Content="Login" x:Name="LoginButton"
+                        VerticalAlignment="Center" HorizontalAlignment="Center"
+                        TabIndex="3" Click="LoginButton_Click" Cursor="Hand"
+                        IsDefault="True">
                     <Button.Style>
                         <Style TargetType="{x:Type Button}" BasedOn="{StaticResource PrimaryButton}">
                             <Style.Triggers>
