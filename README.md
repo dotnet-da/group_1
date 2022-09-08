@@ -54,7 +54,10 @@ This chapter contains a list of all technologies that are being used in this pro
 ## Description
 
 ### ER Model
+This is the ER-Model for the PSQL Database, which was created with the help of the SAP PowerDesigner. 
+We didn't use the automatically created versions, e.g. from pgAdmin, because they weren't really readable and 
+we had more freedom with this tool.
 <img src="./docs/er_model.png"/>
 
 ### Dump File
-[a relative link](docs/StreamKingSQLDumpFile.sql)
+[SQL Dump File](docs/StreamKingSQLDumpFile.sql) (From: 09.09.2022 00:10 AM) which was created with the pgAdmin PSQL Tool.
