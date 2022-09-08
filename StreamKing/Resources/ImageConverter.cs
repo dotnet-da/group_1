@@ -13,27 +13,19 @@ namespace StreamKing.Resources
                 return null;
 
             string s = "";
-            try
+            if (value.GetType() == typeof(Media) || value.GetType() == typeof(Movie) || value.GetType() == typeof(Series))
             {
                 s = (value as Media).BackdropURL;
-            }
-            catch (Exception)
-            {
-                try
-                {
-                    s = (value as MovieEntry).Movie.BackdropURL;
-                }
-                catch (Exception)
-                {
-                    try
-                    {
-                        s = (value as SeriesEntry).Series.BackdropURL;
-                    }
-                    catch (Exception)
-                    {
 
-                    }
-                }
+            }
+            else if (value.GetType() == typeof(MovieEntry))
+            {
+                s = (value as MovieEntry).Movie.BackdropURL;
+
+            }
+            else if (value.GetType() == typeof(SeriesEntry))
+            {
+                s = (value as SeriesEntry).Series.BackdropURL;
             }
 
             return new BitmapImage(new Uri("https://image.tmdb.org/t/p/w500" + s, UriKind.Absolute));
@@ -49,10 +41,24 @@ namespace StreamKing.Resources
     {
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
-            string s = value as string;
-
-            if (s == null)
+            if (value == null)
                 return null;
+
+            string s = "";
+            if (value.GetType() == typeof(Media) || value.GetType() == typeof(Movie) || value.GetType() == typeof(Series))
+            {
+                s = (value as Media).BackdropURL;
+
+            }
+            else if (value.GetType() == typeof(MovieEntry))
+            {
+                s = (value as MovieEntry).Movie.BackdropURL;
+
+            }
+            else if (value.GetType() == typeof(SeriesEntry))
+            {
+                s = (value as SeriesEntry).Series.BackdropURL;
+            }
 
             return new BitmapImage(new Uri("https://image.tmdb.org/t/p/w780" + s, UriKind.Absolute));
         }
