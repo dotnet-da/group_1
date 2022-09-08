@@ -49,10 +49,10 @@ namespace StreamKing.MainApplication.Views
 
         private void DeleteButton_Clicked(object sender, RoutedEventArgs e)
         {
-            if(MessageBox.Show("Are you sure you want to delete your Account?", "Attention", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
+            if (MessageBox.Show("Are you sure you want to delete your Account?", "Attention", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
             {
                 App.DeleteCurrentUser();
-            }            
+            }
         }
 
         private void UpdateButton_Clicked(object sender, RoutedEventArgs e)

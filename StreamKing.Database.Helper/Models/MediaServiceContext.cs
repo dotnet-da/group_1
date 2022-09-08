@@ -1,7 +1,6 @@
-﻿using StreamKing.Data.Accounts;
+﻿using Microsoft.EntityFrameworkCore;
+using StreamKing.Data.Accounts;
 using StreamKing.Data.Media;
-using Microsoft.EntityFrameworkCore;
-using System.Reflection.Metadata;
 
 namespace StreamKing.Database.Helper.Models
 {
