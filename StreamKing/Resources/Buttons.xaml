@@ -137,4 +137,30 @@
             </Setter.Value>
         </Setter>
     </Style>
+    
+    <!-- emptyStar Rating Radio Buttons -->
+    <ControlTemplate x:Key="starTemplateEmpty"  TargetType="{x:Type RadioButton}">
+        <Viewbox>
+            <Path Name="star" Fill="Gray" Data="F1 M 145.637,174.227L 127.619,110.39L 180.809,70.7577L 114.528,68.1664L 93.2725,5.33333L 70.3262,67.569L 4,68.3681L 56.0988,109.423L 36.3629,172.75L 91.508,135.888L 145.637,174.227 Z"/>
+        </Viewbox>
+        <ControlTemplate.Triggers>
+            <Trigger Property="IsChecked" Value="True">
+                <Setter TargetName="star" Property="Fill" Value="White"/>
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+
+    <!-- fullStar Rating Radio Buttons -->
+    <ControlTemplate x:Key="starTemplateFull"  TargetType="{x:Type RadioButton}">
+        <Viewbox>
+            <Path Name="star" Fill="Yellow" Data="F1 M 145.637,174.227L 127.619,110.39L 180.809,70.7577L 114.528,68.1664L 93.2725,5.33333L 70.3262,67.569L 4,68.3681L 56.0988,109.423L 36.3629,172.75L 91.508,135.888L 145.637,174.227 Z"/>
+        </Viewbox>
+        <ControlTemplate.Triggers>
+            <Trigger Property="IsChecked" Value="True">
+                <Setter TargetName="star" Property="Fill" Value="White"/>
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+
+
 </ResourceDictionary>

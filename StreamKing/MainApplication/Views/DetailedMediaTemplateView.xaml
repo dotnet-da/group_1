@@ -20,7 +20,9 @@
         <converter:StreamingInfosConverter x:Key="StreamingInfosConverter" />
         <converter:SeasonsConverter x:Key="SeasonsConverter" />
         <converter:SeasonsVisibilityConverter x:Key="SeasonsVisibilityConverter" />
-
+        <converter:MediaRatingVisibilityEmptyConverter x:Key="MediaRatingVisibilityEmptyConverter" />
+        <converter:MediaRatingVisibilityFullConverter x:Key="MediaRatingVisibilityFullConverter" />
+        <converter:RatingConverter x:Key="RatingConverter" />
 
         <!-- This style is used for buttons, to remove the WPF default 'animated' mouse over effect -->
         <Style x:Key="MyButtonStyle"
@@ -247,13 +249,13 @@
                                                            VerticalAlignment="Center"
                                                            FontSize="14"
                                                            Visibility="{Binding Release, Converter={StaticResource NullVisibilityConverter}, FallbackValue=Collapsed}"
-                                                           Text="{Binding Path=Release, StringFormat=' • {0:yyyy}', FallbackValue= • 1970}"
+                                                           Text="{Binding Path=Release, StringFormat=' • {0:yyyy} • ', FallbackValue= • 1970}"
                                                            Foreground="{StaticResource SecondaryColor}" />
                                                 <TextBlock x:Name="MovieEntryReleaseYear"
                                                            VerticalAlignment="Center"
                                                            FontSize="14"
                                                            Visibility="{Binding Movie, Converter={StaticResource NullVisibilityConverter}, FallbackValue=Collapsed}"
-                                                           Text="{Binding Path=Movie.Release, StringFormat=' • {0:yyyy}', FallbackValue= • 1970}"
+                                                           Text="{Binding Path=Movie.Release, StringFormat=' • {0:yyyy} • ', FallbackValue= • 1970}"
                                                            Foreground="{StaticResource SecondaryColor}" />
                                                 <TextBlock x:Name="SeriesEntryReleaseYear"
                                                            VerticalAlignment="Center"
@@ -261,6 +263,153 @@
                                                            Visibility="{Binding Series, Converter={StaticResource NullVisibilityConverter}, FallbackValue=Collapsed}"
                                                            Text="{Binding Path=Series.Release, StringFormat=' • {0:yyyy}', FallbackValue= • 1970}"
                                                            Foreground="{StaticResource SecondaryColor}" />
+
+                                                <ItemsControl VerticalAlignment="Bottom"
+                                                              IsTabStop="False"
+                                                              Margin="0,0,0,1"
+                                                              Visibility="{Binding Converter={StaticResource MediaRatingVisibilityFullConverter}, ConverterParameter=0}">
+                                                    <ItemsControl.ItemsPanel>
+                                                        <ItemsPanelTemplate>
+                                                            <DockPanel></DockPanel>
+                                                        </ItemsPanelTemplate>
+                                                    </ItemsControl.ItemsPanel>
+
+                                                    <RadioButton Width="15"
+                                                                 Height="15"
+                                                                 GroupName="RatingGroup"
+                                                                 Template="{StaticResource starTemplateEmpty}"
+                                                                 Content="RadioButton"
+                                                                 HorizontalAlignment="Left"
+                                                                 Grid.Row="4"
+                                                                 VerticalAlignment="Top"
+                                                                 x:Name="OneStarEmpty"
+                                                                 Focusable="False"
+                                                                 IsHitTestVisible="False"
+                                                                 Visibility="{Binding Converter={StaticResource MediaRatingVisibilityEmptyConverter}, ConverterParameter=1}" />
+                                                    <RadioButton Width="15"
+                                                                 Height="15"
+                                                                 GroupName="RatingGroup"
+                                                                 Template="{StaticResource starTemplateFull}"
+                                                                 Content="RadioButton"
+                                                                 HorizontalAlignment="Left"
+                                                                 Grid.Row="4"
+                                                                 VerticalAlignment="Top"
+                                                                 x:Name="OneStarFull"
+                                                                 Focusable="False"
+                                                                 IsHitTestVisible="False"
+                                                                 Visibility="{Binding Converter={StaticResource MediaRatingVisibilityFullConverter}, ConverterParameter=1}" />
+
+                                                    <RadioButton Width="15"
+                                                                 Height="15"
+                                                                 GroupName="RatingGroup"
+                                                                 Template="{StaticResource starTemplateEmpty}"
+                                                                 Content="RadioButton"
+                                                                 HorizontalAlignment="Left"
+                                                                 Grid.Row="4"
+                                                                 VerticalAlignment="Top"
+                                                                 x:Name="TwoStarEmpty"
+                                                                 Focusable="False"
+                                                                 IsHitTestVisible="False"
+                                                                 Visibility="{Binding Converter={StaticResource MediaRatingVisibilityEmptyConverter}, ConverterParameter=2}" />
+                                                    <RadioButton Width="15"
+                                                                 Height="15"
+                                                                 GroupName="RatingGroup"
+                                                                 Template="{StaticResource starTemplateFull}"
+                                                                 Content="RadioButton"
+                                                                 HorizontalAlignment="Left"
+                                                                 Grid.Row="4"
+                                                                 VerticalAlignment="Top"
+                                                                 x:Name="TwoStarFull"
+                                                                 Focusable="False"
+                                                                 IsHitTestVisible="False"
+                                                                 Visibility="{Binding Converter={StaticResource MediaRatingVisibilityFullConverter}, ConverterParameter=2}" />
+
+                                                    <RadioButton Width="15"
+                                                                 Height="15"
+                                                                 GroupName="RatingGroup"
+                                                                 Template="{StaticResource starTemplateEmpty}"
+                                                                 Content="RadioButton"
+                                                                 HorizontalAlignment="Left"
+                                                                 Grid.Row="4"
+                                                                 VerticalAlignment="Top"
+                                                                 x:Name="ThreeStarEmpty"
+                                                                 Focusable="False"
+                                                                 IsHitTestVisible="False"
+                                                                 Visibility="{Binding Converter={StaticResource MediaRatingVisibilityEmptyConverter}, ConverterParameter=3}" />
+                                                    <RadioButton Width="15"
+                                                                 Height="15"
+                                                                 GroupName="RatingGroup"
+                                                                 Template="{StaticResource starTemplateFull}"
+                                                                 Content="RadioButton"
+                                                                 HorizontalAlignment="Left"
+                                                                 Grid.Row="4"
+                                                                 VerticalAlignment="Top"
+                                                                 x:Name="ThreeStarFull"
+                                                                 Focusable="False"
+                                                                 IsHitTestVisible="False"
+                                                                 Visibility="{Binding Converter={StaticResource MediaRatingVisibilityFullConverter}, ConverterParameter=3}" />
+
+                                                    <RadioButton Width="15"
+                                                                 Height="15"
+                                                                 GroupName="RatingGroup"
+                                                                 Template="{StaticResource starTemplateEmpty}"
+                                                                 Content="RadioButton"
+                                                                 HorizontalAlignment="Left"
+                                                                 Grid.Row="4"
+                                                                 VerticalAlignment="Top"
+                                                                 x:Name="FourStarEmpty"
+                                                                 Focusable="False"
+                                                                 IsHitTestVisible="False"
+                                                                 Visibility="{Binding Converter={StaticResource MediaRatingVisibilityEmptyConverter}, ConverterParameter=4}" />
+                                                    <RadioButton Width="15"
+                                                                 Height="15"
+                                                                 GroupName="RatingGroup"
+                                                                 Template="{StaticResource starTemplateFull}"
+                                                                 Content="RadioButton"
+                                                                 HorizontalAlignment="Left"
+                                                                 Grid.Row="4"
+                                                                 VerticalAlignment="Top"
+                                                                 x:Name="FourStarFull"
+                                                                 Focusable="False"
+                                                                 IsHitTestVisible="False"
+                                                                 Visibility="{Binding Converter={StaticResource MediaRatingVisibilityFullConverter}, ConverterParameter=4}" />
+
+                                                    <RadioButton Width="15"
+                                                                 Height="15"
+                                                                 GroupName="RatingGroup"
+                                                                 Template="{StaticResource starTemplateEmpty}"
+                                                                 Content="RadioButton"
+                                                                 HorizontalAlignment="Left"
+                                                                 Grid.Row="4"
+                                                                 VerticalAlignment="Top"
+                                                                 x:Name="FiveStarEmpty"
+                                                                 Focusable="False"
+                                                                 IsHitTestVisible="False"
+                                                                 Visibility="{Binding Converter={StaticResource MediaRatingVisibilityEmptyConverter}, ConverterParameter=5}" />
+                                                    <RadioButton Width="15"
+                                                                 Height="15"
+                                                                 GroupName="RatingGroup"
+                                                                 Template="{StaticResource starTemplateFull}"
+                                                                 Content="RadioButton"
+                                                                 HorizontalAlignment="Left"
+                                                                 Grid.Row="4"
+                                                                 VerticalAlignment="Top"
+                                                                 x:Name="FiveStarFull"
+                                                                 Focusable="False"
+                                                                 IsHitTestVisible="False"
+                                                                 Visibility="{Binding Converter={StaticResource MediaRatingVisibilityFullConverter}, ConverterParameter=5}" />
+
+                                                    <TextBlock x:Name="Rating"
+                                                               Text="{Binding Converter={StaticResource RatingConverter}, StringFormat={}{0:#,#.0}, FallbackValue='0.0'}"
+                                                               FontSize="12"
+                                                               FontWeight="SemiBold"
+                                                               Margin="4,0,0,0"
+                                                               Grid.Column="0"
+                                                               Grid.Row="4"
+                                                               VerticalAlignment="Center">
+                                                        
+                                                    </TextBlock>
+                                                </ItemsControl>
                                             </StackPanel>
                                             <ListBox ItemsSource="{Binding Converter={StaticResource GenresConverter}}"
                                                      Margin="-4,8,0,0"
@@ -521,6 +670,7 @@
                                         </Button>
                                     </StackPanel>
                                 </ItemsControl>
+                                
                             </Grid>
                         </ItemsControl>
                     </Grid>
