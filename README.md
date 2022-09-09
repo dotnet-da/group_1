@@ -44,7 +44,7 @@ This chapter contains a list of all technologies that are being used in this pro
 
 ## Mockup
 ### Login View
-![Login](../group_1/Images_for_MD/Login.png)
+![Login](../Images_for_MD/Login.png)
 ### Create Account View
 ![Login](../group_1/Images_for_MD/CreateAccount.png)
 ### Captcha View
