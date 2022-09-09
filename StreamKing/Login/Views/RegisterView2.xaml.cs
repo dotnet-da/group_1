@@ -74,11 +74,11 @@ namespace StreamKing.Login.Views
         public void checkValidInputs()
         {
             verifyString = num.ToString();
-
+          
             if (RepeatPasswordInput.Password == PasswordInput.Password
                 && PasswordInput.Password.Length >= _passwordMinLength
                 && PasswordInput.Password.Length <= _inputMaxLength
-                && UsernameInput.Text.Length > _usernameMinLength
+                && UsernameInput.Text.Length >= _usernameMinLength
                 && UsernameInput.Text.Length <= _inputMaxLength
                 && verifyString.Equals(InputCaptcha.Text.ToString()))
             {
@@ -89,9 +89,10 @@ namespace StreamKing.Login.Views
                 RepeatPasswordInputLabel.Foreground = (SolidColorBrush)new BrushConverter().ConvertFrom("#ffffff");
                 VerifyCaptchaTextBlock.Foreground = (SolidColorBrush)new BrushConverter().ConvertFrom("#ffffff");
 
-                setModelParams(UsernameInput.Text);
+                
 
                 SignUpButton.IsEnabled = true;
+                setModelParams(UsernameInput.Text);
             }
             else
             {
@@ -203,7 +204,7 @@ namespace StreamKing.Login.Views
             graphics.DrawString(num.ToString(), font, System.Drawing.Brushes.Red, new System.Drawing.Point(90, 2));
 
             drawImage(image);
-
+            
 
         }
 

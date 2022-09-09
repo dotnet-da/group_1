@@ -1,5 +1,7 @@
-﻿using StreamKing.Data.Media;
+﻿using StreamKing.Data.Accounts;
+using StreamKing.Data.Media;
 using StreamKing.MainApplication.ViewModels;
+using StreamKing.MainApplication.Views;
 using System;
 using System.Collections.ObjectModel;
 using System.Windows;
@@ -27,6 +29,17 @@ namespace StreamKing.MainApplication
         public void SetSettingsView()
         {
             _viewModel.MainPage = new SettingsPageViewModel();
+            UpdateDataContext();
+        }
+
+        public void SetAdminView()
+        {
+            _viewModel.MainPage = new AdminViewModel();
+            UpdateDataContext();
+        }
+        public void SetUpdateAccountView(Account? User)
+        {
+            _viewModel.MainPage = new UpdateAccountViewModel(User);
             UpdateDataContext();
         }
 
@@ -302,6 +315,15 @@ namespace StreamKing.MainApplication
                 Menu.Visibility = Visibility.Collapsed;
             }
             SetSettingsView();
+        }
+
+        private void AdminButton_Clicked(object sender, RoutedEventArgs e)
+        {
+            if (Menu.Visibility == Visibility.Visible)
+            {
+                Menu.Visibility = Visibility.Collapsed;
+            }
+            SetAdminView();
         }
     }
 }
