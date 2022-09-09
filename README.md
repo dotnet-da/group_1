@@ -41,4 +41,19 @@ This chapter contains a list of all technologies that are being used in this pro
   
 <!-- Setup Process -->
 ## Setup Process
-**/TODO**
+
+## Mockup
+### Login View
+![Login](Images_for_MD/Login.png)
+### Create Account View
+![Login](Images_for_MD/CreateAccount.png)
+### Captcha View
+![Login](Images_for_MD/Captcha.png)
+### Landing Page View
+![Login](Images_for_MD/LandingPage.png)
+### Search results View
+![Login](Images_for_MD/SearchResults.png)
+### Detail View Series
+![Login](Images_for_MD/DetailSeries.png)
+### Detail View Movie
+![Login](Images_for_MD/DetailMovie.png)

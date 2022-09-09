@@ -222,15 +222,15 @@ namespace StreamKing.MainApplication
 
             if (Region == "DE")
             {
-                _viewModel.ActiveRegionImage = "../Assets/Images/region_DE.jpg";
+                _viewModel.ActiveRegionImage = "../Assets/Images/region_DE.png";
             }
             else if (Region == "FI")
             {
-                _viewModel.ActiveRegionImage = "../Assets/Images/region_FI.jpg";
+                _viewModel.ActiveRegionImage = "../Assets/Images/region_FI.png";
             }
             else
             {
-                _viewModel.ActiveRegionImage = "../Assets/Images/region_US.jpg";
+                _viewModel.ActiveRegionImage = "../Assets/Images/region_US.png";
             }
             UpdateDataContext();
         }
@@ -282,17 +282,17 @@ namespace StreamKing.MainApplication
             if (button.Name.Contains("DE"))
             {
                 App.SwitchRegion("DE");
-                _viewModel.ActiveRegionImage = "../Assets/Images/region_DE.jpg";
+                _viewModel.ActiveRegionImage = "../Assets/Images/region_DE.png";
             }
             else if (button.Name.Contains("FI"))
             {
                 App.SwitchRegion("FI");
-                _viewModel.ActiveRegionImage = "../Assets/Images/region_FI.jpg";
+                _viewModel.ActiveRegionImage = "../Assets/Images/region_FI.png";
             }
             else if (button.Name.Contains("US"))
             {
                 App.SwitchRegion("US");
-                _viewModel.ActiveRegionImage = "../Assets/Images/region_US.jpg";
+                _viewModel.ActiveRegionImage = "../Assets/Images/region_US.png";
             }
 
             if (RegionSwitch.Visibility == Visibility.Visible)

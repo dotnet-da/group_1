@@ -7,6 +7,7 @@ using StreamKing.MainApplication;
 using StreamKing.Web.Models;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
@@ -155,6 +156,59 @@ namespace StreamKing
                 Console.WriteLine("Error in GetWatchlist: " + ex.Message);
             }
 
+        public static async void GetEpisodesList(Season season)
+        {
+            _mediaApi.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _apiToken);
+
+            Series? series = _mediaList.OfType<Series>().ToList().Where(ser => ser.Seasons.Where(sea => sea.Id == season.Id).FirstOrDefault() != null).FirstOrDefault();
+
+            if(series != null)
+            {
+                if(season.Episodes is not null && season.Episodes.Count > 0)
+                {
+                    series.Seasons.First(sea => sea.Id == season.Id).Episodes = null;
+                    if (_mainWindow != null)
+                    {
+                        Media currentMedia = _mainWindow.GetSelectedMedia();
+                        _mainWindow.SetSelectedMedia(null);
+                        _mainWindow.SetSelectedMedia(currentMedia);
+                    }
+                }
+                else
+                {
+                    try
+                    {
+                        HttpResponseMessage response = await _mediaApi.GetAsync(series.TmdbId + "/seasons/" + season.Id);
+
+                        if (!response.IsSuccessStatusCode)
+                        {
+                            MessageBox.Show("GetEpisodesList:" + response.StatusCode);
+                            return;
+                        }
+
+                        var content = await response.Content.ReadAsStringAsync();
+
+                        var foundSeason = JObject.Parse(content).ToObject<Season>();
+                        Console.WriteLine("EpisodesList loaded: " + foundSeason.Id + " " + foundSeason.Episodes.Count);
+
+                        series.Seasons.First(sea => sea.Id == season.Id).Episodes = foundSeason.Episodes.OrderBy(ep => ep.Number).ToList();
+                        Console.WriteLine("EpisodesList updated: " + series.Seasons.First(sea => sea.Id == season.Id).Id + " " + series.Seasons.First(sea => sea.Id == season.Id).Episodes.Count);
+
+                        if (_mainWindow != null)
+                        {
+                            Media currentMedia = _mainWindow.GetSelectedMedia();
+                            _mainWindow.SetSelectedMedia(null);
+                            _mainWindow.SetSelectedMedia(currentMedia);
+                        }
+
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine("Error in GetEpisodesList: " + ex.Message);
+                    }
+                }
+            }
+
         }
         public static async void GetWatchlist()
         {
@@ -258,6 +312,61 @@ namespace StreamKing
                 catch (Exception ex)
                 {
                     Console.WriteLine("Error in RemoveSelectedWatchEntryFromWatchlist: " + ex.Message);
+                }
+            }
+            return true;
+        }
+
+
+
+        public static async Task<bool> UpdateSelectedWatchEntry(string? newTag)
+        {
+            WatchEntry? selected = _mainWindow.GetSelectedWatchEntry();
+
+            if (newTag.Length == 0)
+            {
+                newTag = null;
+            }
+
+            if (selected is not null && Watchlist is not null)
+            {
+                Console.WriteLine("Updating WatchEntry(" + selected.Id + "): " + newTag);
+                WatchEntryRequest watchEntryRequest = new WatchEntryRequest
+                {
+                    Tag = newTag,
+                };
+
+                if (selected.GetType() == typeof(MovieEntry))
+                {
+                    watchEntryRequest.MovieId = (selected as MovieEntry).Movie.TmdbId;
+                }
+                else if (selected.GetType() == typeof(SeriesEntry))
+                {
+                    watchEntryRequest.SeriesId = (selected as SeriesEntry).Series.TmdbId;
+                }
+
+                var watchEntryRequestContent = JsonConvert.SerializeObject(watchEntryRequest);
+                var httpContent = new StringContent(watchEntryRequestContent, Encoding.UTF8, "application/json");
+
+                try
+                {
+                    string path = "session/watchlists/" + Watchlist.Id + "/entries";
+                    Console.WriteLine("Post to: " + path);
+                    HttpResponseMessage response = await _mediaApi.PostAsync(path, httpContent);
+
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        MessageBox.Show("UpdateSelectedWatchEntry:" + response.StatusCode);
+                        return false;
+                    }
+                    var content = await response.Content.ReadAsStringAsync();
+                    Console.WriteLine("Successful UpdateSelectedWatchEntry: " + content);
+
+                    GetWatchlist();
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Error in UpdateSelectedWatchEntry: " + ex.Message);
                 }
             }
             return true;
@@ -718,7 +827,7 @@ namespace StreamKing
                 Mouse.OverrideCursor = null;
                 MessageBox.Show("User was not updated: " + result.Message);
             }
-            
+
         }
     }
 
