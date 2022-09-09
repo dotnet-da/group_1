@@ -55,7 +55,8 @@
                     HorizontalAlignment="Right"
                     Cursor="Hand"
                     BorderBrush="{x:Null}"
-                    Style="{StaticResource MyButtonStyle}">
+                    Style="{StaticResource MyButtonStyle}"
+                    Click="CloseButton_Clicked">
                 <StackPanel>
                     <Image Source="../../Assets/Images/close.png" />
                 </StackPanel>

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Windows;
 using StreamKing.Data.Accounts;
 using StreamKing.Data.Media;
 using StreamKing.Web.Models;
@@ -34,6 +35,7 @@ namespace StreamKing.MainApplication.ViewModels
                     var updateRequest = new UpdateRequest { Username = UserName, Email = Email, FirstName = FirstName, LastName = LastName };
 
                     App.AdminUpdateSelectedUser(User, updateRequest);
+                    
                 }
             );
 

@@ -10,6 +10,34 @@
     <UserControl.DataContext>
         <local:AdminViewModel/>
     </UserControl.DataContext>
+    <UserControl.Resources>
+        <!-- This style is used for buttons, to remove the WPF default 'animated' mouse over effect -->
+        <Style x:Key="MyButtonStyle"
+               TargetType="Button">
+            <Setter Property="OverridesDefaultStyle"
+                    Value="True" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Name="border"
+                                CornerRadius="32"
+                                Background="{TemplateBinding Background}">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver"
+                                     Value="True">
+                                <Setter TargetName="border"
+                                        Property="Background"
+                                        Value="{StaticResource SecondaryDisabledColor}" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
 
     <ItemsControl IsTabStop="False" FontSize="16" Foreground="{StaticResource SecondaryColor}" Background="{StaticResource PrimaryFocusColor}" >
         <Grid Height="800" Width="600">
@@ -27,6 +55,21 @@
                 <RowDefinition Height="79*"/>
                 <RowDefinition Height="113*"/>
             </Grid.RowDefinitions>
+            <ItemsControl Grid.Row="0" Grid.Column="4"  HorizontalAlignment="Right" >
+                <Button Height="48"
+                    Width="48"
+                    Background="Transparent"
+                    VerticalAlignment="Top"
+                    HorizontalAlignment="Right"
+                    Cursor="Hand"
+                    BorderBrush="{x:Null}"
+                    Style="{StaticResource MyButtonStyle}"
+                    Click="CloseButton_Clicked">
+                    <StackPanel>
+                        <Image Source="../../Assets/Images/close.png" />
+                    </StackPanel>
+                </Button>
+            </ItemsControl>
 
             <TextBlock x:Name="Headline" Text="Admin OverView" FontSize="30" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="3"/>
             <DataGrid x:Name="AllAccountsGrid" ItemsSource="{Binding allUsers}" Grid.ColumnSpan="5" Margin="0,62,0,0" SelectionChanged="AllAccountsGrid_SelectionChanged" Grid.RowSpan="2"/>

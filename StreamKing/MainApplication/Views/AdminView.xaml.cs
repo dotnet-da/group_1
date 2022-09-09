@@ -55,13 +55,12 @@ namespace StreamKing.MainApplication.Views
             {
                 MessageBox.Show("AllAccountGrid_SelectionChanged: ChosenUser= is NULL");
             }
-
-          
-
-
-
         }
 
+        private void CloseButton_Clicked(object sender, RoutedEventArgs e)
+        {
+            ((MainWindow)Window.GetWindow(this)).SetLandingPageView();
+        }
         private void AddButton_Click(object sender, RoutedEventArgs e)
         {
             //Weiterleitung zu einer (leicht veränderten) RegisterPage ohne Captcha

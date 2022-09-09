@@ -28,29 +28,11 @@ namespace StreamKing.MainApplication.Views
         public UpdateAccount() 
         {
             InitializeComponent();
-            //ViewModel = (UpdateAccountViewModel)this.DataContext;
-            //if (ViewModel is not null)
-            //{
-
-            //    User = ViewModel.User;
-            //    MessageBox.Show("Username from if: " + User.FirstName);
-            //    // (DataContext as UpdateAccountViewModel).User;
-            //}
-            //else
-            //{
-            //    User = ViewModel.User;
-            //    MessageBox.Show("Username from else: " + User.FirstName);
-            //}
-           
-
         }
-      
-        //private void UpdateButton_Clicked(object sender, RoutedEventArgs e)
-        //{
-        //    var updateRequest = new UpdateRequest {Username = UsernameInput.Text, Email = EmailInput.Text, FirstName = FirstNameInput.Text, LastName = LastNameInput.Text };
-           
-        //    App.AdminUpdateSelectedUser(User, updateRequest);
 
-        //}
+        private void CloseButton_Clicked(object sender, RoutedEventArgs e)
+        {
+            ((MainWindow)Window.GetWindow(this)).SetAdminView();
+        }
     }
 }
