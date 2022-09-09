@@ -357,6 +357,45 @@ namespace StreamKing
             return message;
         }
 
+        public static async Task<string> AddNewUser(RegisterRequest registerRequest)
+        {
+            string message;
+            string path = "";
+
+            _accountsApi.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _apiToken);
+
+            var authenticateRequestContent = JsonConvert.SerializeObject(registerRequest);
+            var httpContent = new StringContent(authenticateRequestContent, Encoding.UTF8, "application/json");
+            try
+            {
+                HttpResponseMessage response = await _accountsApi.PostAsync(path, httpContent);
+                if (!response.IsSuccessStatusCode && response.StatusCode != System.Net.HttpStatusCode.BadRequest)
+                {
+                    message = "ERROR in AddNewUser: " + response.StatusCode;
+                    return message;
+                }
+
+                var content = await response.Content.ReadAsStringAsync();
+                JObject joResponse = JObject.Parse(content);
+
+                if ((bool)joResponse["status"] && joResponse["token"] != null && joResponse["id"] != null)
+                {
+                    message = "Success";
+                    GetAllUsers();
+                }
+                else
+                {
+                    message = (string)joResponse["message"];
+                }
+            }
+            catch (Exception ex)
+            {
+                message = "ERROR:\n" + ex.Message;
+            }
+
+            return message;
+        }
+
         public static async void SetCurrentUser()
         {
             _accountsApi.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _apiToken);
@@ -392,7 +431,7 @@ namespace StreamKing
             }
         }
 
-        public static async void GetAllUsers()
+        public static async Task<bool> GetAllUsers()
         {
             _accountsApi.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _apiToken);
 
@@ -402,7 +441,7 @@ namespace StreamKing
             if (!response.IsSuccessStatusCode)
             {
                 MessageBox.Show("Error in GetAllUsers:" + response.StatusCode);
-                return;
+                return false;
             }
 
             var content = await response.Content.ReadAsStringAsync();
@@ -417,6 +456,8 @@ namespace StreamKing
             {
                 MessageBox.Show("Error in GetAllUsers: " + ex.Message);
             }
+
+            return true;
 
         }
 
@@ -479,9 +520,9 @@ namespace StreamKing
 
                 if (result.Status)
                 {
-                    Console.WriteLine("Successful DeleteSelectedUser: " + content);
                     Mouse.OverrideCursor = null;
-                    Logout();
+                    MessageBox.Show("Successful DeleteSelectedUser: " + content);
+                    var status = await GetAllUsers();
                 }
                 else
                 {

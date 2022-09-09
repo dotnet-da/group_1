@@ -120,7 +120,22 @@
                     <TextBox x:Name="LastNameInput" Text="{Binding LastName}" TabIndex="1" Style="{StaticResource InputControlBox}"
                  ></TextBox>
                 </ItemsControl>
-                <Button  Content="Update" Command="{Binding UpdateButtonCommand}"/>
+                <ItemsControl FontSize="16"
+                              Grid.Row="3"
+                              Grid.Column="1"
+                              IsTabStop="False"
+                              Margin="8">
+                    <TextBlock Text="Password (only for Add)"
+                               Foreground="{StaticResource SecondaryColor}"></TextBlock>
+                    <TextBox x:Name="PasswordInput"
+                             TabIndex="1"
+                             Style="{StaticResource InputControlBox}"></TextBox>
+                </ItemsControl>
+
+                <Button  Content="Add new User"
+                         Click="AddNewUser_Clicked" />
+                <Button  Content="Update"
+                         Command="{Binding UpdateButtonCommand}" />
 
             </ItemsControl>
         </ScrollViewer>

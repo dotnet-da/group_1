@@ -37,7 +37,7 @@ namespace StreamKing.MainApplication
             _viewModel.MainPage = new AdminViewModel();
             UpdateDataContext();
         }
-        public void SetUpdateAccountView(Account User)
+        public void SetUpdateAccountView(Account? User)
         {
             _viewModel.MainPage = new UpdateAccountViewModel(User);
             UpdateDataContext();

@@ -21,26 +21,32 @@ namespace StreamKing.MainApplication.ViewModels
 
         public string? UserName { get; set; }
 
-        public UpdateAccountViewModel(Account acc)
+        public UpdateAccountViewModel(Account? acc)
         {
-            User = acc;
-            FirstName = acc.FirstName;
-            LastName = acc.LastName;
-            Email = acc.Email;
-            UserName = acc.Username;
+            if(acc is not null)
+            {
+                User = acc;
+                FirstName = acc.FirstName;
+                LastName = acc.LastName;
+                Email = acc.Email;
+                UserName = acc.Username;
+                
+            }
+            else
+            {
+                User = new Account();
+            }
+
             this.UpdateButtonCommand = new DelegateCommand(
-                (o) => !String.IsNullOrEmpty(UserName) || !String.IsNullOrEmpty(FirstName),
-                (o) => 
-                {
-                    var updateRequest = new UpdateRequest { Username = UserName, Email = Email, FirstName = FirstName, LastName = LastName };
+                    (o) => !String.IsNullOrEmpty(UserName) || !String.IsNullOrEmpty(FirstName),
+                    (o) =>
+                    {
+                        var updateRequest = new UpdateRequest { Username = UserName, Email = Email, FirstName = FirstName, LastName = LastName };
 
-                    App.AdminUpdateSelectedUser(User, updateRequest);
-                    
-                }
-            );
+                        App.AdminUpdateSelectedUser(User, updateRequest);
 
-
-
+                    }
+                );
         }
         public UpdateAccountViewModel()
         { 

@@ -63,7 +63,10 @@ namespace StreamKing.MainApplication.Views
         }
         private void AddButton_Click(object sender, RoutedEventArgs e)
         {
-            //Weiterleitung zu einer (leicht veränderten) RegisterPage ohne Captcha
+            if (App._mainWindow is not null)
+            {
+                App._mainWindow.SetUpdateAccountView(null);
+            }
         }
 
         private void DeleteButton_Click(object sender, RoutedEventArgs e)
@@ -74,9 +77,10 @@ namespace StreamKing.MainApplication.Views
                 DeleteButton.IsEnabled = false;
             }
             else
+            {
                 checkID.Text = ChosenAccount.FirstName;
                 App.DeleteSelectedUser(ChosenAccount);
-            
+            }
         }
 
         private void AllAccountsGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
