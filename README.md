@@ -14,6 +14,7 @@
   <li>
     <a href="#description">Description</a>
     <ul>
+      <li><a href="#mockup">Mockup</a></li>
       <li><a href="#er-model">ER Model</a></li>
       <li><a href="#dump-file">Dump File</a></li>
     </ul>
@@ -50,8 +51,12 @@ This chapter contains a list of all technologies that are being used in this pro
 <!-- Setup Process -->
 ## Setup Process
 (how to install the application, so that a new developer can start to work)
-
-//TODO
+These are the Steps you need to take to develop with this application:
+1. Clone repository
+2. Open project in Visual Studio 2022 and Build the solution or run "dotnet build solution.sln -c Release" in a shell
+3. Start WebAPI backend by going into the StreamKing.Web folder and running "dotnet run -c Release --no-build" (--no-build is recommended so this process does not block any dll files from being used in other builds). You will be asked to login to the API (Username: streamking, Password: 7dyAvoCqTkmVqKNu5c9eX3wg) and then login to the database (Username: dotnet, Password:{ask us for the password privately, this is our live database, so we do not want to give out the password in the ReadMe.md})
+4. Start Frontend by executing the previously built exe File, which can be found at (StreamKing\bin\Release\net6.0-windows\streamking.exe). 
+5. Have fun!
 
 <!-- DESCRIPTION -->
 ## Description
