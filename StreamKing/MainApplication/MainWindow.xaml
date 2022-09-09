@@ -21,6 +21,14 @@
                       DataType="{x:Type viewmodels:SettingsPageViewModel}">
             <views:SettingsPage DataContext="{Binding}" />
         </DataTemplate>
+        <DataTemplate x:Name="AdminViewTemplate"
+                      DataType="{x:Type viewmodels:AdminViewModel}">
+            <views:AdminView DataContext="{Binding}" />
+        </DataTemplate>
+        <DataTemplate x:Name="UpdateAccountTemplate"
+                      DataType="{x:Type viewmodels:UpdateAccountViewModel}">
+            <views:UpdateAccount DataContext="{Binding}" />
+        </DataTemplate>
         <converter:NullVisibilityConverter x:Key="NullVisibilityConverter" />
     </Window.Resources>
     <Window.DataContext>
@@ -243,6 +251,7 @@
                                 FocusVisualStyle="{x:Null}"
                                 Style="{StaticResource RemoveButtonHoverStyle}"
                                 Visibility="{Binding Account, Converter={StaticResource AccountTypeVisibilityConverter}}"
+                                Click="AdminButton_Clicked"
                                 Cursor="Hand">
                             <TextBlock TextAlignment="Left"
                                        Margin="40,0,0,0"

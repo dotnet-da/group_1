@@ -1,0 +1,136 @@
+﻿<UserControl x:Class="StreamKing.MainApplication.Views.AdminView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:StreamKing.MainApplication.ViewModels"
+             mc:Ignorable="d"
+             d:DesignHeight="800"
+             d:DesignWidth="1000">
+
+    <UserControl.DataContext>
+        <local:AdminViewModel />
+    </UserControl.DataContext>
+    <UserControl.Resources>
+        <!-- This style is used for buttons, to remove the WPF default 'animated' mouse over effect -->
+        <Style x:Key="MyButtonStyle"
+               TargetType="Button">
+            <Setter Property="OverridesDefaultStyle"
+                    Value="True" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Name="border"
+                                CornerRadius="32"
+                                Background="{TemplateBinding Background}">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver"
+                                     Value="True">
+                                <Setter TargetName="border"
+                                        Property="Background"
+                                        Value="{StaticResource SecondaryDisabledColor}" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
+
+    <ItemsControl IsTabStop="False"
+                  FontSize="16"
+                  Foreground="{StaticResource SecondaryColor}"
+                  Background="{StaticResource PrimaryFocusColor}">
+        <Grid Height="800"
+              Width="1000">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="1*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="62*" />
+                <RowDefinition Height="372*" />
+                <RowDefinition Height="172*" />
+                <RowDefinition Height="79*" />
+                <RowDefinition Height="113*" />
+            </Grid.RowDefinitions>
+            <ItemsControl Grid.Row="0"
+                          Grid.Column="4"
+                          HorizontalAlignment="Right">
+                <Button Height="48"
+                        Width="48"
+                        Background="Transparent"
+                        VerticalAlignment="Top"
+                        HorizontalAlignment="Right"
+                        Cursor="Hand"
+                        BorderBrush="{x:Null}"
+                        Style="{StaticResource MyButtonStyle}"
+                        Click="CloseButton_Clicked">
+                    <StackPanel>
+                        <Image Source="../../Assets/Images/close.png" />
+                    </StackPanel>
+                </Button>
+            </ItemsControl>
+
+            <TextBlock x:Name="Headline"
+                       Text="Admin OverView"
+                       FontSize="30"
+                       HorizontalAlignment="Center"
+                       Grid.Row="0"
+                       Grid.Column="1"
+                       Grid.ColumnSpan="3" />
+            <DataGrid x:Name="AllAccountsGrid"
+                      ItemsSource="{Binding allUsers}"
+                      Grid.ColumnSpan="5"
+                      Grid.Row="1"
+                      SelectionChanged="AllAccountsGrid_SelectionChanged"
+                      Grid.RowSpan="2" />
+            <Button x:Name="EditButton"
+                    Grid.Column="1"
+                    Content="Edit"
+                    Grid.Row="2"
+                    Click="EditButton_Click"
+                    Margin="0,172,0,113"
+                    Grid.RowSpan="3" />
+            <Button x:Name="AddButton"
+                    Grid.Column="2"
+                    Content="Add"
+                    Grid.Row="2"
+                    Click="AddButton_Click"
+                    Margin="0,172,0,113"
+                    Grid.RowSpan="3" />
+            <Button x:Name="DeleteButton"
+                    Grid.Column="3"
+                    Content="Delete"
+                    Grid.Row="2"
+                    Click="DeleteButton_Click"
+                    Margin="0,172,0,113"
+                    Grid.RowSpan="3"
+                    IsEnabled="False" />
+            <TextBox x:Name="checkID"
+                     Grid.Row="2"
+                     TextWrapping="Wrap"
+                     Text="TextBox"
+                     Margin="0,172,0,113"
+                     Grid.RowSpan="3" />
+            <DataGrid x:Name="Logs"
+                      Grid.Row="1"
+                      Grid.ColumnSpan="2"
+                      Margin="0,373,0,79"
+                      Grid.RowSpan="3" />
+            <DataGrid x:Name="Watchlist"
+                      Grid.Column="3"
+                      Grid.Row="1"
+                      Grid.ColumnSpan="2"
+                      Margin="0,373,0,79"
+                      Grid.RowSpan="3" />
+
+        </Grid>
+    </ItemsControl>
+</UserControl>

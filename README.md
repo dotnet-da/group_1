@@ -59,6 +59,23 @@ The StreamKing Application is used to get Streaming Availability Informations fo
 USA, Germany and Finland. You are also able 
 to save these to your own personal Watchlist which is linked to your Account and is then being saved in our central 
 Database.
+
+### Mockup
+#### Login View
+![Login](Images_for_MD/Login.png)
+#### Create Account View
+![Login](Images_for_MD/CreateAccount.png)
+#### Captcha View
+![Login](Images_for_MD/Captcha.png)
+#### Landing Page View
+![Login](Images_for_MD/LandingPage.png)
+#### Search results View
+![Login](Images_for_MD/SearchResults.png)
+#### Detail View Series
+![Login](Images_for_MD/DetailSeries.png)
+#### Detail View Movie
+![Login](Images_for_MD/DetailMovie.png)
+
 ### ER Model
 This is the ER-Model for the PSQL Database, which was created with the help of the SAP PowerDesigner. 
 We didn't use the automatically created versions, e.g. from pgAdmin, because they weren't really readable and 
@@ -67,3 +84,5 @@ we had more freedom with this tool.
 
 ### Dump File
 [SQL Dump File](docs/StreamKingSQLDumpFile.sql) (From: 09.09.2022 00:10 AM) which was created with the pgAdmin PSQL Tool.
+
+
