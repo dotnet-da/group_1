@@ -46,14 +46,14 @@ This chapter contains a list of all technologies that are being used in this pro
 ### Login View
 ![Login](Images_for_MD/Login.png)
 ### Create Account View
-![Login](../group_1/Images_for_MD/CreateAccount.png)
+![Login](Images_for_MD/CreateAccount.png)
 ### Captcha View
-![Login](../group_1/Images_for_MD/Captcha.png)
+![Login](Images_for_MD/Captcha.png)
 ### Landing Page View
-![Login](../group_1/Images_for_MD/LandingPage.png)
+![Login](Images_for_MD/LandingPage.png)
 ### Search results View
-![Login](../group_1/Images_for_MD/SearchResults.png)
+![Login](Images_for_MD/SearchResults.png)
 ### Detail View Series
-![Login](../group_1/Images_for_MD/DetailSeries.png)
+![Login](Images_for_MD/DetailSeries.png)
 ### Detail View Movie
-![Login](../group_1/Images_for_MD/DetailMovie.png)
+![Login](Images_for_MD/DetailMovie.png)
