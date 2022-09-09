@@ -31,7 +31,7 @@ The application consists of a backend [WebAPI](https://dotnet.microsoft.com/en-u
 ### Contributors
 Student members of project group:
 - [Toubeyas (Abel, Tobias), MNr: 766207](https://github.com/Toubeyas) 
-- [Iron-Mike-Tyson (de Riese-Meyer, Kevin), MNr: <TODO>](https://github.com/Iron-Mike-Tyson) 
+- [Iron-Mike-Tyson (de Riese-Meyer, Kevin), MNr: 766397](https://github.com/Iron-Mike-Tyson) 
 - [T-hai (Quang Thai Vu), MNr: 737992](https://github.com/T-hai) 
 
 Lecturer:
