@@ -1,4 +1,6 @@
-﻿using System.Windows;
+﻿using StreamKing.Data.Media;
+using System;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 
@@ -66,6 +68,13 @@ namespace StreamKing.MainApplication.Views
                 App._mainWindow.SetSelectedMovieEntry(null);
                 App._mainWindow.SetSelectedSeriesEntry(null);
             }
+        }
+
+        private void SeasonButton_Clicked(object sender, RoutedEventArgs e)
+        {
+            Console.WriteLine("SeasonButton_Clicked");
+            Console.WriteLine((sender as Button).DataContext);
+            App.GetEpisodesList(((sender as Button).DataContext as Season));
         }
     }
 }
