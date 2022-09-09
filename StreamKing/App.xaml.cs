@@ -155,6 +155,7 @@ namespace StreamKing
             {
                 Console.WriteLine("Error in GetWatchlist: " + ex.Message);
             }
+        }
 
         public static async void GetEpisodesList(Season season)
         {

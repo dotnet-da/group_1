@@ -251,6 +251,7 @@
                                 FocusVisualStyle="{x:Null}"
                                 Style="{StaticResource RemoveButtonHoverStyle}"
                                 Visibility="{Binding Account, Converter={StaticResource AccountTypeVisibilityConverter}}"
+                                Click="AdminButton_Clicked"
                                 Cursor="Hand">
                             <TextBlock TextAlignment="Left"
                                        Margin="40,0,0,0"
