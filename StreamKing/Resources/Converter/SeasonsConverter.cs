@@ -21,7 +21,11 @@ namespace StreamKing.Resources.Converter
 
             } else if (value.GetType() == typeof(SeriesEntry))
             {
-                s = (value as SeriesEntry).Series.Seasons.OrderBy(s => s.Number).ToList();
+                if((value as SeriesEntry).Series.Seasons is not null && (value as SeriesEntry).Series.Seasons.Count > 0)
+                {
+                    s = (value as SeriesEntry).Series.Seasons.OrderBy(s => s.Number).ToList();
+
+                }
             }
 
             return s;
@@ -43,12 +47,15 @@ namespace StreamKing.Resources.Converter
 
             if (value.GetType() == typeof(Series))
             {
-                return ((value as Series).Seasons.Count>0)?Visibility.Visible:Visibility.Collapsed;
+                return ((value as Series).Seasons.Count > 0) ? Visibility.Visible : Visibility.Collapsed;
 
             }
             else if (value.GetType() == typeof(SeriesEntry))
             {
-                return ((value as SeriesEntry).Series.Seasons.Count > 0) ? Visibility.Visible : Visibility.Collapsed;
+                if ((value as SeriesEntry).Series.Seasons is not null)
+                {
+                    return ((value as SeriesEntry).Series.Seasons.Count > 0) ? Visibility.Visible : Visibility.Collapsed;
+                }
             }
 
             return Visibility.Collapsed;

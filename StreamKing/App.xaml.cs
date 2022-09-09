@@ -7,6 +7,7 @@ using StreamKing.MainApplication;
 using StreamKing.Web.Models;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
@@ -123,6 +124,59 @@ namespace StreamKing
             _mediaApi.BaseAddress = new Uri(WebApiUrl + "media/");
         }
 
+        public static async void GetEpisodesList(Season season)
+        {
+            _mediaApi.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _apiToken);
+
+            Series? series = _mediaList.OfType<Series>().ToList().Where(ser => ser.Seasons.Where(sea => sea.Id == season.Id).FirstOrDefault() != null).FirstOrDefault();
+
+            if(series != null)
+            {
+                if(season.Episodes is not null && season.Episodes.Count > 0)
+                {
+                    series.Seasons.First(sea => sea.Id == season.Id).Episodes = null;
+                    if (_mainWindow != null)
+                    {
+                        Media currentMedia = _mainWindow.GetSelectedMedia();
+                        _mainWindow.SetSelectedMedia(null);
+                        _mainWindow.SetSelectedMedia(currentMedia);
+                    }
+                }
+                else
+                {
+                    try
+                    {
+                        HttpResponseMessage response = await _mediaApi.GetAsync(series.TmdbId + "/seasons/" + season.Id);
+
+                        if (!response.IsSuccessStatusCode)
+                        {
+                            MessageBox.Show("GetEpisodesList:" + response.StatusCode);
+                            return;
+                        }
+
+                        var content = await response.Content.ReadAsStringAsync();
+
+                        var foundSeason = JObject.Parse(content).ToObject<Season>();
+                        Console.WriteLine("EpisodesList loaded: " + foundSeason.Id + " " + foundSeason.Episodes.Count);
+
+                        series.Seasons.First(sea => sea.Id == season.Id).Episodes = foundSeason.Episodes.OrderBy(ep => ep.Number).ToList();
+                        Console.WriteLine("EpisodesList updated: " + series.Seasons.First(sea => sea.Id == season.Id).Id + " " + series.Seasons.First(sea => sea.Id == season.Id).Episodes.Count);
+
+                        if (_mainWindow != null)
+                        {
+                            Media currentMedia = _mainWindow.GetSelectedMedia();
+                            _mainWindow.SetSelectedMedia(null);
+                            _mainWindow.SetSelectedMedia(currentMedia);
+                        }
+
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine("Error in GetEpisodesList: " + ex.Message);
+                    }
+                }
+            }
+        }
         public static async void GetWatchlist()
         {
             _mediaApi.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _apiToken);
