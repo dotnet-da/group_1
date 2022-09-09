@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using StreamKing.Data.Accounts;
+using StreamKing.MainApplication.ViewModels;
 using StreamKing.Web.Models;
 
 namespace StreamKing.MainApplication.Views
@@ -21,28 +22,35 @@ namespace StreamKing.MainApplication.Views
     /// </summary>
     public partial class UpdateAccount : UserControl
     {
-        public Account User { get; set; }
-        public UpdateAccount(Account user)
+        public Account? User { get; set; }
+        public UpdateAccountViewModel ViewModel { get; set; }
+
+        public UpdateAccount() 
         {
             InitializeComponent();
-            User = user;
-            UsernameInput.Text = user.Username;
-            EmailInput.Text = user.Email;
-            FirstNameInput.Text = user.FirstName;
-            LastNameInput.Text = user.LastName;
-            
-        }
-        private void UpdateButton_Clicked(object sender, RoutedEventArgs e)
-        {
-            User.Username = UsernameInput.Text;
-            User.Email = EmailInput.Text;
-            User.FirstName = FirstNameInput.Text;
-            User.LastName = LastNameInput.Text;
+            //ViewModel = (UpdateAccountViewModel)this.DataContext;
+            //if (ViewModel is not null)
+            //{
 
-            var updateRequest = new UpdateRequest {Username = UsernameInput.Text, Email = EmailInput.Text, FirstName = FirstNameInput.Text, LastName = LastNameInput.Text };
+            //    User = ViewModel.User;
+            //    MessageBox.Show("Username from if: " + User.FirstName);
+            //    // (DataContext as UpdateAccountViewModel).User;
+            //}
+            //else
+            //{
+            //    User = ViewModel.User;
+            //    MessageBox.Show("Username from else: " + User.FirstName);
+            //}
            
-            App.AdminUpdateSelectedUser(User, updateRequest);
 
         }
+      
+        //private void UpdateButton_Clicked(object sender, RoutedEventArgs e)
+        //{
+        //    var updateRequest = new UpdateRequest {Username = UsernameInput.Text, Email = EmailInput.Text, FirstName = FirstNameInput.Text, LastName = LastNameInput.Text };
+           
+        //    App.AdminUpdateSelectedUser(User, updateRequest);
+
+        //}
     }
 }

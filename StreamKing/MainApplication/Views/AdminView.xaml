@@ -30,7 +30,7 @@
 
             <TextBlock x:Name="Headline" Text="Admin OverView" FontSize="30" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="3"/>
             <DataGrid x:Name="AllAccountsGrid" ItemsSource="{Binding allUsers}" Grid.ColumnSpan="5" Margin="0,62,0,0" SelectionChanged="AllAccountsGrid_SelectionChanged" Grid.RowSpan="2"/>
-            <Button x:Name="EditButton" Grid.Column="1" Content="Edit" Grid.Row="2" Click="EditButton_Click" Margin="0,172,0,113" Grid.RowSpan="3" IsEnabled="False"/>
+            <Button x:Name="EditButton" Grid.Column="1" Content="Edit" Grid.Row="2" Click="EditButton_Click" Margin="0,172,0,113" Grid.RowSpan="3" />
             <Button x:Name="AddButton" Grid.Column="2" Content="Add" Grid.Row="2" Click="AddButton_Click" Margin="0,172,0,113" Grid.RowSpan="3"/>
             <Button x:Name="DeleteButton" Grid.Column="3" Content="Delete" Grid.Row="2" Click="DeleteButton_Click" Margin="0,172,0,113" Grid.RowSpan="3" IsEnabled="False"/>
             <TextBox x:Name="checkID"  Grid.Row="2" TextWrapping="Wrap" Text="TextBox" Margin="0,172,0,113" Grid.RowSpan="3"/>

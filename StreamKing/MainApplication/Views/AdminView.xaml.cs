@@ -43,9 +43,19 @@ namespace StreamKing.MainApplication.Views
         {
             if (ChosenAccount != null)
             {
-                ((MainWindow)Window.GetWindow(this)).SetUpdateAccountView(ChosenAccount);
+                
+                if (App._mainWindow is not null)
+                {
+                    App._mainWindow.SetUpdateAccountView(ChosenAccount);
+                }
+                
                 
             }
+            else 
+            {
+                MessageBox.Show("AllAccountGrid_SelectionChanged: ChosenUser= is NULL");
+            }
+
           
 
 
@@ -90,6 +100,7 @@ namespace StreamKing.MainApplication.Views
             if (row == null)
             {
                 ChosenAccount = null;
+                MessageBox.Show("AllAccountGrid_SelectionChanged: ChosenUser= is NULL");
                 return;
             }
                 

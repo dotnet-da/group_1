@@ -3,14 +3,10 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:StreamKing.MainApplication.ViewModels"
+             xmlns:local="clr-namespace:StreamKing.MainApplication.ViewModels" d:DataContext="{d:DesignInstance Type=local:UpdateAccountViewModel}"
              mc:Ignorable="d" 
              d:DesignHeight="650" d:DesignWidth="1000">
-    <UserControl.DataContext>
-        <local:UpdateAccountViewModel/>
-    </UserControl.DataContext>
 
-    
     <UserControl.Resources>
         <!-- This style is used for buttons, to remove the WPF default 'animated' mouse over effect -->
         <Style x:Key="MyButtonStyle"
@@ -93,7 +89,7 @@
                 Grid.Column="0"
                 IsTabStop="False" Margin="8">
                     <TextBlock Text="Username" Foreground="{StaticResource SecondaryColor}"></TextBlock>
-                    <TextBox x:Name="UsernameInput" Text="{Binding UserName}" IsEnabled="False" TabIndex="1" Style="{StaticResource InputControlBox}"
+                    <TextBox x:Name="UsernameInput" Text="{Binding UserName}" TabIndex="1" Style="{StaticResource InputControlBox}"
                  ></TextBox>
                 </ItemsControl>
 
@@ -123,7 +119,7 @@
                     <TextBox x:Name="LastNameInput" Text="{Binding LastName}" TabIndex="1" Style="{StaticResource InputControlBox}"
                  ></TextBox>
                 </ItemsControl>
-                <Button Content="Update"/>
+                <Button  Content="Update" Command="{Binding UpdateButtonCommand}"/>
 
             </ItemsControl>
         </ScrollViewer>

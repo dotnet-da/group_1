@@ -27,7 +27,7 @@
         </DataTemplate>
         <DataTemplate x:Name="UpdateAccountTemplate"
                       DataType="{x:Type viewmodels:UpdateAccountViewModel}">
-            <views:AdminView DataContext="{Binding}" />
+            <views:UpdateAccount DataContext="{Binding}" />
         </DataTemplate>
         <converter:NullVisibilityConverter x:Key="NullVisibilityConverter" />
     </Window.Resources>

@@ -541,7 +541,8 @@ namespace StreamKing
         }
         public static async void AdminUpdateSelectedUser(Account user, UpdateRequest updateRequest)
         {
-            string path = user.Id.ToString(); // Accounts/
+
+            string path = user.Id.ToString();
             Console.WriteLine("Put to: " + path);
             Mouse.OverrideCursor = Cursors.Wait;
 
