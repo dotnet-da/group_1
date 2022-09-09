@@ -21,21 +21,22 @@
                 <ColumnDefinition Width="120*"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition Height="55*"/>
-                <RowDefinition Height="480*"/>
-                <RowDefinition Height="70*"/>
-                <RowDefinition Height="100*"/>
+                <RowDefinition Height="62*"/>
+                <RowDefinition Height="372*"/>
+                <RowDefinition Height="172*"/>
+                <RowDefinition Height="79*"/>
+                <RowDefinition Height="113*"/>
             </Grid.RowDefinitions>
 
-            <TextBlock x:Name="Headline" Text="Admin OverView" FontSize="30" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="5"></TextBlock>
-            <DataGrid x:Name="AllAccountsGrid" Grid.Row="1" ItemsSource="{Binding allUsers}" Grid.ColumnSpan="5" Margin="0,0,0,0" SelectionChanged="AllAccountsGrid_SelectionChanged"/>
-            <Button x:Name="EditButton" Grid.Column="1" Content="Edit" Grid.Row="2" Click="EditButton_Click"/>
-            <Button x:Name="AddButton" Grid.Column="2" Content="Add" Grid.Row="2" Click="AddButton_Click"/>
-            <Button x:Name="DeleteButton" Grid.Column="3" Content="Delete" Grid.Row="2" Click="DeleteButton_Click"/>
-
+            <TextBlock x:Name="Headline" Text="Admin OverView" FontSize="30" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="3"/>
+            <DataGrid x:Name="AllAccountsGrid" ItemsSource="{Binding allUsers}" Grid.ColumnSpan="5" Margin="0,62,0,0" SelectionChanged="AllAccountsGrid_SelectionChanged" Grid.RowSpan="2"/>
+            <Button x:Name="EditButton" Grid.Column="1" Content="Edit" Grid.Row="2" Click="EditButton_Click" Margin="0,172,0,113" Grid.RowSpan="3" IsEnabled="False"/>
+            <Button x:Name="AddButton" Grid.Column="2" Content="Add" Grid.Row="2" Click="AddButton_Click" Margin="0,172,0,113" Grid.RowSpan="3"/>
+            <Button x:Name="DeleteButton" Grid.Column="3" Content="Delete" Grid.Row="2" Click="DeleteButton_Click" Margin="0,172,0,113" Grid.RowSpan="3" IsEnabled="False"/>
+            <TextBox x:Name="checkID"  Grid.Row="2" TextWrapping="Wrap" Text="TextBox" Margin="0,172,0,113" Grid.RowSpan="3"/>
+            <DataGrid x:Name="Logs" Grid.Row="1" Grid.ColumnSpan="2" Margin="0,373,0,79" Grid.RowSpan="3"/>
+            <DataGrid x:Name="Watchlist" Grid.Column="3" Grid.Row="1"  Grid.ColumnSpan="2" Margin="0,373,0,79" Grid.RowSpan="3"/>
 
         </Grid>
     </ItemsControl>
-
-
 </UserControl>

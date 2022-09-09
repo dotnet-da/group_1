@@ -10,8 +10,6 @@ namespace StreamKing.MainApplication.ViewModels
     {
         public List<Account> allUsers { get; set; }
 
-        //wie kann AdminView aus selectedUser zugreifen?
-        public Account? selectedUser { get; set; }
         public AdminViewModel()
         {
             allUsers = new List<Account>(App._allUsers);

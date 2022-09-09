@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
@@ -19,9 +20,9 @@ namespace StreamKing.MainApplication.Views
     /// <summary>
     /// Interaktionslogik für AdminView.xaml
     /// Administration Page
-    /// - Anzeige aller Accounts in Tabelle
+    /// - Anzeige aller Accounts in Tabelle 
     ///    - Wenn Account ausgewählt wird, in separater Tabelle alle dazugehörigen Logs laden
-    ///    - Wenn Account ausgewählt wird, in separater Tabelle alle dazugehörigen Watchlists laden
+    ///    - Wenn Account ausgewählt wird, in separater Tabelle alle dazugehörigen Watchlists laden 
     ///    - Möglichkeit neuen Account in die Datenbank zu schreiben
     ///    - Möglichkeit Account Daten zu bearbeiten
     ///    - Möglichkeit Account zu löschen
@@ -34,14 +35,20 @@ namespace StreamKing.MainApplication.Views
         }
 
         public Account? ChosenAccount { get; set; }
-        //kann ChosenAccount über einen Klick- oder DoppelKlick im DataGrid mit der UserListe eingestellt werden? 
+        public Watchlist? watchlist { get; set; }
 
 
         //Logs und Watchlist als PopUp/MessageBox möglich? Oder soll eine weitere ViewPage ("AdminDetailedAccountView.xaml" erstellt werden?)
-
         private void EditButton_Click(object sender, RoutedEventArgs e)
         {
-            //Weiterleitung zu der SettingsPage des ausgewählten Accounts
+            if (ChosenAccount != null)
+            {
+                ((MainWindow)Window.GetWindow(this)).SetUpdateAccountView(ChosenAccount);
+                
+            }
+          
+
+
 
         }
 
@@ -52,31 +59,15 @@ namespace StreamKing.MainApplication.Views
 
         private void DeleteButton_Click(object sender, RoutedEventArgs e)
         {
-            //siehe App.deleteCurrentUser 
-            //oder Weiterleitung zur SettingPage und löschen von da?
+
+            if (ChosenAccount == null)
+            {
+                DeleteButton.IsEnabled = false;
+            }
+            else
+                checkID.Text = ChosenAccount.FirstName;
+                App.DeleteSelectedUser(ChosenAccount);
             
-        }
-
-        private void DataGrid_Unselected(object sender, RoutedEventArgs e)
-        {
-            ChosenAccount = null;
-        }
-
-        private void DataGrid_Selected(object sender, RoutedEventArgs e)
-        {
-            // unsicher, ob das so stimmt
-            ChosenAccount = AllAccountsGrid.SelectedValue as Account;
-
-        }
-
-        private void AllUsers_Selected(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void AllUsers_Unselected(object sender, RoutedEventArgs e)
-        {
-
         }
 
         private void AllAccountsGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -91,6 +82,8 @@ namespace StreamKing.MainApplication.Views
             catch (Exception)
             {
                 ChosenAccount = null;
+                DeleteButton.IsEnabled = false;
+                EditButton.IsEnabled = false;
                 return;
             }
            
@@ -100,15 +93,21 @@ namespace StreamKing.MainApplication.Views
                 return;
             }
                 
-
             DataGridCell RowColumn = dataGrid.Columns[0].GetCellContent(row).Parent as DataGridCell;
             string CellValue = ((TextBlock)RowColumn.Content).Text;
 
             ChosenAccount = AllAccountsGrid.SelectedValue as Account;
 
-            if (ChosenAccount!= null)
+            if (ChosenAccount!= null) 
+            {
                 Console.WriteLine(ChosenAccount.Id);
+                checkID.Text = ChosenAccount.Id.ToString();
+                App.GetUserWatchlist(ChosenAccount);
+                watchlist = App._userWatchlist;
 
+                DeleteButton.IsEnabled = true;
+                EditButton.IsEnabled = true;
+            }
 
         }
     }

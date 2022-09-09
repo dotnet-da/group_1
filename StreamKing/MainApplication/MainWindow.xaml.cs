@@ -1,5 +1,7 @@
-﻿using StreamKing.Data.Media;
+﻿using StreamKing.Data.Accounts;
+using StreamKing.Data.Media;
 using StreamKing.MainApplication.ViewModels;
+using StreamKing.MainApplication.Views;
 using System;
 using System.Collections.ObjectModel;
 using System.Windows;
@@ -33,6 +35,11 @@ namespace StreamKing.MainApplication
         public void SetAdminView()
         {
             _viewModel.MainPage = new AdminViewModel();
+            UpdateDataContext();
+        }
+        public void SetUpdateAccountView(Account User)
+        {
+            _viewModel.MainPage = new UpdateAccountViewModel(User);
             UpdateDataContext();
         }
 

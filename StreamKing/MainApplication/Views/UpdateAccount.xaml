@@ -1,0 +1,137 @@
+﻿<UserControl x:Class="StreamKing.MainApplication.Views.UpdateAccount"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:StreamKing.MainApplication.ViewModels"
+             mc:Ignorable="d" 
+             d:DesignHeight="650" d:DesignWidth="1000">
+    <UserControl.DataContext>
+        <local:UpdateAccountViewModel/>
+    </UserControl.DataContext>
+
+    
+    <UserControl.Resources>
+        <!-- This style is used for buttons, to remove the WPF default 'animated' mouse over effect -->
+        <Style x:Key="MyButtonStyle"
+               TargetType="Button">
+            <Setter Property="OverridesDefaultStyle"
+                    Value="True" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Name="border"
+                                CornerRadius="32"
+                                Background="{TemplateBinding Background}">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver"
+                                     Value="True">
+                                <Setter TargetName="border"
+                                        Property="Background"
+                                        Value="{StaticResource SecondaryDisabledColor}" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
+    <Grid Background="{StaticResource PrimaryColor}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="48"></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition Height="48"></RowDefinition>
+            <RowDefinition Height="48"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*"></ColumnDefinition>
+            <ColumnDefinition Width="4*"></ColumnDefinition>
+            <ColumnDefinition Width="1*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <ItemsControl Grid.Row="0" Grid.Column="2"  HorizontalAlignment="Left" >
+            <Button Height="48"
+                    Width="48"
+                    Background="Transparent"
+                    VerticalAlignment="Top"
+                    HorizontalAlignment="Right"
+                    Cursor="Hand"
+                    BorderBrush="{x:Null}"
+                    Style="{StaticResource MyButtonStyle}">
+                <StackPanel>
+                    <Image Source="../../Assets/Images/close.png" />
+                </StackPanel>
+            </Button>
+        </ItemsControl>
+        <ItemsControl
+                      Grid.Row="0"
+                    Grid.Column="1"
+                      VerticalAlignment="Center"
+                      HorizontalAlignment="Center">
+            <TextBlock FontSize="36" 
+                       VerticalAlignment="Center"
+                       HorizontalAlignment="Center"
+                       Foreground="{StaticResource SecondaryColor}">Update Account</TextBlock>
+        </ItemsControl>
+        <ScrollViewer VerticalScrollBarVisibility="Auto"
+                      Grid.Row="1"
+                      Panel.ZIndex="0"
+                      Background="{StaticResource PrimaryHeaderColor}"
+            Grid.Column="1">
+            <ItemsControl FontSize="16"
+            >
+                <TextBlock FontSize="32" 
+                           Margin="8,16,0,0"
+                       VerticalAlignment="Center"
+                       HorizontalAlignment="Left"
+                       Foreground="{StaticResource SecondaryColor}">Profile</TextBlock>
+
+                <ItemsControl 
+                Grid.Row="0"
+                Grid.Column="0"
+                IsTabStop="False" Margin="8">
+                    <TextBlock Text="Username" Foreground="{StaticResource SecondaryColor}"></TextBlock>
+                    <TextBox x:Name="UsernameInput" Text="{Binding UserName}" IsEnabled="False" TabIndex="1" Style="{StaticResource InputControlBox}"
+                 ></TextBox>
+                </ItemsControl>
+
+                <ItemsControl 
+                Grid.Row="1"
+                Grid.Column="0"
+                IsTabStop="False" Margin="8">
+                    <TextBlock Text="Email" Foreground="{StaticResource SecondaryColor}"></TextBlock>
+                    <TextBox x:Name="EmailInput" Text="{Binding Email}" TabIndex="1" Style="{StaticResource InputControlBox}"
+                 ></TextBox>
+                </ItemsControl>
+
+                <ItemsControl 
+                Grid.Row="3"
+                Grid.Column="0"
+                IsTabStop="False" Margin="8">
+                    <TextBlock Text="First Name" Foreground="{StaticResource SecondaryColor}"></TextBlock>
+                    <TextBox x:Name="FirstNameInput" Text="{Binding FirstName}" TabIndex="1" Style="{StaticResource InputControlBox}"
+                 ></TextBox>
+                </ItemsControl>
+                <ItemsControl 
+                FontSize="16"
+                Grid.Row="3"
+                Grid.Column="1"
+                IsTabStop="False" Margin="8">
+                    <TextBlock Text="Last Name" Foreground="{StaticResource SecondaryColor}"></TextBlock>
+                    <TextBox x:Name="LastNameInput" Text="{Binding LastName}" TabIndex="1" Style="{StaticResource InputControlBox}"
+                 ></TextBox>
+                </ItemsControl>
+                <Button Content="Update"/>
+
+            </ItemsControl>
+        </ScrollViewer>
+        <ItemsControl
+                      Grid.Row="0"
+                    Grid.Column="1"
+                      VerticalAlignment="Center"
+                      HorizontalAlignment="Center">
+        </ItemsControl>
+    </Grid>
+</UserControl>

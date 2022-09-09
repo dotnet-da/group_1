@@ -34,6 +34,8 @@ namespace StreamKing
         public static LoginWindow? _loginWindow { get; set; }
         public static List<Media> _mediaList { get; set; } = new List<Media>();
         public static Watchlist? Watchlist { get; set; }
+        public static Watchlist? _userWatchlist { get; set; }
+        public static AccountLog? _userAccountLog { get; set; }
         public App()
         {
             InitAccountsApi();
@@ -122,6 +124,38 @@ namespace StreamKing
             _mediaApi.BaseAddress = new Uri(WebApiUrl + "media/");
         }
 
+        public static async void GetUserWatchlist(Account user)
+        {
+
+            _mediaApi.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _apiToken);
+            string path = "users/" + user.Id.ToString() + "/watchlists";
+
+            try
+            {
+                HttpResponseMessage response = await _mediaApi.GetAsync(path);
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    MessageBox.Show("GetWatchlist:" + response.StatusCode);
+                    return;
+                }
+
+                var content = await response.Content.ReadAsStringAsync();
+
+                _userWatchlist = JArray.Parse(content).ToObject<List<Watchlist>>()[0];
+                Console.WriteLine("Watchlist loaded: " + _userWatchlist.Id + ": " + _userWatchlist.Name);
+
+                if (_mainWindow != null)
+                {
+                    _mainWindow.SetWatchlist();
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error in GetWatchlist: " + ex.Message);
+            }
+
+        }
         public static async void GetWatchlist()
         {
             _mediaApi.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _apiToken);
@@ -405,7 +439,6 @@ namespace StreamKing
             }
             _mainWindow = null;
         }
-
         public static async void SwitchRegion(string region)
         {
             UpdateRequest updateRequest = new UpdateRequest
@@ -424,8 +457,45 @@ namespace StreamKing
                 return;
             }
         }
+        public static async void DeleteSelectedUser(Account user)
+        {
+            Console.WriteLine("Removing User(" + user.Id + "): " + user.Username);
+            Mouse.OverrideCursor = Cursors.Wait;
 
-        //DeleteSelectedUser-Methode hinzufügen oder DeleteCurrentuser leicht überarbeiten
+            try
+            {
+                string path = user.Id.ToString();
+                Console.WriteLine("Delete from: " + path);
+                HttpResponseMessage response = await _accountsApi.DeleteAsync(path);
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    MessageBox.Show("DeleteSelectedUser:" + response.StatusCode);
+                    Mouse.OverrideCursor = null;
+                    return;
+                }
+                var content = await response.Content.ReadAsStringAsync();
+                var result = JObject.Parse(content).ToObject<DeleteResponse>();
+
+                if (result.Status)
+                {
+                    Console.WriteLine("Successful DeleteSelectedUser: " + content);
+                    Mouse.OverrideCursor = null;
+                    Logout();
+                }
+                else
+                {
+                    Mouse.OverrideCursor = null;
+                    MessageBox.Show("User was not deleted: " + result.Message);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error in DeleteSelectedUser: " + ex.Message);
+                Mouse.OverrideCursor = null;
+
+            }
+        }
         public static async void DeleteCurrentUser()
         {
             if (_currentUser is not null)
@@ -469,6 +539,111 @@ namespace StreamKing
             }
 
         }
+        public static async void AdminUpdateSelectedUser(Account user, UpdateRequest updateRequest)
+        {
+            string path = user.Id.ToString(); // Accounts/
+            Console.WriteLine("Put to: " + path);
+            Mouse.OverrideCursor = Cursors.Wait;
+
+            var authenticateRequestContent = JsonConvert.SerializeObject(updateRequest);
+            var httpContent = new StringContent(authenticateRequestContent, Encoding.UTF8, "application/json");
+
+            HttpResponseMessage response = await _accountsApi.PutAsync(path, httpContent);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                MessageBox.Show("Error in UpdateUser:" + response.StatusCode);
+                return;
+            }
+
+            var content = await response.Content.ReadAsStringAsync();
+            var result = JObject.Parse(content).ToObject<UpdateResponse>();
+
+            if (result.Status)
+            {
+                Console.WriteLine("Successful UpdateUser: " + content);
+                Mouse.OverrideCursor = null;
+                MessageBox.Show("User was Updated: " + result.Message);
+                SetCurrentUser();
+            }
+            else
+            {
+                Mouse.OverrideCursor = null;
+                MessageBox.Show("User was not updated: " + result.Message);
+            }
+            //string path = user.Id.ToString();
+            //Console.WriteLine("Put to: " + path);
+            //Mouse.OverrideCursor = Cursors.Wait;
+
+            //UpdateRequest updateRequest = new UpdateRequest { FirstName = user.FirstName, LastName=user.LastName, Email=user.Email };
+
+            //var authenticateRequestContent = JsonConvert.SerializeObject(updateRequest);
+            //var httpContent = new StringContent(authenticateRequestContent, Encoding.UTF8, "application/json");
+
+            //HttpResponseMessage response = await _accountsApi.PutAsync("session", httpContent);
+
+            //if (!response.IsSuccessStatusCode)
+            //{
+            //    MessageBox.Show("Error in UpdateCurrentuser:" + response.StatusCode);
+            //    return;
+            //}
+
+            //var content = await response.Content.ReadAsStringAsync();
+            //var result = JObject.Parse(content).ToObject<UpdateResponse>();
+
+            //if (result.Status)
+            //{
+            //    Console.WriteLine("Successful UpdateCurrentuser: " + content);
+            //    Mouse.OverrideCursor = null;
+            //    MessageBox.Show("User was Updated: " + result.Message);
+            //    SetCurrentUser();
+            //}
+            //else
+            //{
+            //    Mouse.OverrideCursor = null;
+            //    MessageBox.Show("User was not updated: " + result.Message);
+            //}
+
+        }
+
+        public static async void AddNewUser(Account user)
+        {
+
+
+            //if (user is not null)
+            //{
+            //    Console.WriteLine("Adding User: " + user.FirstName + " " + user.LastName);
+            //    UpdateRequest UserUpdateRequest = new UpdateRequest { Id = user.Id, FirstName = user.FirstName, 
+            //        LastName = user.LastName };
+                
+
+
+            //    var updateRequestContent = JsonConvert.SerializeObject(UserUpdateRequest);
+            //    var httpContent = new StringContent(updateRequestContent, Encoding.UTF8, "application/json");
+
+            //    try
+            //    {
+            //        string path = "session/watchlists/" + Watchlist.Id + "/entries";
+            //        Console.WriteLine("Post to: " + path);
+            //        HttpResponseMessage response = await _mediaApi.PostAsync(path, httpContent);
+
+            //        if (!response.IsSuccessStatusCode)
+            //        {
+            //            MessageBox.Show("AddSelectedMediaToWatchlist:" + response.StatusCode);
+            //            return false;
+            //        }
+            //        var content = await response.Content.ReadAsStringAsync();
+            //        Console.WriteLine("Successful AddSelectedMediaToWatchlist: " + content);
+
+            //        GetWatchlist();
+            //    }
+            //    catch (Exception ex)
+            //    {
+            //        Console.WriteLine("Error in GetWatchlist: " + ex.Message);
+            //    }
+            //}
+            //return true;
+        }
         public static async void UpdateCurrentuser(UpdateRequest updateRequest)
         {
             string path = "session";
@@ -504,4 +679,5 @@ namespace StreamKing
             
         }
     }
+
 }
