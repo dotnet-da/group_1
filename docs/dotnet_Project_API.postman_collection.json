@@ -1,0 +1,888 @@
+{
+	"info": {
+		"_postman_id": "72ccac7a-f2fa-440c-a394-a0bdbb198854",
+		"name": "dotnet Project API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "10810701"
+	},
+	"item": [
+		{
+			"name": "Accounts",
+			"item": [
+				{
+					"name": "Token generation",
+					"item": [
+						{
+							"name": "Generate Admin JWT Token",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let response = pm.response.json();\r",
+											"pm.collectionVariables.set(\"AdminToken\", response.token);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"username\" : \"admin\",\r\n    \"password\" : \"admin9876\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://localhost:9595/api/accounts/authenticate",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "9595",
+									"path": [
+										"api",
+										"accounts",
+										"authenticate"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Generate User JWT Token",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let response = pm.response.json();\r",
+											"pm.collectionVariables.set(\"UserToken\", response.token);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"username\" : \"toubeyas\",\r\n    \"password\" : \"hello_itsme\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://localhost:9595/api/accounts/authenticate",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "9595",
+									"path": [
+										"api",
+										"accounts",
+										"authenticate"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Admin",
+					"item": [
+						{
+							"name": "Get all accounts",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://localhost:9595/api/accounts",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "9595",
+									"path": [
+										"api",
+										"accounts"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Account by id",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://localhost:9595/api/accounts/165bdb18-e952-487f-b492-1d0ba734b983/logs",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "9595",
+									"path": [
+										"api",
+										"accounts",
+										"165bdb18-e952-487f-b492-1d0ba734b983",
+										"logs"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update Account by id",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\":\"tobias.abel@stud.h-da.de\",\r\n    \"firstName\":\"tobias\",\r\n    \"lastName\":\"abel\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://localhost:9595/api/accounts/2184489d-1e7b-40e4-a42e-cc2ddcb2c162",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "9595",
+									"path": [
+										"api",
+										"accounts",
+										"2184489d-1e7b-40e4-a42e-cc2ddcb2c162"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Account by id",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "https://localhost:9595/api/accounts/1b06756d-39cf-427a-a95c-2cf917127d30",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "9595",
+									"path": [
+										"api",
+										"accounts",
+										"1b06756d-39cf-427a-a95c-2cf917127d30"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"auth": {
+						"type": "bearer",
+						"bearer": [
+							{
+								"key": "token",
+								"value": "{{AdminToken}}",
+								"type": "string"
+							}
+						]
+					},
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "User",
+					"item": [
+						{
+							"name": "Get Session Account",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://localhost:9595/api/accounts/session",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "9595",
+									"path": [
+										"api",
+										"accounts",
+										"session"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update Session Account",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"birthday\":\"2000-01-26\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://localhost:9595/api/accounts/session",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "9595",
+									"path": [
+										"api",
+										"accounts",
+										"session"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Session Account",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "https://localhost:9595/api/accounts/session",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "9595",
+									"path": [
+										"api",
+										"accounts",
+										"session"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"auth": {
+						"type": "bearer",
+						"bearer": [
+							{
+								"key": "token",
+								"value": "{{UserToken}}",
+								"type": "string"
+							}
+						]
+					},
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "Public",
+					"item": [
+						{
+							"name": "Register new User",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"username\" : \"tobedeleted\",\r\n    \"password\" : \"tobedeleted\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://localhost:9595/api/accounts",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "9595",
+									"path": [
+										"api",
+										"accounts"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Media",
+			"item": [
+				{
+					"name": "Users",
+					"item": [
+						{
+							"name": "Get All Watchlists of User by ID",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://localhost:9595/api/media/users/d2d69619-135d-426e-83a9-f5898baa960a/watchlists",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "9595",
+									"path": [
+										"api",
+										"media",
+										"users",
+										"d2d69619-135d-426e-83a9-f5898baa960a",
+										"watchlists"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Watchlist of User by ID",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://localhost:9595/api/media/users/165bdb18-e952-487f-b492-1d0ba734b983/watchlists/4",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "9595",
+									"path": [
+										"api",
+										"media",
+										"users",
+										"165bdb18-e952-487f-b492-1d0ba734b983",
+										"watchlists",
+										"4"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update Watchlist of User by ID",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\":\"My Streams\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://localhost:9595/api/media/users/165bdb18-e952-487f-b492-1d0ba734b983/watchlists/4",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "9595",
+									"path": [
+										"api",
+										"media",
+										"users",
+										"165bdb18-e952-487f-b492-1d0ba734b983",
+										"watchlists",
+										"4"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Watchlist of User by ID",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "https://localhost:9595/api/media/users/165bdb18-e952-487f-b492-1d0ba734b983/watchlists/2",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "9595",
+									"path": [
+										"api",
+										"media",
+										"users",
+										"165bdb18-e952-487f-b492-1d0ba734b983",
+										"watchlists",
+										"2"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create Watchlist of User by ID",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\":\"My Streams\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://localhost:9595/api/media/users/165bdb18-e952-487f-b492-1d0ba734b983/watchlists",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "9595",
+									"path": [
+										"api",
+										"media",
+										"users",
+										"165bdb18-e952-487f-b492-1d0ba734b983",
+										"watchlists"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get All Watchlists of Session User",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://localhost:9595/api/media/session/watchlists",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "9595",
+									"path": [
+										"api",
+										"media",
+										"session",
+										"watchlists"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Watchlist of Session User by ID",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://localhost:9595/api/media/session/watchlists/5",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "9595",
+									"path": [
+										"api",
+										"media",
+										"session",
+										"watchlists",
+										"5"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Watchlist Entry of session user",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "https://localhost:9595/api/media/session/watchlists/5/entries/16",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "9595",
+									"path": [
+										"api",
+										"media",
+										"session",
+										"watchlists",
+										"5",
+										"entries",
+										"16"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Add MovieEntry to Watchlist of Session user",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"tag\":\"Watching\",\r\n    \"movieid\":338953\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://localhost:9595/api/media/session/watchlists/5/entries",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "9595",
+									"path": [
+										"api",
+										"media",
+										"session",
+										"watchlists",
+										"5",
+										"entries"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Add series season to Watchlist of Session user",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"tag\":\"Watched\",\r\n    \"seriesid\":10000456,\r\n    \"seasonid\":62103\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://localhost:9595/api/media/session/watchlists/5/entries",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "9595",
+									"path": [
+										"api",
+										"media",
+										"session",
+										"watchlists",
+										"5",
+										"entries"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Add episode to Watchlist of Session user",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"tag\":\"Watched\",\r\n    \"MovieId\": 19995\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://localhost:9595/api/media/session/watchlists/5/entries",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "9595",
+									"path": [
+										"api",
+										"media",
+										"session",
+										"watchlists",
+										"5",
+										"entries"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"auth": {
+						"type": "bearer",
+						"bearer": [
+							{
+								"key": "token",
+								"value": "{{AdminToken}}",
+								"type": "string"
+							}
+						]
+					},
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "Get All Media",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:9595/api/media?type=series&take=10",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "9595",
+							"path": [
+								"api",
+								"media"
+							],
+							"query": [
+								{
+									"key": "type",
+									"value": "series"
+								},
+								{
+									"key": "take",
+									"value": "10"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Media Details by ID",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:9595/api/media/10000456",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "9595",
+							"path": [
+								"api",
+								"media",
+								"10000456"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Season Details by ID",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:9595/api/media/10000456/seasons/62103",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "9595",
+							"path": [
+								"api",
+								"media",
+								"10000456",
+								"seasons",
+								"62103"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Episode details by ID",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:9595/api/media/10000456/seasons/110088/episodes",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "9595",
+							"path": [
+								"api",
+								"media",
+								"10000456",
+								"seasons",
+								"110088",
+								"episodes"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"auth": {
+				"type": "bearer",
+				"bearer": [
+					{
+						"key": "token",
+						"value": "{{UserToken}}",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "AdminToken",
+			"value": ""
+		},
+		{
+			"key": "UserToken",
+			"value": ""
+		}
+	]
+}
